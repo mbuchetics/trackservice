@@ -125,9 +125,7 @@ app.get('/last/:count?', function(req, res) {
         "</code></pre></body></html>");
 });
 
-app.use('/', express.errorHandler({ dump: true, stack: true }));
-
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
 
 getTracklist();
 setInterval(getTracklist, 120000);
