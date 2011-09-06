@@ -102,6 +102,12 @@ function getTracklist() {
 
 var app = require('express').createServer();
 
+app.get('/', function(req, res) {
+  res.send(
+    "<html><body><h3>hello world</h3></body></html>");
+});
+
+
 app.get('/all', function(req, res) {
   res.send(
     "<html><body><h3>all songs</h3><pre><code>" + 
