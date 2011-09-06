@@ -1,0 +1,20 @@
+{
+  "author": "Matthias Buchetics <mbuchetics@gmail.com>",
+  "name": "fm4trackservice",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mbuchetics/fm4trackservice.git"
+  },
+  "engines": {
+    "node": "~v0.4.11"
+  },
+  "dependencies": {
+    "request": "~2.1.1",
+    "express": "~2.4.6",
+    "jsdom": "~0.2.4",
+    "underscore": "~1.1.7",
+    "colors": "~0.5.0"
+  },
+  "devDependencies": {}
+}
