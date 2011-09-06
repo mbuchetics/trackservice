@@ -1,4 +1,5 @@
-var request = require('request'),
+var express = require('express'),
+    request = require('request'),
     jsdom = require("jsdom"),
     util = require('util'),
     fs = require('fs'),
@@ -100,13 +101,12 @@ function getTracklist() {
     });
 }
 
-var app = require('express').createServer();
+var app = express.createServer();
 
 app.get('/', function(req, res) {
   res.send(
     "<html><body><h3>hello world</h3></body></html>");
 });
-
 
 app.get('/all', function(req, res) {
   res.send(
@@ -124,6 +124,8 @@ app.get('/last/:count?', function(req, res) {
         JSON.stringify(songs.slice(-count), null, 4) + 
         "</code></pre></body></html>");
 });
+
+app.use('/', express.errorHandler({ dump: true, stack: true }));
 
 app.listen(3000);
 
