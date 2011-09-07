@@ -1,4 +1,4 @@
-var config = require('./config_deploy'),
+var config = require('./config'),
     express = require('express'),
     request = require('request'),
     jsdom = require("jsdom"),
@@ -10,7 +10,6 @@ var config = require('./config_deploy'),
     mongodb = require('mongodb'),
     async = require('async'),
     songs = [],
-    fd = fs.openSync('tracklist.txt', 'a+'),
     jquerySrc = fs.readFileSync("./jquery-1.6.2.min.js").toString(),
     db;
     
@@ -28,19 +27,50 @@ function getTime(timeStr) {
     return time;
 }
 
-function addSong(song) {
-    console.log('new song:'.underline.red);
-    console.log(util.inspect(song).red);
-    songs.push(song);
-
-    var line = JSON.stringify(song);
-    fs.write(fd, line + '\n', null);
-    
+function getSongsCollection(callback) {
     db.collection('songs', function(err, collection) {
+        if (!err) {
+            callback(collection);
+        }
+    });
+}
+
+function addSong(song) {
+    songs.push(song);
+    
+    getSongsCollection(function(collection) {
         collection.insert(song);
+        collection.ensureIndex({ time: -1}, function() {});
+        collection.ensureIndex({ artist: 1 }, function() {});
+        console.log('added song to db:'.underline.red);
+        console.log(util.inspect(song).red);
     });
     
     return songs;
+}
+
+function getSongs(count, callback) {
+    if (count < 0) {
+        count = 0;
+    }
+    
+    getSongsCollection(function(collection) {
+        collection.find().sort({ time : -1 }).limit(count).toArray(function(err, results) {
+           if (!err) {
+               callback(results);
+           } 
+        });
+    });
+}
+
+function getSong(song, callback) {
+    getSongsCollection(function(collection) {
+        collection.findOne({ time: song.time, artist: song.artist, title: song.title }, function(err, result) {
+            if (!err) {
+                callback(result);
+            }
+        }); 
+    });
 }
 
 function getTracklist() {    
@@ -66,25 +96,21 @@ function getTracklist() {
                         };
 
                         foundSongs.push(song);                 
-                    });  
-
-                    foundSongs.forEach(function(newSong) {
-                        var found = false;
-                        for (var i = songs.length - 1; i >= songs.length - foundSongs.length - 1; i--) {
-                            if (songs[i] != undefined && songs[i].time - newSong.time == 0) {
-                                found = true;
-                                break;
-                            }
-                        };
-
-                        if (!found) {
-                            addSong(newSong);
-                        }
                     });
-
-                    console.log('last 5 songs:');
-                    console.log(songs.slice(-5));
-                    console.log('');         
+                    
+                    foundSongs.forEach(function(newSong) {
+                        getSong(newSong, function(song) {
+                           if (!song) {
+                               addSong(newSong);
+                           }
+                           /* 
+                           else {                           
+                               console.log('already in db');
+                               console.log(util.inspect(song).red);
+                           }
+                           */
+                        });
+                    });
                 }
             });
         }
@@ -92,27 +118,9 @@ function getTracklist() {
 }
 
 function run() {  
-    console.log('read songs from tracklist.txt'.green);
-
-    if (path.existsSync('tracklist.txt')) {
-        fs.readFileSync('tracklist.txt')
-        .toString()
-        .split('\n')
-        .forEach(function (line) { 
-            if(line[0] != '[') {
-                try {     
-                    var song = JSON.parse(line);
-                    song.time = new Date(song.time);
-                    songs.push(song);
-                    console.log(song);
-                } catch(e) {}
-            }
-        });
-    }
-
     console.log('start tracking songs'.green);
     
-    fs.write(fd, '[new session ' + new Date().toGMTString() + ']\n', null);
+    //fs.write(fd, '[new session ' + new Date().toGMTString() + ']\n', null);
 
     var app = express.createServer();
 
@@ -122,26 +130,36 @@ function run() {
     });
 
     app.get('/all', function(req, res) {
-      res.send(
-        "<html><body><h3>all songs</h3><pre><code>" + 
-        JSON.stringify(songs, null, 4) + 
-        "</code></pre></body></html>");
+        getSongs(0, function(songs) {
+            res.send(
+                "<html><body><h3>all songs</h3><pre><code>" + 
+                JSON.stringify(songs, null, 4) + 
+                "</code></pre></body></html>");
+        });
     });
 
     app.get('/last/:count?', function(req, res) {
         var count = req.params.count;
-        if (count == undefined)
+        if (count == undefined) {
             count = 5;
-        res.send(
-            "<html><body><h3>last " + count + " songs</h3><pre><code>" + 
-            JSON.stringify(songs.slice(-count), null, 4) + 
-            "</code></pre></body></html>");
+        }
+        else {
+            count = parseInt(count);
+        }
+            
+        getSongs(count, function(songs) {
+            res.send(
+                "<html><body><h3>last " + count + " songs</h3><pre><code>" + 
+                JSON.stringify(songs, null, 4) + 
+                "</code></pre></body></html>");
+        });
     });
 
     app.listen(process.env.PORT || 3000);
 
     getTracklist();
-    setInterval(getTracklist, 120000);
+    //setInterval(getTracklist, 120000);
+    setInterval(getTracklist, 60000);
 }
 
 function init(dbname, host, port, user, password) {
