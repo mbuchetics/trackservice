@@ -1,4 +1,4 @@
-var config = require('./config_deploy'),
+var config = require('./config'),
     express = require('express'),
     request = require('request'),
     jsdom = require("jsdom"),
@@ -9,6 +9,7 @@ var config = require('./config_deploy'),
     colors = require('colors'),
     mongodb = require('mongodb'),
     async = require('async'),
+    datetime = require('datetime'),
     songs = [],
     jquerySrc = fs.readFileSync("./jquery-1.6.2.min.js").toString(),
     db;
@@ -28,6 +29,15 @@ function getTime(timeStr) {
     }
 
     return time;
+}
+
+function getSongPretty(song) {
+    return { 
+        time: datetime.format(song.time, '%d.%m., %T'),
+        timeAgo: datetime.formatAgo(song.time),
+        artist: song.artist,
+        title: song.title,
+    };
 }
 
 function getSongsCollection(callback) {
@@ -125,24 +135,33 @@ function run() {
     console.log('start tracking songs'.green);
     
     //fs.write(fd, '[new session ' + new Date().toGMTString() + ']\n', null);
-
+    
     var app = express.createServer();
+    
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
 
     app.get('/', function(req, res) {
-      res.send(
-        "<html><body><h3>hello world, it's" + new Date() + "</h3></body></html>");
+        res.render('index', { title: 'hello world' });
     });
-
-    app.get('/all', function(req, res) {
+    
+    app.get('/list', function(req, res) {
         getSongs(0, function(songs) {
-            res.send(
-                "<html><body><h3>all songs</h3><pre><code>" + 
-                JSON.stringify(songs, null, 4) + 
-                "</code></pre></body></html>");
+            res.render('songs', { 
+                count: songs.length, 
+                lastUpdated: datetime.formatAgo(songs[0].time),
+                songs: underscore.map(songs, getSongPretty) 
+            });
+        });
+    });    
+
+    app.get('/api/all', function(req, res) {
+        getSongs(0, function(songs) {
+            res.send(JSON.stringify(songs, null, 4));
         });
     });
 
-    app.get('/last/:count?', function(req, res) {
+    app.get('/api/last/:count?', function(req, res) {
         var count = req.params.count;
         if (count == undefined) {
             count = 5;
@@ -152,10 +171,7 @@ function run() {
         }
             
         getSongs(count, function(songs) {
-            res.send(
-                "<html><body><h3>last " + count + " songs</h3><pre><code>" + 
-                JSON.stringify(songs, null, 4) + 
-                "</code></pre></body></html>");
+            res.send(JSON.stringify(songs, null, 4));
         });
     });
 
