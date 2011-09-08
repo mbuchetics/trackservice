@@ -1,4 +1,4 @@
-var config = require('./config_deploy'),
+var config = require('./config'),
     express = require('express'),
     request = require('request'),
     jsdom = require("jsdom"),
@@ -15,9 +15,12 @@ var config = require('./config_deploy'),
     
 function getTime(timeStr) {
     var now = new Date(),
-    hour = timeStr.substring(0,2),
-    minute = timeStr.substring(3,5),
-    time = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0);
+        hour = timeStr.substring(0,2),
+        minute = timeStr.substring(3,5), 
+        time = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0));
+        
+    // fm4 trackservice times are GMT+0200
+    time.setHours(time.getHours() - 2);
 
     // previous day
     if (now - time < 0) {
