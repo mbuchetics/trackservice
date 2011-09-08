@@ -1,4 +1,4 @@
-var config = require('./config'),
+var config = require('./config_deploy'),
     express = require('express'),
     request = require('request'),
     jsdom = require("jsdom"),
