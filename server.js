@@ -1,4 +1,4 @@
-var config = require('./config'),
+var config = require('./config_deploy'),
     express = require('express'),
     request = require('request'),
     jsdom = require("jsdom"),
@@ -118,6 +118,7 @@ function getTracklist() {
 }
 
 function run() {  
+    console.log('connected to db'.green);
     console.log('start tracking songs'.green);
     
     //fs.write(fd, '[new session ' + new Date().toGMTString() + ']\n', null);
@@ -126,7 +127,7 @@ function run() {
 
     app.get('/', function(req, res) {
       res.send(
-        "<html><body><h3>hello world</h3></body></html>");
+        "<html><body><h3>hello world, it's" + new Date() + "</h3></body></html>");
     });
 
     app.get('/all', function(req, res) {
@@ -163,20 +164,28 @@ function run() {
 }
 
 function init(dbname, host, port, user, password) {
+    console.log('trying to connect to db');
     console.log(config);
     
     db = new mongodb.Db(config.db, new mongodb.Server(config.host, config.port, {auto_reconnect:true}), {});
     db.open(function(err, db) {
-        if (config.user) {
-            db.authenticate(config.user, config.pw, function(err, success) { 
-                console.log(success);
-                if (success) {
-                    run();
-                } 
-            });
+        if (!err) {
+            if (config.user) {
+                db.authenticate(config.user, config.pw, function(err, success) { 
+                    if (!err && success) {
+                        run();
+                    } 
+                    else {
+                        console.log('error authenticating db'.red);
+                    }
+                });
+            }
+            else {
+                run();
+            }
         }
         else {
-            run();
+            console.log('error opening db'.red);
         }
     });
 }
