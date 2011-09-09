@@ -12,6 +12,7 @@ var config = require('./config_deploy'),
     datetime = require('datetime'),
     songs = [],
     jquerySrc = fs.readFileSync("./jquery-1.6.2.min.js").toString(),
+    port = process.env.PORT || 3000,
     db;
     
 function getTime(timeStr) {
@@ -138,6 +139,8 @@ function run() {
     
     var app = express.createServer();
     
+    
+    
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
 
@@ -157,7 +160,7 @@ function run() {
 
     app.get('/api/all', function(req, res) {
         getSongs(0, function(songs) {
-            res.send(JSON.stringify(songs, null, 4));
+            res.json(songs);
         });
     });
 
@@ -171,11 +174,13 @@ function run() {
         }
             
         getSongs(count, function(songs) {
-            res.send(JSON.stringify(songs, null, 4));
+            res.json(songs);
         });
     });
+    
+    console.log('listening on port ' + port);
 
-    app.listen(process.env.PORT || 3000);
+    app.listen(port);
 
     getTracklist();
     //setInterval(getTracklist, 120000);
