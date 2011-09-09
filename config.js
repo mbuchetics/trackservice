@@ -1,7 +1,5 @@
 var config = {};
 
-config.db = 'music';
-config.host = 'localhost';
-config.port = 27017;
+config.db_url = process.env.MONGODB_URL || 'mongodb://localhost:27017/music';
 
 module.exports = config;

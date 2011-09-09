@@ -1,4 +1,4 @@
-var config = require('./config_deploy'),
+var config = require('./config'),
     express = require('express'),
     request = require('request'),
     jsdom = require("jsdom"),
@@ -139,8 +139,6 @@ function run() {
     
     var app = express.createServer();
     
-    
-    
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
 
@@ -191,25 +189,13 @@ function init(dbname, host, port, user, password) {
     console.log('trying to connect to db');
     console.log(config);
     
-    db = new mongodb.Db(config.db, new mongodb.Server(config.host, config.port, {auto_reconnect:true}), {});
-    db.open(function(err, db) {
+    mongodb.connect(config.db_url, function(err, database) {
         if (!err) {
-            if (config.user) {
-                db.authenticate(config.user, config.pw, function(err, success) { 
-                    if (!err && success) {
-                        run();
-                    } 
-                    else {
-                        console.log('error authenticating db'.red);
-                    }
-                });
-            }
-            else {
-                run();
-            }
+            db = database;
+            run();
         }
         else {
-            console.log('error opening db'.red);
+            console.log('error connecting to db'.red);
         }
     });
 }
