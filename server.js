@@ -143,7 +143,7 @@ function run() {
     app.set('view engine', 'jade');
 
     app.get('/', function(req, res) {
-        res.render('index', { title: 'hello world' });
+        res.render('index', { title: 'hello ines' });
     });
     
     app.get('/list', function(req, res) {
