@@ -21,3 +21,20 @@ body {
 {
     padding: 10px;
 }
+
+#song_list .buttons
+{
+}
+
+#song_list .artist
+{
+}
+
+#song_list .title
+{
+}
+
+#song_list .time
+{
+    width: 150px;
+}

@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="css/style.css" />
 	
 	<script src="http://code.jquery.com/jquery-1.6.3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/externals/jquery.timeago.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/externals/underscore-min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/externals/handlebars.1.0.0.beta.3.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
@@ -45,34 +46,35 @@
 		<div class="row">
 			<div class="span12 columns offset2">
 				<div id="song_list">
-					<table class="zebra-striped"> 
-						<thead> 
-							<tr> 
-								<th>Time</th> 
-								<th>Artist</th> 
-								<th>Song</th> 
-							</tr>
-						</thead> 
-						<tbody> 
-							<tr> 
-								<td>1</td> 
-								<td>Some</td> 
-								<td>One</td> 
-							</tr> 
-							<tr> 
-								<td>2</td> 
-								<td>Joe</td>
-								<td>Sixpack</td> 
-							</tr> 
-							<tr> 
-								<td>3</td> 
-								<td>Stu</td> 
-								<td>Dent</td> 
-							</tr> 
-						</tbody>
-					</table>
 				</div>
 			</div>
 		</div>
-	</div>		
+	</div>	
+
+	<!-- TEMPLATES -->
+	
+	<script type="text/template" id="song_list_template">
+		<table class="zebra-striped"> 
+			<thead> 
+				<tr> 
+					<th class="buttons"></th>
+					<th class="artist">Artist</th> 
+					<th class="title">Title</th> 
+					<th class="time">Time</th> 
+				</tr>
+			</thead> 
+			<tbody> 
+				{{#each songs}}
+				<tr> 	
+					<td><button type="submit" name="button_like_song" class="btn">+</button></td>
+					<td>{{ artist }}</td> 
+					<td>{{ title }}</td> 
+					<td><time class="timeago" datetime="{{ time }}">{{ time }}</time></td> 
+				</tr> 
+				{{/each}}
+			</tbody>
+		</table>	
+	</script>
+	
+	<!-- /TEMPLATES -->
 </body>
