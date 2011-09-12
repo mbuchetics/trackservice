@@ -10,7 +10,7 @@ var config = require('./config'),
     mongodb = require('mongodb'),
     async = require('async'),
     datetime = require('datetime'),
-    jquerySrc = fs.readFileSync("externals/jquery-1.6.2.min.js").toString(),
+    jquerySrc = fs.readFileSync("public/js/externals/jquery-1.6.3.min.js").toString(),
     db;
     
 function getTime(timeStr) {
@@ -135,22 +135,8 @@ function run() {
     
     var app = express.createServer();
     
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-
-    app.get('/', function(req, res) {
-        res.render('index', { title: 'blub!' });
-    });
-    
-    app.get('/list', function(req, res) {
-        getSongs(0, function(songs) {
-            res.render('songs', { 
-                count: songs.length, 
-                lastUpdated: datetime.formatAgo(songs[0].time),
-                songs: underscore.map(songs, getSongPretty) 
-            });
-        });
-    });    
+    app.use(express.staticCache());
+    app.use(express.static(__dirname + '/public'));
 
     app.get('/api/all', function(req, res) {
         getSongs(0, function(songs) {
@@ -171,6 +157,11 @@ function run() {
             res.json(songs);
         });
     });
+    
+    app.get('*', function(req, res) {
+        res.writeHead(404);
+        res.end();
+    })
     
     console.log('listening on port ' + config.port);
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>trackservice</title>	
+	
+	<link rel="stylesheet" href="css/bootstrap-1.2.0.min.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	
+	<script src="http://code.jquery.com/jquery-1.6.3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/externals/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/externals/handlebars.1.0.0.beta.3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	<!-- Topbar
+	================================================== -->
+	<div class="topbar">
+		<div class="topbar-inner">
+        	<div class="container">
+          		<h3><a href="#">Trackservice</a></h3>
+          		<ul class="nav">
+		            <li><a href="#">Recent</a></li>
+					<li><a href="#my_list">My List</a></li>
+		            <li><a href="#top_week">Top Last Week</a></li>
+					<li><a href="#top_month">Top Last Month</a></li>
+		        </ul>
+				<ul class="nav secondary-nav">
+					<li>slurmomatic</li>
+				</ul>
+			</div>
+      	</div>
+    </div>
+	
+	<!-- Header
+    ================================================== -->
+	<div id="page_header">
+		<div class="container">
+			<h1>Recent Songs</h1>
+		</div>
+	</div>
+		
+	<!-- Main
+	================================================== -->
+	<div class="container">
+		<div class="row">
+			<div class="span12 columns offset2">
+				<div id="song_list">
+					<table class="zebra-striped"> 
+						<thead> 
+							<tr> 
+								<th>Time</th> 
+								<th>Artist</th> 
+								<th>Song</th> 
+							</tr>
+						</thead> 
+						<tbody> 
+							<tr> 
+								<td>1</td> 
+								<td>Some</td> 
+								<td>One</td> 
+							</tr> 
+							<tr> 
+								<td>2</td> 
+								<td>Joe</td>
+								<td>Sixpack</td> 
+							</tr> 
+							<tr> 
+								<td>3</td> 
+								<td>Stu</td> 
+								<td>Dent</td> 
+							</tr> 
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>		
+</body>

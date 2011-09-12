@@ -1,0 +1,23 @@
+body {
+    padding-top: 40px;
+}
+
+#page_header {
+	border-bottom: 1px solid #ccc;
+	background-color: #eff3f7;
+}
+
+#page_header h1
+{
+	color: #444;
+	font-size: 36px;
+	//text-shadow: 0 2px 2px rgba(0,0,0,.3);
+	padding-top: 20px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+#song_list
+{
+    padding: 10px;
+}
