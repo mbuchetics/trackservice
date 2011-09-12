@@ -36,6 +36,7 @@ function getSongPretty(song) {
         timeAgo: datetime.formatAgo(song.time),
         artist: song.artist,
         title: song.title,
+        source: song.source,
     };
 }
 
@@ -100,7 +101,8 @@ function getTracklist() {
                         var song = { 
                             'time': time, 
                             'artist': $(this).find('.artist').text(), 
-                            'title': $(this).find('.tracktitle').text()
+                            'title': $(this).find('.tracktitle').text(),
+                            'source': 'fm4',
                         };
 
                         foundSongs.push(song);                 
