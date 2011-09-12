@@ -12,7 +12,6 @@ var config = require('./config'),
     datetime = require('datetime'),
     songs = [],
     jquerySrc = fs.readFileSync("./jquery-1.6.2.min.js").toString(),
-    port = process.env.PORT || 3000,
     db;
     
 function getTime(timeStr) {
@@ -143,7 +142,7 @@ function run() {
     app.set('view engine', 'jade');
 
     app.get('/', function(req, res) {
-        res.render('index', { title: 'hello ines' });
+        res.render('index', { title: 'blub!' });
     });
     
     app.get('/list', function(req, res) {
