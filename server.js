@@ -10,8 +10,7 @@ var config = require('./config'),
     mongodb = require('mongodb'),
     async = require('async'),
     datetime = require('datetime'),
-    songs = [],
-    jquerySrc = fs.readFileSync("./jquery-1.6.2.min.js").toString(),
+    jquerySrc = fs.readFileSync("externals/jquery-1.6.2.min.js").toString(),
     db;
     
 function getTime(timeStr) {
@@ -49,8 +48,6 @@ function getSongsCollection(callback) {
 }
 
 function addSong(song) {
-    songs.push(song);
-    
     getSongsCollection(function(collection) {
         collection.insert(song);
         collection.ensureIndex({ time: -1}, function() {});
@@ -58,8 +55,6 @@ function addSong(song) {
         console.log('added song to db:'.underline.red);
         console.log(util.inspect(song).red);
     });
-    
-    return songs;
 }
 
 function getSongs(count, callback) {
