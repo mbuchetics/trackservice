@@ -175,9 +175,9 @@ function run() {
         });
     });
     
-    console.log('listening on port ' + port);
+    console.log('listening on port ' + config.port);
 
-    app.listen(port);
+    app.listen(config.port);
 
     getTracklist();
     //setInterval(getTracklist, 120000);
