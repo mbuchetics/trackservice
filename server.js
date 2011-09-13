@@ -150,7 +150,7 @@ function run() {
     app.use(express.static(__dirname + '/public'));
 
     app.get('/api/all', function(req, res) {
-        console.log('/api/all request');
+        console.log('/api/all');
         
         getSongs(0, function(songs) {
             res.json(songs);
@@ -158,8 +158,6 @@ function run() {
     });
 
     app.get('/api/last/:count?', function(req, res) {
-        console.log('/api/last/ request');
-        
         var count = req.params.count;
         if (count == undefined) {
             count = 5;
@@ -167,15 +165,15 @@ function run() {
         else {
             count = parseInt(count);
         }
+        
+        console.log('/api/last/' + count);
   
         getSongs(count, function(songs) {
             res.json(songs);
         });
     });
     
-    app.get('*', function(req, res) {
-        console.log('404');
-        
+    app.get('*', function(req, res) {    
         res.writeHead(404);
         res.end();
     })
