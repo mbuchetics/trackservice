@@ -5,7 +5,7 @@ var config = require('./config'),
     util = require('util'),
     fs = require('fs'),
     path = require('path'),
-    underscore = require('underscore'),
+    _ = require('underscore'),
     colors = require('colors'),
     mongodb = require('mongodb'),
     async = require('async'),
@@ -111,8 +111,18 @@ function getTracklist() {
                         'title': $(this).find('.tracktitle').text(),
                         'source': 'fm4',
                     };
-
-                    foundSongs.push(song);                 
+                    
+                    var isDuplicate = _.any(foundSongs, function(element) {
+                            return _.isEqual(element, song);
+                        });
+                         
+                    if (isDuplicate) {
+                        console.log('isDupliate:');
+                        console.log(util.inspect(song));
+                    }
+                    else {
+                        foundSongs.push(song);
+                    }                    
                 });
                 
                 foundSongs.forEach(function(newSong) {
@@ -120,12 +130,6 @@ function getTracklist() {
                        if (!song) {
                            addSong(newSong);
                        }
-                       /* 
-                       else {                           
-                           console.log('already in db');
-                           console.log(util.inspect(song).red);
-                       }
-                       */
                     });
                 });
             });
