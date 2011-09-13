@@ -10,8 +10,20 @@ var config = require('./config'),
     mongodb = require('mongodb'),
     async = require('async'),
     datetime = require('datetime'),
-    jquerySrc = fs.readFileSync("public/js/externals/jquery-1.6.3.min.js").toString(),
+    jQuerySrc = fs.readFileSync('public/js/externals/jquery-1.6.3.min.js').toString(),
     db;
+    
+var useJQuery = function(body, callback) {
+    jsdom.env ({
+        html: body,
+        src: [ jQuerySrc ],                
+        done: function (err, window) {
+            callback(window.jQuery);            
+            // memory leak if we don't close the window ...
+            window.close();
+        }
+    });
+}
     
 function getTime(timeStr) {
     var now = new Date(),
@@ -82,49 +94,48 @@ function getSong(song, callback) {
     });
 }
 
-function getTracklist() {    
+function getTracklist() { 
     request('http://hop.orf.at/img-trackservice/fm4.html', function(error, res, body) {
         if (!error && res.statusCode == 200) {
-            jsdom.env ({
-                html: body,
-                src: [ jquerySrc ],                
-                done: function (err, window) {
-                    var now = new Date();
-                    console.log('update: ' + now.toGMTString());
+            useJQuery(body, function($) {
+                var now = new Date();
+                console.log('update: ' + now.toGMTString());
 
-                    var foundSongs = [];
+                var foundSongs = [];
 
-                    var $ = window.jQuery;
+                $('div').each(function(index) {
+                    var time = getTime($(this).text().substring(0, 5));                       
+                    var song = { 
+                        'time': time, 
+                        'artist': $(this).find('.artist').text(), 
+                        'title': $(this).find('.tracktitle').text(),
+                        'source': 'fm4',
+                    };
 
-                    $('div').each(function(index) {
-                        var time = getTime($(this).text().substring(0, 5));                       
-                        var song = { 
-                            'time': time, 
-                            'artist': $(this).find('.artist').text(), 
-                            'title': $(this).find('.tracktitle').text(),
-                            'source': 'fm4',
-                        };
-
-                        foundSongs.push(song);                 
+                    foundSongs.push(song);                 
+                });
+                
+                foundSongs.forEach(function(newSong) {
+                    getSong(newSong, function(song) {
+                       if (!song) {
+                           addSong(newSong);
+                       }
+                       /* 
+                       else {                           
+                           console.log('already in db');
+                           console.log(util.inspect(song).red);
+                       }
+                       */
                     });
-                    
-                    foundSongs.forEach(function(newSong) {
-                        getSong(newSong, function(song) {
-                           if (!song) {
-                               addSong(newSong);
-                           }
-                           /* 
-                           else {                           
-                               console.log('already in db');
-                               console.log(util.inspect(song).red);
-                           }
-                           */
-                        });
-                    });
-                }
+                });
             });
         }
     });
+}
+
+function printMemory() {
+    var mem = process.memoryUsage();
+    console.log('mem: ' + mem.rss / 1024 / 1024);
 }
 
 function run() {  
@@ -139,12 +150,16 @@ function run() {
     app.use(express.static(__dirname + '/public'));
 
     app.get('/api/all', function(req, res) {
+        console.log('/api/all request');
+        
         getSongs(0, function(songs) {
             res.json(songs);
         });
     });
 
     app.get('/api/last/:count?', function(req, res) {
+        console.log('/api/last/ request');
+        
         var count = req.params.count;
         if (count == undefined) {
             count = 5;
@@ -152,13 +167,15 @@ function run() {
         else {
             count = parseInt(count);
         }
-            
+  
         getSongs(count, function(songs) {
             res.json(songs);
         });
     });
     
     app.get('*', function(req, res) {
+        console.log('404');
+        
         res.writeHead(404);
         res.end();
     })
@@ -168,8 +185,11 @@ function run() {
     app.listen(config.port);
 
     getTracklist();
+    printMemory();
+    
     //setInterval(getTracklist, 120000);
     setInterval(getTracklist, 60000);
+    setInterval(printMemory, 60000);
 }
 
 function init(dbname, host, port, user, password) {
