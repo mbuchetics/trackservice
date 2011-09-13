@@ -131,7 +131,7 @@ function run() {
     console.log('connected to db'.green);
     console.log('start tracking songs'.green);
     
-    //fs.write(fd, '[new session ' + new Date().toGMTString() + ']\n', null);
+    console.log('[new session ' + new Date().toGMTString() + ']');
     
     var app = express.createServer();
     
