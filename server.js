@@ -1,6 +1,7 @@
 var config = require('./config'),
     express = require('express'),
     request = require('request'),
+    http = require('http'),
     jsdom = require("jsdom"),
     util = require('util'),
     fs = require('fs'),
@@ -10,6 +11,7 @@ var config = require('./config'),
     mongodb = require('mongodb'),
     async = require('async'),
     datetime = require('datetime'),
+    iconv  = require('iconv').Iconv,
     jQuerySrc = fs.readFileSync('public/js/externals/jquery-1.6.3.min.js').toString(),
     db;
     
@@ -95,27 +97,28 @@ function getSong(song, callback) {
 }
 
 function getTracklist() {     
-    request('http://hop.orf.at/img-trackservice/fm4.html', function(error, res, html) {
+    request('http://hop.orf.at/img-trackservice/fm4.html', function(error, res, data) {
         if (!error && res.statusCode == 200) {
+            var html = toUTF8(data);
             parseTracklist(html);
         }
     });
 }
 
 function getTracklistTestLocal() {
-    fs.readFile('fm4.html', function(err, html) {
+    fs.readFile('fm4.html', function(err, data) {
         if (!err) {
+            var html = toUTF8(data);
             parseTracklist(html);
         }
     });
 }
 
-function getTracklistTestRemote() {
-    request('http://10.42.99.135/~matthias/fm4.html', function(error, res, html) {
-        if (!error && res.statusCode == 200) {
-            parseTracklist(html);
-        }
-    });
+function toUTF8(data) {
+    var conv = new iconv('ISO-8859-1', 'UTF-8'),
+        utf8_data = conv.convert(data);
+    
+    return utf8_data;
 }
 
 function parseTracklist(html) {
@@ -129,7 +132,7 @@ function parseTracklist(html) {
             var time = getTime($(this).text().substring(0, 5));
             var artist = $(this).find('.artist').html();
             var title = $(this).find('.tracktitle').html();
-
+            
             var song = { 
                 'time': time, 
                 'artist': artist, 
@@ -209,7 +212,7 @@ function run() {
 
     app.listen(config.port);
 
-    //getTracklistTestRemote();
+    //getTracklistTestLocal();
     getTracklist();
     printMemory();
     
