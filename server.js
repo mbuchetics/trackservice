@@ -94,46 +94,69 @@ function getSong(song, callback) {
     });
 }
 
-function getTracklist() { 
-    request('http://hop.orf.at/img-trackservice/fm4.html', function(error, res, body) {
+function getTracklist() {     
+    request('http://hop.orf.at/img-trackservice/fm4.html', function(error, res, html) {
         if (!error && res.statusCode == 200) {
-            useJQuery(body, function($) {
-                var now = new Date();
-                console.log('update: ' + now.toGMTString());
-
-                var foundSongs = [];
-
-                $('div').each(function(index) {
-                    var time = getTime($(this).text().substring(0, 5));                       
-                    var song = { 
-                        'time': time, 
-                        'artist': $(this).find('.artist').text(), 
-                        'title': $(this).find('.tracktitle').text(),
-                        'source': 'fm4',
-                    };
-                    
-                    var isDuplicate = _.any(foundSongs, function(element) {
-                            return _.isEqual(element, song);
-                        });
-                         
-                    if (isDuplicate) {
-                        console.log('isDupliate:');
-                        console.log(util.inspect(song));
-                    }
-                    else {
-                        foundSongs.push(song);
-                    }                    
-                });
-                
-                foundSongs.forEach(function(newSong) {
-                    getSong(newSong, function(song) {
-                       if (!song) {
-                           addSong(newSong);
-                       }
-                    });
-                });
-            });
+            parseTracklist(html);
         }
+    });
+}
+
+function getTracklistTestLocal() {
+    fs.readFile('fm4.html', function(err, html) {
+        if (!err) {
+            parseTracklist(html);
+        }
+    });
+}
+
+function getTracklistTestRemote() {
+    request('http://10.42.99.135/~matthias/fm4.html', function(error, res, html) {
+        if (!error && res.statusCode == 200) {
+            parseTracklist(html);
+        }
+    });
+}
+
+function parseTracklist(html) {
+    useJQuery(html, function($) {
+        var now = new Date();
+        console.log('update: ' + now.toGMTString());
+
+        var foundSongs = [];
+
+        $('div').each(function(index) {
+            var time = getTime($(this).text().substring(0, 5));
+            var artist = $(this).find('.artist').html();
+            var title = $(this).find('.tracktitle').html();
+
+            var song = { 
+                'time': time, 
+                'artist': artist, 
+                'title': title,
+                'source': 'fm4',
+            };
+            
+            var isDuplicate = _.any(foundSongs, function(element) {
+                    return _.isEqual(element, song);
+                });
+                 
+            if (isDuplicate) {
+                console.log('isDupliate:');
+                console.log(util.inspect(song));
+            }
+            else {
+                foundSongs.push(song);
+            }                    
+        });
+        
+        foundSongs.forEach(function(newSong) {
+            getSong(newSong, function(song) {
+               if (!song) {
+                   addSong(newSong);
+               }
+            });
+        });
     });
 }
 
@@ -186,6 +209,7 @@ function run() {
 
     app.listen(config.port);
 
+    //getTracklistTestRemote();
     getTracklist();
     printMemory();
     
