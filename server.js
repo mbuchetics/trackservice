@@ -212,7 +212,7 @@ function run() {
 
     app.listen(config.port);
 
-    //getTracklistTestLocal();
+    getTracklistTestLocal();
     getTracklist();
     printMemory();
     
