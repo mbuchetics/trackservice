@@ -24,7 +24,6 @@ $(function() {
 	    },
 	    
 	    showAll: function() {
-	        console.log('showAll');
 	        $('#page_title').html('All Songs');
 	        $.getJSON('api/all', function(songs) {
 	            renderSongsList(songs);
@@ -32,7 +31,6 @@ $(function() {
 	    },
 	    
 	    showRecent: function() {
-	        console.log('showRecent');
 	        $('#page_title').html('Last 10 Songs');
 	        $.getJSON('api/last/10', function(songs) {
 	            renderSongsList(songs);
