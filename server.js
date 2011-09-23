@@ -97,12 +97,27 @@ function getSong(song, callback) {
 }
 
 function getTracklist() {     
-    request('http://hop.orf.at/img-trackservice/fm4.html', function(error, res, data) {
-        if (!error && res.statusCode == 200) {
-            var html = toUTF8(data);
-            parseTracklist(html);
-        }
-    });
+    request({
+       uri: 'http://hop.orf.at/img-trackservice/fm4.html',
+       encoding: 'binary' 
+       }, 
+       function(error, res, html) {
+           if (!error && res.statusCode == 200) {
+               parseTracklist(html);
+           }
+       });
+}
+
+function getTestFile() {     
+    request({
+       uri: 'http://fm4.orf.at/v2static/html/streaming/buttons.html',
+       encoding: 'binary' 
+       }, 
+       function(error, res, html) {
+           if (!error && res.statusCode == 200) {
+               console.log(html);
+           }
+       });
 }
 
 function getTracklistTestLocal() {
@@ -213,6 +228,8 @@ function run() {
     app.listen(config.port);
 
     //getTracklistTestLocal();
+    //getTestFile();
+    
     getTracklist();
     printMemory();
     
