@@ -11,7 +11,6 @@ var config = require('./config'),
     mongodb = require('mongodb'),
     async = require('async'),
     datetime = require('datetime'),
-    iconv  = require('iconv').Iconv,
     jQuerySrc = fs.readFileSync('public/js/externals/jquery-1.6.3.min.js').toString(),
     db;
     
@@ -118,22 +117,6 @@ function getTestFile() {
                console.log(html);
            }
        });
-}
-
-function getTracklistTestLocal() {
-    fs.readFile('fm4.html', function(err, data) {
-        if (!err) {
-            var html = toUTF8(data);
-            parseTracklist(html);
-        }
-    });
-}
-
-function toUTF8(data) {
-    var conv = new iconv('ISO-8859-1', 'UTF-8'),
-        utf8_data = conv.convert(data);
-    
-    return utf8_data;
 }
 
 function parseTracklist(html) {
