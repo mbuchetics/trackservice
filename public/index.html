@@ -3,7 +3,7 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<title>trackservice</title>	
 	
-	<link rel="stylesheet" href="css/bootstrap-1.3.0.min.css" />
+	<link rel="stylesheet" href="css/bootstrap.css" />
 	<link rel="stylesheet" href="css/style.css" />
 	
 	<script src="js/externals/json2.js" type="text/javascript" charset="utf-8"></script>
@@ -12,64 +12,67 @@
 	<script src="js/externals/underscore-min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/externals/handlebars.1.0.0.beta.3.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/externals/backbone-min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/externals/date-de-AT.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 	<!-- Topbar
 	================================================== -->
+	
 	<div class="topbar">
-		<div class="topbar-inner">
+		<div class="fill">
         	<div class="container">
-          		<h3><a href="#">Trackservice</a></h3>
+          		<a class="brand" href="#">Trackservice</a>
           		<ul class="nav">
-		            <li><a href="#/recent">Recent</a></li>
-					<li><a href="#/all">All</a></li>
-		        </ul>
-				<ul class="nav secondary-nav">
-					<li><a href="#/user/slurmomatic">slurmomatic</a></li>
-				</ul>
-			</div>
+					<li class="menu-recent active"><a href="#/recent">Aktuell</a></li>
+					<li class="menu-all"><a href="#/all">Alle</a></li>
+          		</ul>
+          		<form action="" class="pull-right">
+            		<input class="input-small" type="text" placeholder="Username">
+            		<button class="btn" type="submit">Sign in</button>
+          		</form>
+        	</div>
       	</div>
     </div>
 	
-	<!-- Header
-    ================================================== -->
-	<div id="page_header">
-		<div class="container">
-			<h1 id="page_title">Recent Songs</h1>
-		</div>
-	</div>
-		
-	<!-- Main
-	================================================== -->
 	<div class="container">
-		<div class="row">
-			<div class="span12 columns offset2">
-				<div id="song_list">
-				</div>
-			</div>
-		</div>
-	</div>	
+
+    	<div class="content">
+        	<div class="page-header">
+          		<h1 id="page-title">Aktuelle Songs <small>Supporting text or tagline</small></h1>
+        	</div>
+        	<div class="row">
+          		<div class="span10">
+					<div id="song-list"></div>
+          		</div>
+          		<div class="span6">
+            		<h3>Merkliste</h3>
+					<div id="like-list">
+						nix da
+					</div>
+					<h3>FM4 Live Stream</h3>
+					<p>zum Live Stream ...</p>
+          		</div>
+        	</div>
+      	</div>
+
+      	<footer>
+        	<p>&copy; Matthias Buchetics 2011</p>
+      	</footer>
+
+    </div>
 
 	<!-- TEMPLATES -->
 	
 	<script type="text/template" id="song_list_template">
 		<table class="zebra-striped"> 
-			<thead> 
-				<tr> 
-					<th class="buttons"></th>
-					<th class="artist">Artist</th> 
-					<th class="title">Title</th> 
-					<th class="time">Time</th> 
-				</tr>
-			</thead> 
 			<tbody> 
 				{{#each songs}}
 				<tr> 	
-					<td><button type="submit" name="button_like_song" class="btn">+</button></td>
-					<td>{{ artist }}</td> 
-					<td>{{ title }}</td> 
-					<td><time class="timeago" datetime="{{ time }}">{{ time }}</time></td> 
+					<!--<td><button type="submit" name="button_like_song" class="btn">+</button></td>-->
+					<td class="plus"><a class="button-plus" href="">+</a></td>
+					<td class="song">{{ artist }} - {{ title }}</td> 
+					<td class="time">{{ time }} {{#if isNew}}<span class="label warning">neu</span>{{/if}}</td> 
 				</tr> 
 				{{/each}}
 			</tbody>

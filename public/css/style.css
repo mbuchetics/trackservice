@@ -1,40 +1,82 @@
+html, body {
+    background-color: #eee;
+}
+  
 body {
-    padding-top: 40px;
+    padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
 }
 
-#page_header {
-	border-bottom: 1px solid #ccc;
-	background-color: #eff3f7;
+footer p {
+    text-align: center; /* center align it with the container */
 }
 
-#page_header h1
-{
-	color: #444;
-	font-size: 36px;
-	//text-shadow: 0 2px 2px rgba(0,0,0,.3);
-	padding-top: 20px;
-	margin-bottom: 10px;
-	text-align: center;
+/* The white background content wrapper */
+.content {
+    background-color: #fff;
+    padding: 20px;
+    margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+    -webkit-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+    border-radius: 0 0 6px 6px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
 }
 
-#song_list
+/* Page header tweaks */
+.page-header {
+    background-color: #f5f5f5;
+    padding: 20px 20px 10px;
+    margin: -20px -20px 20px;
+}
+
+/* Give a quick and non-cross-browser friendly divider */
+.content .span6 {
+    margin-left: 0;
+    padding-left: 19px;
+    border-left: 1px solid #eee;
+}
+
+.topbar .btn {
+    border: 0;
+}
+
+#song-list
 {
     padding: 10px;
 }
 
-#song_list .buttons
+#song-list .plus
+{ 
+    width: 20px;
+    text-align: center;
+}
+
+#song-list .button-plus
+{
+    text-align: center;
+    font-size: 9.75px;
+    //font-weight: bold;
+    background-color: #0064CD;
+    padding: 5px 8px 6px;
+    color: white;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#song-list .button-plus:hover
+{
+    text-decoration: none;
+    background-color: #004A99;
+}
+
+#song-list .song
 {
 }
 
-#song_list .artist
+#song-list .time
 {
-}
-
-#song_list .title
-{
-}
-
-#song_list .time
-{
-    width: 150px;
+    width: 140px;
+    text-align: right;
 }

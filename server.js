@@ -156,8 +156,8 @@ function parseTracklist(html) {
             };
             
             var isDuplicate = _.any(foundSongs, function(element) {
-                    return _.isEqual(element, song);
-                });
+                return _.isEqual(element, song);
+            });
                  
             if (isDuplicate) {
                 console.log('isDupliate:');
@@ -191,7 +191,7 @@ function run() {
     
     var app = express.createServer();
     
-    app.use(express.staticCache());
+    //app.use(express.staticCache());
     app.use(express.static(__dirname + '/public'));
 
     app.get('/api/all', function(req, res) {
@@ -202,16 +202,10 @@ function run() {
         });
     });
 
-    app.get('/api/last/:count?', function(req, res) {
-        var count = req.params.count;
-        if (count == undefined) {
-            count = 5;
-        }
-        else {
-            count = parseInt(count);
-        }
-        
-        console.log('/api/last/' + count);
+    app.get('/api/recent', function(req, res) {
+        var count = parseInt(req.param('count', 5));
+
+        console.log('/api/recent with count: ' + count);
   
         getSongs(count, function(songs) {
             res.json(songs);
