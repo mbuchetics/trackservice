@@ -197,8 +197,13 @@ function addLike(songId, user) {
 }
 
 function convertToVersion2() {
-    getItems('songs', { }, { time: 1 }, 0, function(song) {
-        addPlay(song);
+    var i = 0;
+    console.log('converting ...');
+    getItems('songs', { }, { time: 1 }, 0, function(songs) {
+        songs.forEach(function(song) {
+            console.log(i++);
+            addPlay(song);
+        });
     });
 }
 
