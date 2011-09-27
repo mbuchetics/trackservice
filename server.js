@@ -129,7 +129,7 @@ function run() {
     //getTestFile();
     
     //getTracklist();
-    ZZprintMemory();
+    //printMemory();
     
     //setInterval(getTracklist, 120000);
     //setInterval(getTracklist, 60000);
