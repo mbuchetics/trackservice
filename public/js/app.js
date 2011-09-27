@@ -66,39 +66,44 @@ $(function() {
 	var AppRouter = Backbone.Router.extend({
 	    routes: {
 	        "/all": "showAll",
+	        "/:user/all": "showAll",
 	        "/recent": "showRecent",
+	        "/:user/recent": "showRecent",
 	        "/most-plays": "showMostPlayedSongs",
+	        "/:user/most-plays": "showMostPlayedSongs",
 	        "/most-likes": "showMostLikedSongs",
+	        "/:user/most-likes": "showMostLikedSongs",
 	        "": "showRecent",
+	        "/:user": "showRecent",
 	    },
 	    
-	    showAll: function() {
+	    showAll: function(user) {
 	        setActiveMenuItem('.menu-all');
-	        $('#page-title').html('Alles');
+	        $('#page-title').html('Alles <small>'+ user +'</small>');
 	        $.getJSON('api/plays/all', function(plays) {
 	            renderPlayList(plays);
         	});
 	    },
 	    
-	    showRecent: function() {
+	    showRecent: function(user) {
 	        setActiveMenuItem('.menu-recent');
-	        $('#page-title').html('Die letzten Lieder <small>15 oder so ...</small>');
+	        $('#page-title').html('Die letzten Lieder <small>'+ user +'</small>');
 	        $.getJSON('api/plays/recent', { count: 15 }, function(plays) {
 	            renderPlayList(plays);
         	});
 	    },
 	    
-	    showMostPlayedSongs: function() {
+	    showMostPlayedSongs: function(user) {
 	        setActiveMenuItem('.menu-most-plays');
-	        $('#page-title').html('Die meistgespielten Lieder <small>aller Zeiten!</small>');
+	        $('#page-title').html('Die meistgespielten Lieder <small>'+ user +'</small>');
 	        $.getJSON('api/songs/most_plays', { count: 15 }, function(songs) {
 	            renderSongList(songs);
         	});
 	    },
 	    
-	    showMostLikedSongs: function() {
+	    showMostLikedSongs: function(user) {
 	        setActiveMenuItem('.menu-most-likes');
-	        $('#page-title').html('Die beliebtesten Lieder <small>aller Zeiten!</small>');
+	        $('#page-title').html('Die beliebtesten Lieder <small>'+ user +'</small>');
 	        $.getJSON('api/songs/most_likes', { count: 15 }, function(songs) {
 	            renderSongList(songs);
         	});
