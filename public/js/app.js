@@ -5,11 +5,12 @@
 
 $(function() {
 	var host = window.location.hostname,
-		songListTempl = Handlebars.compile($('#song_list_template').html());
+		songListTempl = Handlebars.compile($('#song_list_template').html()),
+		playListTempl = Handlebars.compile($('#play_list_template').html());
 	
-	function extendSong(song) {
+	function extendPlay(play) {
 	    var now = new Date(),
-	        time = new Date(song.time),
+	        time = new Date(play.time),
 	        day = time.clone().clearTime(),
 	        isToday = day.equals(Date.today()),
 	        isYesterday = day.equals(Date.today().add(-1).day()),
@@ -32,18 +33,26 @@ $(function() {
 	    
         return { 
             time: timeStr,
-            artist: song.artist,
-            title: song.title,
-            source: song.source,
+            artist: play.artist,
+            title: play.title,
+            source: play.source,
             isNew: timeDiffInMinutes < 15,
         };
     }
 	
-	function renderSongsList(songs) {
-	    var extSongs = _.map(songs, extendSong);
+	function renderPlayList(plays) {
+	    var extPlays = _.map(plays, extendPlay);
 	    
+	    var playListHtml = playListTempl({ 
+			plays: extPlays,
+		});
+		
+		$('#song-list').html(playListHtml);
+	}
+	
+	function renderSongList(songs) {
 	    var songListHtml = songListTempl({ 
-			songs: extSongs,
+			songs: songs,
 		});
 		
 		$('#song-list').html(songListHtml);
@@ -58,22 +67,40 @@ $(function() {
 	    routes: {
 	        "/all": "showAll",
 	        "/recent": "showRecent",
+	        "/most-plays": "showMostPlayedSongs",
+	        "/most-likes": "showMostLikedSongs",
 	        "": "showRecent",
 	    },
 	    
 	    showAll: function() {
 	        setActiveMenuItem('.menu-all');
 	        $('#page-title').html('Alles');
-	        $.getJSON('api/all', function(songs) {
-	            renderSongsList(songs);
+	        $.getJSON('api/plays/all', function(plays) {
+	            renderPlayList(plays);
         	});
 	    },
 	    
 	    showRecent: function() {
 	        setActiveMenuItem('.menu-recent');
 	        $('#page-title').html('Die letzten Lieder <small>15 oder so ...</small>');
-	        $.getJSON('api/recent', { count: 15 }, function(songs) {
-	            renderSongsList(songs);
+	        $.getJSON('api/plays/recent', { count: 15 }, function(plays) {
+	            renderPlayList(plays);
+        	});
+	    },
+	    
+	    showMostPlayedSongs: function() {
+	        setActiveMenuItem('.menu-most-plays');
+	        $('#page-title').html('Die meistgespielten Lieder <small>aller Zeiten!</small>');
+	        $.getJSON('api/songs/most_plays', { count: 15 }, function(songs) {
+	            renderSongList(songs);
+        	});
+	    },
+	    
+	    showMostLikedSongs: function() {
+	        setActiveMenuItem('.menu-most-likes');
+	        $('#page-title').html('Die beliebtesten Lieder <small>aller Zeiten!</small>');
+	        $.getJSON('api/songs/most_likes', { count: 15 }, function(songs) {
+	            renderSongList(songs);
         	});
 	    }
 	});

@@ -27,6 +27,8 @@
           		<ul class="nav">
 					<li class="menu-recent active"><a href="#/recent">Aktuell</a></li>
 					<li class="menu-all"><a href="#/all">Alle</a></li>
+					<li class="menu-most-plays"><a href="#/most-plays">Meistgespielt</a></li>
+					<li class="menu-most-likes"><a href="#/most-likes">Beliebt</a></li>
           		</ul>
           		<form action="" class="pull-right">
             		<input class="input-small" type="text" placeholder="Username">
@@ -65,15 +67,29 @@
 
 	<!-- TEMPLATES -->
 	
+	<script type="text/template" id="play_list_template">
+		<table class="zebra-striped"> 
+			<tbody> 
+				{{#each plays}}
+				<tr> 	
+					<td class="plus"><a class="button-plus" href="">+</a></td>
+					<td class="song">{{ artist }} - {{ title }}</td> 
+					<td class="time">{{ time }} {{#if isNew}}<span class="label warning">neu</span>{{/if}}</td> 
+				</tr> 
+				{{/each}}
+			</tbody>
+		</table>	
+	</script>
+	
 	<script type="text/template" id="song_list_template">
 		<table class="zebra-striped"> 
 			<tbody> 
 				{{#each songs}}
 				<tr> 	
-					<!--<td><button type="submit" name="button_like_song" class="btn">+</button></td>-->
 					<td class="plus"><a class="button-plus" href="">+</a></td>
 					<td class="song">{{ artist }} - {{ title }}</td> 
-					<td class="time">{{ time }} {{#if isNew}}<span class="label warning">neu</span>{{/if}}</td> 
+					<td class="play_count">{{ play_count }}</td> 
+					<td class="like_count">{{ like_count }}</td> 
 				</tr> 
 				{{/each}}
 			</tbody>

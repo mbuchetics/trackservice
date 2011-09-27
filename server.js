@@ -1,4 +1,5 @@
 var config = require('./config'),
+    db = require('./database'),
     express = require('express'),
     request = require('request'),
     http = require('http'),
@@ -8,11 +9,8 @@ var config = require('./config'),
     path = require('path'),
     _ = require('underscore'),
     colors = require('colors'),
-    mongodb = require('mongodb'),
-    async = require('async'),
     datetime = require('datetime'),
-    jQuerySrc = fs.readFileSync('public/js/externals/jquery-1.6.3.min.js').toString(),
-    db;
+    jQuerySrc = fs.readFileSync('public/js/externals/jquery-1.6.3.min.js').toString();
     
 var useJQuery = function(body, callback) {
     jsdom.env ({
@@ -41,58 +39,6 @@ function getTime(timeStr) {
     }
 
     return time;
-}
-
-function getSongPretty(song) {
-    return { 
-        time: datetime.format(song.time, '%d.%m., %T'),
-        timeAgo: datetime.formatAgo(song.time),
-        artist: song.artist,
-        title: song.title,
-        source: song.source,
-    };
-}
-
-function getSongsCollection(callback) {
-    db.collection('songs', function(err, collection) {
-        if (!err) {
-            callback(collection);
-        }
-    });
-}
-
-function addSong(song) {
-    getSongsCollection(function(collection) {
-        collection.insert(song);
-        collection.ensureIndex({ time: -1}, function() {});
-        collection.ensureIndex({ artist: 1 }, function() {});
-        console.log('added song to db:'.underline.red);
-        console.log(util.inspect(song).red);
-    });
-}
-
-function getSongs(count, callback) {
-    if (count < 0) {
-        count = 0;
-    }
-    
-    getSongsCollection(function(collection) {
-        collection.find().sort({ time : -1 }).limit(count).toArray(function(err, results) {
-           if (!err) {
-               callback(results);
-           } 
-        });
-    });
-}
-
-function getSong(song, callback) {
-    getSongsCollection(function(collection) {
-        collection.findOne({ time: song.time, artist: song.artist, title: song.title }, function(err, result) {
-            if (!err) {
-                callback(result);
-            }
-        }); 
-    });
 }
 
 function getTracklist() {     
@@ -152,11 +98,7 @@ function parseTracklist(html) {
         });
         
         foundSongs.forEach(function(newSong) {
-            getSong(newSong, function(song) {
-               if (!song) {
-                   addSong(newSong);
-               }
-            });
+            db.addPlay(newSong);
         });
     });
 }
@@ -174,31 +116,8 @@ function run() {
     
     var app = express.createServer();
     
-    //app.use(express.staticCache());
-    app.use(express.static(__dirname + '/public'));
-
-    app.get('/api/all', function(req, res) {
-        console.log('/api/all');
-        
-        getSongs(0, function(songs) {
-            res.json(songs);
-        });
-    });
-
-    app.get('/api/recent', function(req, res) {
-        var count = parseInt(req.param('count', 5));
-
-        console.log('/api/recent with count: ' + count);
-  
-        getSongs(count, function(songs) {
-            res.json(songs);
-        });
-    });
-    
-    app.get('*', function(req, res) {    
-        res.writeHead(404);
-        res.end();
-    })
+    require('./environment.js')(app, express);
+    require('./routes.js')(app);
     
     console.log('listening on port ' + config.port);
 
@@ -215,19 +134,4 @@ function run() {
     setInterval(printMemory, 60000);
 }
 
-function init(dbname, host, port, user, password) {
-    console.log('trying to connect to db');
-    console.log(config);
-    
-    mongodb.connect(config.db_url, function(err, database) {
-        if (!err) {
-            db = database;
-            run();
-        }
-        else {
-            console.log('error connecting to db'.red);
-        }
-    });
-}
-
-init();
+db.init(config, run);
