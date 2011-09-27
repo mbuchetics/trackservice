@@ -196,6 +196,12 @@ function addLike(songId, user) {
     });
 }
 
+function convertToVersion2() {
+    getItems('songs', { }, { time: 1 }, 0, function(song) {
+        addPlay(song);
+    });
+}
+
 // exports
 
 module.exports.init = init;
@@ -214,3 +220,4 @@ module.exports.getPlay = getPlay;
 module.exports.getLike = getLike;
 module.exports.addPlay = addPlay;
 module.exports.addLike = addLike;
+module.exports.convertToVersion2 = convertToVersion2;
