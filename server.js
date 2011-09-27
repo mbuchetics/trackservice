@@ -123,17 +123,15 @@ function run() {
 
     app.listen(config.port);
     
-    db.convertToVersion2();
-
     //getTracklistTestLocal();
     //getTestFile();
     
-    //getTracklist();
-    //printMemory();
+    getTracklist();
+    printMemory();
     
     //setInterval(getTracklist, 120000);
-    //setInterval(getTracklist, 60000);
-    //setInterval(printMemory, 60000);
+    setInterval(getTracklist, 60000);
+    setInterval(printMemory, 60000);
 }
 
 db.init(config, run);

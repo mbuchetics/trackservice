@@ -57,7 +57,7 @@ function toObjectID(idString) {
 }
 
 function getSongsCollection(callback) {
-    getCollection('songs2', callback);
+    getCollection('songs', callback);
 }
 
 function getPlaysCollection(callback) {
@@ -69,7 +69,7 @@ function getLikesCollection(callback) {
 }
 
 function getSongs(filterCriteria, sortCriteria, count, callback) {
-    getItems('songs2', filterCriteria, sortCriteria, count, callback);
+    getItems('songs', filterCriteria, sortCriteria, count, callback);
 }
 
 function getPlays(filterCriteria, sortCriteria, count, callback) {
@@ -81,7 +81,7 @@ function getLikes(filterCriteria, sortCriteria, count, callback) {
 }
 
 function getSong(criteria, callback) {
-    getItem('songs2', criteria, callback);
+    getItem('songs', criteria, callback);
 }
 
 function getPlay(criteria, callback) {
@@ -110,7 +110,7 @@ function insertPlay(songId, song) {
     });
 }
 
-function addPlay(song) {
+function addPlay(song, waitForInsert) {
     getSong({ artist: song.artist, title: song.title }, function(foundSong) {
         // song not in database
         if (!foundSong) {
@@ -196,17 +196,6 @@ function addLike(songId, user) {
     });
 }
 
-function convertToVersion2() {
-    var i = 0;
-    console.log('converting ...');
-    getItems('songs', { }, { time: 1 }, 0, function(songs) {
-        songs.forEach(function(song) {
-            console.log(i++);
-            addPlay(song);
-        });
-    });
-}
-
 // exports
 
 module.exports.init = init;
@@ -225,4 +214,3 @@ module.exports.getPlay = getPlay;
 module.exports.getLike = getLike;
 module.exports.addPlay = addPlay;
 module.exports.addLike = addLike;
-module.exports.convertToVersion2 = convertToVersion2;
