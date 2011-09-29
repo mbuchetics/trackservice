@@ -8,6 +8,20 @@ $(function() {
 		songListTempl = Handlebars.compile($('#song_list_template').html()),
 		playListTempl = Handlebars.compile($('#play_list_template').html());
 	
+	function addEvents() {
+	    $('.button-plus').click(function(e) {
+            e.preventDefault();
+
+            console.log('button clicked');
+            console.log($(this).parent().parent().attr('class'));
+        });
+        
+        $('tr').mouseover(function() {
+            console.log('mouse over');
+            console.log($(this).attr('class'));
+        });
+	}
+	
 	function extendPlay(play) {
 	    var now = new Date(),
 	        time = new Date(play.time),
@@ -30,8 +44,9 @@ $(function() {
         else {
             timeStr = time.toString('d. MMM. HH:mm');
         }
-	    
+
         return { 
+            songId: play.song_id,
             time: timeStr,
             artist: play.artist,
             title: play.title,
@@ -48,6 +63,8 @@ $(function() {
 		});
 		
 		$('#song-list').html(playListHtml);
+		
+		addEvents();
 	}
 	
 	function renderSongList(songs) {
@@ -56,6 +73,8 @@ $(function() {
 		});
 		
 		$('#song-list').html(songListHtml);
+		
+		addEvents();
 	}
 	
 	function setActiveMenuItem(selector) {
@@ -66,20 +85,16 @@ $(function() {
 	var AppRouter = Backbone.Router.extend({
 	    routes: {
 	        "/all": "showAll",
-	        "/:user/all": "showAll",
 	        "/recent": "showRecent",
-	        "/:user/recent": "showRecent",
 	        "/most-plays": "showMostPlayedSongs",
-	        "/:user/most-plays": "showMostPlayedSongs",
 	        "/most-likes": "showMostLikedSongs",
-	        "/:user/most-likes": "showMostLikedSongs",
 	        "": "showRecent",
-	        "/:user": "showRecent",
+	        "/:user": "showRecent"
 	    },
 	    
 	    showAll: function(user) {
 	        setActiveMenuItem('.menu-all');
-	        $('#page-title').html('Alles <small>'+ user +'</small>');
+	        $('#page-title').html('All Songs <small>from the beginning of time</small>');
 	        $.getJSON('api/plays/all', function(plays) {
 	            renderPlayList(plays);
         	});
@@ -87,7 +102,7 @@ $(function() {
 	    
 	    showRecent: function(user) {
 	        setActiveMenuItem('.menu-recent');
-	        $('#page-title').html('Die letzten Lieder <small>'+ user +'</small>');
+	        $('#page-title').html('Recent Songs <small>last 15</small>');
 	        $.getJSON('api/plays/recent', { count: 15 }, function(plays) {
 	            renderPlayList(plays);
         	});
@@ -95,7 +110,7 @@ $(function() {
 	    
 	    showMostPlayedSongs: function(user) {
 	        setActiveMenuItem('.menu-most-plays');
-	        $('#page-title').html('Die meistgespielten Lieder <small>'+ user +'</small>');
+	        $('#page-title').html('Most Played Songs <small>top 15</small>');
 	        $.getJSON('api/songs/most_plays', { count: 15 }, function(songs) {
 	            renderSongList(songs);
         	});
@@ -103,13 +118,13 @@ $(function() {
 	    
 	    showMostLikedSongs: function(user) {
 	        setActiveMenuItem('.menu-most-likes');
-	        $('#page-title').html('Die beliebtesten Lieder <small>'+ user +'</small>');
+	        $('#page-title').html('Most Liked Songs <small>top 15</small>');
 	        $.getJSON('api/songs/most_likes', { count: 15 }, function(songs) {
 	            renderSongList(songs);
         	});
 	    }
 	});
-	
+
 	var appRouter = new AppRouter();
 	Backbone.history.start();
 });

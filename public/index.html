@@ -25,10 +25,10 @@
         	<div class="container">
           		<a class="brand" href="#">Trackservice</a>
           		<ul class="nav">
-					<li class="menu-recent active"><a href="#/recent">Aktuell</a></li>
-					<li class="menu-all"><a href="#/all">Alle</a></li>
-					<li class="menu-most-plays"><a href="#/most-plays">Meistgespielt</a></li>
-					<li class="menu-most-likes"><a href="#/most-likes">Beliebt</a></li>
+					<li class="menu-recent active"><a href="#/recent">Recent</a></li>
+					<li class="menu-all"><a href="#/all">All</a></li>
+					<li class="menu-most-plays"><a href="#/most-plays">Most played</a></li>
+					<li class="menu-most-likes"><a href="#/most-likes">Most liked</a></li>
           		</ul>
           		<form action="" class="pull-right">
             		<input class="input-small" type="text" placeholder="Username">
@@ -42,7 +42,7 @@
 
     	<div class="content">
         	<div class="page-header">
-          		<h1 id="page-title">Aktuelle Songs <small>Username</small></h1>
+          		<h1 id="page-title">Page Title <small>Subtext</small></h1>
         	</div>
         	<div class="row">
           		<div class="span10">
@@ -51,6 +51,10 @@
           		<div class="span6">
             		<h3>Merkliste</h3>
 					<div id="like-list">
+						nix da
+					</div>
+					<h3>Info</h3>
+					<div id="info">
 						nix da
 					</div>
 					<h3>FM4 Live Stream</h3>
@@ -71,7 +75,7 @@
 		<table class="zebra-striped"> 
 			<tbody> 
 				{{#each plays}}
-				<tr> 	
+				<tr class="{{ songId }}"> 	
 					<td class="plus"><a class="button-plus" href="">+</a></td>
 					<td class="song">{{ artist }} - {{ title }}</td> 
 					<td class="time">{{ time }} {{#if isNew}}<span class="label warning">neu</span>{{/if}}</td> 
@@ -85,7 +89,7 @@
 		<table class="zebra-striped"> 
 			<tbody> 
 				{{#each songs}}
-				<tr> 	
+				<tr class="{{ _id }}">	
 					<td class="plus"><a class="button-plus" href="">+</a></td>
 					<td class="song">{{ artist }} - {{ title }}</td> 
 					<td class="play_count">{{ play_count }}</td> 
