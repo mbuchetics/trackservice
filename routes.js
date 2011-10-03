@@ -1,40 +1,48 @@
 var db = require('./database.js');
 
-module.exports = function(app) {
-    app.get('/api/songs/all', function(req, res) {
-        console.log('/api/songs/all');
+function getParameters(req) {
+    var paramCount = req.param('count'),
+        paramSince = req.param('since');
         
-        db.getSongs({}, { last_time: -1 }, 0, function(songs) {
-            res.json(songs);
-        });
-    });
+    return {
+        count: paramCount ? parseInt(paramCount) : 10,
+        time:  paramSince ? new Date(paramSince) : new Date(0),
+    };
+}
 
-    app.get('/api/songs/recent', function(req, res) {
-        var count = parseInt(req.param('count', 5));
-
-        console.log('/api/songs/recent with count: ' + count);
+module.exports = function(app) {
+    
+    /// songs
+    
+    app.get('/api/songs', function(req, res) {
+        var params = getParameters(req);
+        
+        console.log('/api/songs');
+        console.log(params);
   
-        db.getSongs({}, { last_time: -1 }, count, function(songs) {
+        db.getSongs({ last_time: { '$gte': params.time } }, { last_time: -1 }, params.count, function(songs) {
             res.json(songs);
         });
     });
     
-    app.get('/api/songs/most_plays', function(req, res) {
-        var count = parseInt(req.param('count', 5));
+    app.get('/api/songs/top_plays', function(req, res) {
+        var params = getParameters(req);
 
-        console.log('/api/songs/most_plays with count: ' + count);
+        console.log('/api/songs/top_plays');
+        console.log(params);
   
-        db.getSongs({}, { play_count: -1 }, count, function(songs) {
+        db.getSongs({ last_time: { '$gte': params.time } }, { play_count: -1 }, params.count, function(songs) {
             res.json(songs);
         });
     });
     
-    app.get('/api/songs/most_likes', function(req, res) {
-        var count = parseInt(req.param('count', 5));
+    app.get('/api/songs/top_likes', function(req, res) {
+        var params = getParameters(req);
 
-        console.log('/api/songs/most_likes with count: ' + count);
+        console.log('/api/songs/top_likes');
+        console.log(params);
   
-        db.getSongs({}, { like_count: -1 }, count, function(songs) {
+        db.getSongs({ last_time: { '$gte': params.time } }, { like_count: -1 }, params.count, function(songs) {
             res.json(songs);
         });
     });
@@ -49,20 +57,15 @@ module.exports = function(app) {
         });
     });
     
-    app.get('/api/plays/all', function(req, res) {
-        console.log('/api/plays/all');
+    /// plays
+    
+    app.get('/api/plays', function(req, res) {
+        var params = getParameters(req);
         
-        db.getPlays({}, { time: -1 }, 0, function(plays) {
-            res.json(plays);
-        });
-    });
-
-    app.get('/api/plays/recent', function(req, res) {
-        var count = parseInt(req.param('count', 5));
-
-        console.log('/api/plays/recent with count: ' + count);
-  
-        db.getPlays({}, { time: -1 }, count, function(plays) {
+        console.log('/api/plays');
+        console.log(params);
+        
+        db.getPlays({ time: { '$gte': params.time } }, { time: -1 }, params.count, function(plays) {
             res.json(plays);
         });
     });
@@ -77,20 +80,15 @@ module.exports = function(app) {
         });
     });
     
-    app.get('/api/likes/all', function(req, res) {
-        console.log('/api/likes/all');
+    /// likes
+    
+    app.get('/api/likes', function(req, res) {
+        var params = getParameters(req);
         
-        db.getLikes({}, { time: -1 }, 0, function(likes) {
-            res.json(likes);
-        });
-    });
-
-    app.get('/api/likes/recent', function(req, res) {
-        var count = parseInt(req.param('count', 5));
-
-        console.log('/api/likes/recent with count: ' + count);
-  
-        db.getLikes({}, { time: -1 }, count, function(likes) {
+        console.log('/api/likes');
+        console.log(params);
+        
+        db.getLikes({ time: { '$gte': params.time } }, { time: -1 }, params.count, function(likes) {
             res.json(likes);
         });
     });

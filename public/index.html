@@ -27,8 +27,8 @@
           		<ul class="nav">
 					<li class="menu-recent active"><a href="#/recent">Recent</a></li>
 					<li class="menu-all"><a href="#/all">All</a></li>
-					<li class="menu-most-plays"><a href="#/most-plays">Most played</a></li>
-					<li class="menu-most-likes"><a href="#/most-likes">Most liked</a></li>
+					<li class="menu-top"><a href="#/top">Top</a></li>
+					<li class="menu-popular"><a href="#/popular">Popular</a></li>
           		</ul>
           		<form action="" class="pull-right">
             		<input class="input-small" type="text" placeholder="Username">
@@ -49,12 +49,12 @@
 					<div id="song-list"></div>
           		</div>
           		<div class="span6">
-            		<h3>Merkliste</h3>
-					<div id="like-list">
+            		<h3>Top 10 Last Week</h3>
+					<div class="sidebar" id="top-sidebar">
 						nix da
 					</div>
-					<h3>Info</h3>
-					<div id="info">
+					<h3>Popular Last Week</h3>
+					<div class="sidebar" id="popular-sidebar">
 						nix da
 					</div>
 					<h3>FM4 Live Stream</h3>
@@ -64,7 +64,7 @@
       	</div>
 
       	<footer>
-        	<p>You can <a href="mailto:mbuchetics@gmail.com">contact me</a> or <a href="https://github.com/mbuchetics/trackservice">fork this project on GitHub.</a></p>
+        	<p>You can <a href="https://github.com/mbuchetics/trackservice">fork this project on GitHub.</a></p>
       	</footer>
 
     </div>
@@ -89,12 +89,26 @@
 		<table class="zebra-striped"> 
 			<tbody> 
 				{{#each songs}}
-				<tr class="{{ _id }}">	
+				<tr class="{{ songId }}">	
 					<td class="plus"><a class="button-plus" href="">+</a></td>
 					<td class="song">{{ artist }} - {{ title }}</td> 
-					<td class="play_count">{{ play_count }}</td> 
-					<td class="like_count">{{ like_count }}</td> 
+					<td class="count">{{ count }}</td> 
 				</tr> 
+				{{/each}}
+			</tbody>
+		</table>	
+	</script>
+	
+	<script type="text/template" id="song_sidebar_template">
+		<table class="zebra-striped">
+			<tbody> 
+				{{#each songs}}
+				<tr class="{{ songId }}">
+					<td class="song">{{ artist }} - {{ title }}</td>
+					<td class="count">
+						<div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
+					</td>
+				</li>
 				{{/each}}
 			</tbody>
 		</table>	
