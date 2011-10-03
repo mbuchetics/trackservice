@@ -103,10 +103,11 @@ module.exports = function(app) {
         });
     });
     
-    app.put('/api/likes/:songId', function(req, res) {
-        var user = req.param('user');
-
-        console.log('/api/likes/' + songId + ': ' + user);
+    app.post('/api/likes/:songId', function(req, res) {
+        var songId = req.params.songId,
+            user = req.param('user');
+        
+        console.log('/api/likes/' + songId);
         
         db.addLike(db.toObjectID(songId), user);
         

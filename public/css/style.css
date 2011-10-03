@@ -81,6 +81,12 @@ footer p {
     text-align: right;
 }
 
+#song-list .count
+{
+    width: 140px;
+    text-align: right;
+}
+
 .sidebar .count
 {
     width: 60px;

@@ -13,8 +13,8 @@ $(function() {
 	    $('.button-plus').click(function(e) {
             e.preventDefault();
 
-            console.log('button clicked');
-            console.log($(this).parent().parent().attr('class'));
+            var songId = $(this).parent().parent().attr('class');
+            likeSong(songId, 'TestUser2');
         });
         
         $('tr').mouseover(function() {
@@ -23,7 +23,14 @@ $(function() {
         });
 	}
 	
-	function extendPlay(play) {
+	function likeSong(songId, user) {
+	    $.post('api/likes/' + songId, { user: user }, function(data) {
+	       console.log('song like ok'); 
+	       refreshSidebar();
+	    });
+	}
+	
+	function extendPlay(play, maxCount) {
 	    var now = new Date(),
 	        time = new Date(play.time),
 	        day = time.clone().clearTime(),
@@ -55,6 +62,16 @@ $(function() {
             isNew: timeDiffInMinutes < 15,
         };
     }
+    
+    function extSong(song, count, maxCount) {
+        return {
+            songId: song._id,
+            artist: song.artist,
+            title: song.title,
+            count: count,
+            percentage: maxCount > 0 ? count / maxCount * 95 : 0
+        };
+    }
 	
 	function renderPlayList(plays) {
 	    var extPlays = _.map(plays, extendPlay);
@@ -84,16 +101,11 @@ $(function() {
                 since: getDateAgo(7).toString()
             }, 
             function(songs) {
-                var topCount = songs[0].play_count;
-                var songList = _(songs).select(function(song) { return song.play_count > 0; }).map(function(song) {
-                    return {
-                        songId: song._id,
-                        artist: song.artist,
-                        title: song.title,
-                        count: song.play_count,
-                        percentage: topCount > 0 ? song.play_count / topCount * 100 : 0
-                    }
-                });
+                var songList = _(songs).select(function(song) { 
+                        return song.play_count > 0; 
+                    }).map(function(song) {
+                        return extSong(song, song.play_count, songs[0].play_count);
+                    });
                 
                 var songSidebarHtml = songSidebarTempl({ 
         			songs: songList,
@@ -108,16 +120,11 @@ $(function() {
                 since: getDateAgo(7).toString()
             }, 
             function(songs) {
-                var topCount = songs[0].like_count;
-                var songList = _(songs).select(function(song) { return song.like_count > 0; }).map(function(song) {
-                    return {
-                        songId: song._id,
-                        artist: song.artist,
-                        title: song.title,
-                        count: song.like_count,
-                        percentage: topCount > 0 ? song.like_count / topCount * 100 : 0
-                    }
-                });
+                var songList = _(songs).select(function(song) { 
+                        return song.like_count > 0; 
+                    }).map(function(song) {
+                        return extSong(song, song.like_count, songs[0].like_count);
+                    });
                 
                 var songSidebarHtml = songSidebarTempl({ 
         			songs: songList,
@@ -183,12 +190,7 @@ $(function() {
 	            }, 
 	            function(songs) {
 	                var songList = _.map(songs, function(song) {
-	                    return {
-	                        songId: song._id,
-	                        artist: song.artist,
-	                        title: song.title,
-	                        count: song.play_count
-	                    }
+	                    return extSong(song, song.play_count, songs[0].play_count);
 	                });
 	                renderSongList(songList);
         	    }
@@ -204,14 +206,12 @@ $(function() {
 	                since: getDateAgo(7).toString()
 	            }, 
 	            function(songs) {
-	                var songList = _.map(songs, function(song) {
-	                    return {
-	                        songId: song._id,
-	                        artist: song.artist,
-	                        title: song.title,
-	                        count: song.like_count,
-	                    }
-	                });
+	                var songList = _(songs).select(function(song) { 
+                        return song.like_count > 0; 
+                    }).map(function(song) {
+                        return extSong(song, song.like_count, songs[0].like_count);
+                    });
+                            
 	                renderSongList(songList);
         	    }
         	);
