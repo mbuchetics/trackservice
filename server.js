@@ -53,18 +53,6 @@ function getTracklist() {
        });
 }
 
-function getTestFile() {     
-    request({
-       uri: 'http://fm4.orf.at/v2static/html/streaming/buttons.html',
-       encoding: 'binary' 
-       }, 
-       function(error, res, html) {
-           if (!error && res.statusCode == 200) {
-               console.log(html);
-           }
-       });
-}
-
 function parseTracklist(html) {
     useJQuery(html, function($) {
         var now = new Date();
@@ -122,10 +110,7 @@ function run() {
     console.log('listening on port ' + config.port);
 
     app.listen(config.port);
-    
-    //getTracklistTestLocal();
-    //getTestFile();
-    
+
     getTracklist();
     printMemory();
     

@@ -16,104 +16,83 @@
 	<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
+	<div id="app">
+		
+		<!-- Topbar
+		================================================== -->
 	
-	<!-- Topbar
-	================================================== -->
+		<div class="topbar">
+			<div class="fill">
+	        	<div class="container">
+	          		<a class="brand" href="#">Trackservice</a>
+	          		<ul class="nav">
+						<li class="menu-recent active"><a href="#/recent">Recent</a></li>
+						<li class="menu-all"><a href="#/all">All</a></li>
+						<li class="menu-top"><a href="#/top">Top</a></li>
+						<li class="menu-popular"><a href="#/popular">Popular</a></li>
+	          		</ul>
+	          		<form action="" class="pull-right">
+	            		<input class="input-small" type="text" placeholder="Username">
+	            		<button class="btn" type="submit">Sign in</button>
+	          		</form>
+	        	</div>
+	      	</div>
+	    </div>
 	
-	<div class="topbar">
-		<div class="fill">
-        	<div class="container">
-          		<a class="brand" href="#">Trackservice</a>
-          		<ul class="nav">
-					<li class="menu-recent active"><a href="#/recent">Recent</a></li>
-					<li class="menu-all"><a href="#/all">All</a></li>
-					<li class="menu-top"><a href="#/top">Top</a></li>
-					<li class="menu-popular"><a href="#/popular">Popular</a></li>
-          		</ul>
-          		<form action="" class="pull-right">
-            		<input class="input-small" type="text" placeholder="Username">
-            		<button class="btn" type="submit">Sign in</button>
-          		</form>
-        	</div>
-      	</div>
-    </div>
-	
-	<div class="container">
+		<div class="container">
 
-    	<div class="content">
-        	<div class="page-header">
-          		<h1 id="page-title">Page Title <small>Subtext</small></h1>
-        	</div>
-        	<div class="row">
-          		<div class="span10">
-					<div id="song-list"></div>
-          		</div>
-          		<div class="span6">
-            		<h3>Top 10 Last Week</h3>
-					<div class="sidebar" id="top-sidebar">
-						nix da
-					</div>
-					<h3>Popular Last Week</h3>
-					<div class="sidebar" id="popular-sidebar">
-						nix da
-					</div>
-					<h3>FM4 Live Stream</h3>
-					<p>zum Live Stream ...</p>
-          		</div>
-        	</div>
-      	</div>
+	    	<div class="content">
+	        	<div class="page-header">
+	          		<h1 id="page-title">Page Title <small>Subtext</small></h1>
+	        	</div>
+	        	<div class="row">
+	          		<div class="span10">
+						<div id="song-list"></div>
+	          		</div>
+	          		<div class="span6">
+	            		<h3>Top 10 Last Week</h3>
+						<div class="sidebar" id="top-sidebar">
+							nix da
+						</div>
+						<h3>Popular Last Week</h3>
+						<div class="sidebar" id="popular-sidebar">
+							nix da
+						</div>
+						<h3>FM4 Live Stream</h3>
+						<p>zum Live Stream ...</p>
+	          		</div>
+	        	</div>
+	      	</div>
 
-      	<footer>
-        	<p>You can <a href="https://github.com/mbuchetics/trackservice">fork this project on GitHub.</a></p>
-      	</footer>
+	      	<footer>
+	        	<p>You can <a href="https://github.com/mbuchetics/trackservice">fork this project on GitHub.</a></p>
+	      	</footer>
 
-    </div>
+	    </div>
+
+	</div>
 
 	<!-- TEMPLATES -->
 	
-	<script type="text/template" id="play_list_template">
-		<table class="zebra-striped"> 
-			<tbody> 
-				{{#each plays}}
-				<tr class="{{ songId }}"> 	
-					<td class="plus"><a class="button-plus" href="">+</a></td>
-					<td class="song">{{ artist }} - {{ title }}</td> 
-					<td class="time">{{ time }} {{#if isNew}}<span class="label warning">neu</span>{{/if}}</td> 
-				</tr> 
-				{{/each}}
-			</tbody>
-		</table>	
+	<script type="text/template" id="play_template">	
+		<td class="plus"><a class="button-plus" href="">+</a></td>
+		<td class="song">{{ artist }} - {{ title }}</td> 
+		<td class="time">{{ time }} {{#if isNew}}<span class="label warning">neu</span>{{/if}}</td> 	
 	</script>
 	
-	<script type="text/template" id="song_list_template">
-		<table class="zebra-striped"> 
-			<tbody> 
-				{{#each songs}}
-				<tr class="{{ songId }}">	
-					<td class="plus"><a class="button-plus" href="">+</a></td>
-					<td class="song">{{ artist }} - {{ title }}</td> 
-					<td class="count">
-						<div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
-					</td> 
-				</tr> 
-				{{/each}}
-			</tbody>
-		</table>	
+	<script type="text/template" id="song_template">	
+		<td class="plus"><a class="button-plus" href="">+</a></td>
+		<td class="song">{{ artist }} - {{ title }}</td> 
+		<td class="count">
+			<div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
+		</td> 	
 	</script>
 	
-	<script type="text/template" id="song_sidebar_template">
-		<table class="zebra-striped">
-			<tbody> 
-				{{#each songs}}
-				<tr class="{{ songId }}">
-					<td class="song">{{ artist }} - {{ title }}</td>
-					<td class="count">
-						<div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
-					</td>
-				</li>
-				{{/each}}
-			</tbody>
-		</table>	
+	<script type="text/template" id="sidebar_template">	
+		<td class="song">{{ artist }} - {{ title }}</td> 
+		<td class="count">
+			<div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
+		</td> 	
 	</script>
 	
 	<!-- /TEMPLATES -->
