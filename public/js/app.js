@@ -377,13 +377,14 @@ $(function() {
 	
 	SidebarTopSongs.fetchTopFromServer(10);
 	SidebarPopularSongs.fetchPopularFromServer(10);
-	
+	/*
 	setInterval(function() {
 	    TopSongs.fetchTopFromServer(15);
 	    PopularSongs.fetchPopularFromServer(15);
 	    SidebarTopSongs.fetchTopFromServer(10);
     	SidebarPopularSongs.fetchPopularFromServer(10);
 	}, 1000);
+	*/
 	
 	Backbone.history.start();
 });
