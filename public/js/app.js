@@ -106,6 +106,7 @@ $(function() {
             play.set({ 
                 songId: json.song_id,
                 time: timeStr,
+                originalTime: json.time,
                 artist: json.artist,
                 title: json.title,
                 source: json.source,
@@ -125,6 +126,14 @@ $(function() {
 	               collection.reset(_.map(items, Play.create));
        	   });
        },
+       fetchMoreFromServer: function(count) {
+           var collection = this;
+           var lastPlay = collection.last();
+           $.getJSON('api/plays', { until: lastPlay.get('originalTime'), count: count + 1 }, 
+                function(items) {
+   	               collection.add(_(items).rest(1).map(Play.create));
+           });
+       }
     });
     
     /// Views
@@ -210,9 +219,7 @@ $(function() {
         tagName: "table",
         className: "zebra-striped",
         initialize: function() {
-            this.model.bind('change', this.render, this);        
-            this.model.bind('add', this.render, this);
-            this.model.bind('remove', this.render, this);
+            this.model.bind('add', this.addOne, this);
             this.model.bind('reset', this.render, this);
         },
         render: function() {
@@ -226,6 +233,16 @@ $(function() {
             
             return this;
         },
+        addOne: function(play) {
+            var table = this.el;
+            
+            var view = new PlayView({model: play});
+            var row = view.render().el;
+            
+            $(row).fadeIn();
+            $(table).append(row);
+            
+        }
     });
     
     var SidebarItemView = Backbone.View.extend({
@@ -290,6 +307,16 @@ $(function() {
     	setTitle: function(title) {
     	    this.$('#page-title').html(title);
     	},
+    	setFooter: function(text, clickAction) {
+    	    var footer = this.$('#song-list-footer').html(text);
+    	    
+    	    if (clickAction) {
+    	        footer.click(function(e) {
+    	            e.preventDefault();
+    	            clickAction();
+    	        });
+    	    }
+    	},
         showAllPlays: function() {
             this.setActiveMenuItem('.menu-all');
             this.setTitle('All Tracks <small>from the beginning of time</small>');
@@ -303,6 +330,10 @@ $(function() {
 	        
 	        Plays.fetchFromServer(15);
             $('#song-list').html(PlaysView.el);
+            
+            this.setFooter('<a href="">load more</a>', function() { 
+                Plays.fetchMoreFromServer(10);
+            });
         },
         showTopSongs: function() {
             this.setActiveMenuItem('.menu-top');
