@@ -37,7 +37,7 @@ module.exports = function(app) {
         console.log(params);
   
         db.getSongs(
-            { last_time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
+            { last_time: { '$gte': params.timeSince } }, 
             { play_count: -1 }, 
             params.count, 
             function(songs) { res.json(songs); }
