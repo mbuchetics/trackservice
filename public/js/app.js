@@ -51,7 +51,7 @@ $(function() {
             var collection = this;
             $.getJSON('api/songs/top_plays', { 
                 count: count,
-                since: getDateAgo(7).toString()
+                since: getDateAgo(1).toString()
             }, 
             function(items) {
                 collection.reset(_.map(items, function(item) {
@@ -64,7 +64,7 @@ $(function() {
             console.log('fetching popular songs');
             $.getJSON('api/songs/top_likes', { 
                 count: count,
-                since: getDateAgo(7).toString()
+                since: getDateAgo(1).toString()
             }, 
             function(items) {
                 collection.reset(_(items).select(function(item) { return item.like_count > 0; })
