@@ -5,7 +5,7 @@
 
 $(function() {
 	var host = window.location.hostname,
-	    user = 'TestUser4';
+	    user = 'TestUser5';
 
 	function getDateAgo(daysAgo) {
 	    return Date.today().add({days: -daysAgo});
@@ -14,10 +14,11 @@ $(function() {
 	function likeSong(songId, user) {
 	    $.post('api/likes/' + songId, { user: user }, function(data) {
 	       console.log('song like ok'); 
+	       SidebarPopularSongs.fetchPopularFromServer(10);
 	    });
 	}
 	
-	/// Models
+	/// Song
 	
 	var Song = Backbone.Model.extend({
 	    like: function() {
@@ -41,6 +42,8 @@ $(function() {
 	        return song;
 	    }
 	});
+	
+	/// SongList
     
     var SongList = Backbone.Collection.extend({
         model: Song,
@@ -58,6 +61,7 @@ $(function() {
         },
         fetchPopularFromServer: function(count) {
             var collection = this;
+            console.log('fetching popular songs');
             $.getJSON('api/songs/top_likes', { 
                 count: count,
                 since: getDateAgo(7).toString()
@@ -71,6 +75,8 @@ $(function() {
             });
         }
     });
+    
+    /// Play
     
     var Play = Backbone.Model.extend({
 	    like: function() {
@@ -117,6 +123,8 @@ $(function() {
         }
     });
     
+    /// PlayList
+    
     var PlayList = Backbone.Collection.extend({
        model: Play,
        fetchFromServer: function(count) {
@@ -136,7 +144,7 @@ $(function() {
        }
     });
     
-    /// Views
+    /// SongView
     
     var SongView = Backbone.View.extend({
         tagName:  "tr",
@@ -170,6 +178,8 @@ $(function() {
         }
     });
     
+    /// SongListView
+    
     var SongListView = Backbone.View.extend({
         tagName: "table",
         className: "zebra-striped",
@@ -195,6 +205,8 @@ $(function() {
         },
     });
     
+    /// PlayView
+    
     var PlayView = Backbone.View.extend({
         tagName:  "tr",
         className: "",
@@ -214,6 +226,8 @@ $(function() {
             this.model.like();
         }
     });
+    
+    /// PlayListView
     
     var PlayListView = Backbone.View.extend({
         tagName: "table",
@@ -245,6 +259,8 @@ $(function() {
         }
     });
     
+    /// SidebarItemView
+    
     var SidebarItemView = Backbone.View.extend({
         tagName:  "tr",
         className: "",
@@ -268,6 +284,8 @@ $(function() {
             return this;
         }
     });
+    
+    /// SidebarListView
     
     var SidebarListView = Backbone.View.extend({
         tagName: "table",
@@ -294,6 +312,8 @@ $(function() {
         },
     });
     
+    /// AppView
+    
     var AppView = Backbone.View.extend({
         el: $("#app"),
         initialize: function() {
@@ -317,12 +337,17 @@ $(function() {
     	        });
     	    }
     	},
+    	clearFooter: function() {
+    		this.$('#song-list-footer').empty();
+       	},
         showAllPlays: function() {
             this.setActiveMenuItem('.menu-all');
             this.setTitle('All Tracks <small>from the beginning of time</small>');
             
             Plays.fetchFromServer(-1);
             $('#song-list').html(PlaysView.el);
+            
+            this.clearFooter();
         },
         showRecentPlays: function() {
             this.setActiveMenuItem('.menu-recent');
@@ -331,7 +356,7 @@ $(function() {
 	        Plays.fetchFromServer(15);
             $('#song-list').html(PlaysView.el);
             
-            this.setFooter('<a href="">load more</a>', function() { 
+            this.setFooter('<a href="">more</a>', function() { 
                 Plays.fetchMoreFromServer(10);
             });
         },
@@ -341,6 +366,8 @@ $(function() {
 	        
 	        TopSongs.fetchTopFromServer(15);
 	        $('#song-list').html(TopSongsView.el);
+	        
+	        this.clearFooter();
         },
         showPopularSongs: function() {
             this.setActiveMenuItem('.menu-popular');
@@ -348,8 +375,12 @@ $(function() {
         
             PopularSongs.fetchPopularFromServer(15);
 	        $('#song-list').html(PopularSongsView.el);
+	        
+	        this.clearFooter();
         }
     });
+    
+    /// AppRouter
     
     var AppRouter = Backbone.Router.extend({
 	    routes: {
@@ -373,6 +404,8 @@ $(function() {
 	        App.showPopularSongs();
 	    },
 	});
+	
+	/// Init stuff
     
     window.SidebarTopSongs = new SongList();
     window.SidebarTopSongsView = new SidebarListView({ 
@@ -416,6 +449,12 @@ $(function() {
     	SidebarPopularSongs.fetchPopularFromServer(10);
 	}, 1000);
 	*/
+	
+	$('#fm4-stream').click(function() {
+		var href = $('#fm4-stream a').attr('href');
+		window.open(href, 'player', 'width=320,height=260');
+		return false;
+	});
 	
 	Backbone.history.start();
 });

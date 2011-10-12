@@ -33,7 +33,7 @@ footer p {
 /* Give a quick and non-cross-browser friendly divider */
 .content .span6 {
     margin-left: 0;
-    padding-left: 19px;
+    padding-left: 10px;
     border-left: 1px solid #eee;
 }
 
@@ -95,6 +95,11 @@ footer p {
 {
     width: 140px;
     text-align: right;
+}
+
+.sidebar 
+{
+	padding: 5px;
 }
 
 .sidebar .count
