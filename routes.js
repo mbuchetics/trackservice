@@ -40,7 +40,7 @@ module.exports = function(app) {
             { last_time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
             { play_count: -1 }, 
             params.count, 
-            function(songs) { console.log(songs); res.json(songs); }
+            function(songs) { res.json(songs); }
         );
     });
     
