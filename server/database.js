@@ -111,7 +111,7 @@ function getTopPlayedSongs(filterCriteria, count, callback) {
 	}, function(results) {
 		var mappedResults = _.map(results, function(item) { 
 			return { 
-				song_id: item._id.song_id, 
+				_id: item._id.song_id, 
 				artist: item._id.artist, 
 				title: item._id.title, 
 				count: item.value.count
@@ -132,7 +132,7 @@ function getTopLikedSongs(filterCriteria, count, callback) {
 		getSongs({ _id: { $in: songIds } }, {}, count, function(songs) {
 			_.each(songs, function(song, index) {
 				songsWithCounts.push({ 
-					song_id: song._id,
+					_id: song._id,
 					artist: song.artist,
 					title: song.title,
 					count: counts[index]
@@ -140,6 +140,28 @@ function getTopLikedSongs(filterCriteria, count, callback) {
 			});
 			
 			callback(songsWithCounts);
+		});
+	});
+}
+
+function getLikesExt(filterCriteria, sortCriteria, count, callback) {
+	getLikes(filterCriteria, sortCriteria, count, function(likes) {
+		var songIds = _.map(likes, function(item) { return item.song_id }),
+			likesExt = [];
+			
+		getSongs({ _id: { $in: songIds } }, {}, count, function(songs) {
+			_.each(songs, function(song, index) {
+				var like = likes[index];
+				likesExt.push({ 
+					_id: song._id,
+					artist: song.artist,
+					title: song.title,
+					user: like.user,
+					time: like.time
+				});
+			});
+			
+			callback(likesExt);
 		});
 	});
 }
@@ -303,6 +325,7 @@ module.exports.getLikesCollection = getLikesCollection;
 module.exports.getSongs = getSongs;
 module.exports.getPlays = getPlays;
 module.exports.getLikes = getLikes;
+module.exports.getLikesExt = getLikesExt;
 module.exports.getSong = getSong;
 module.exports.getPlay = getPlay;
 module.exports.getLike = getLike;

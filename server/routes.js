@@ -3,12 +3,14 @@ var db = require('./database.js');
 function getParameters(req) {
     var paramCount = req.param('count'),
         paramSince = req.param('since'),
-        paramUntil = req.param('until');
+        paramUntil = req.param('until'),
+        paramUser = req.param('user');
         
     return {
         count: paramCount ? parseInt(paramCount) : 10,
         timeUntil: paramUntil ? new Date(paramUntil) : new Date(),
-        timeSince:  paramSince ? new Date(paramSince) : new Date(0)
+        timeSince:  paramSince ? new Date(paramSince) : new Date(0),
+        user: paramUser
     };
 }
 
@@ -110,13 +112,21 @@ module.exports = function(app) {
     /// likes
     
     app.get('/api/likes', function(req, res) {
-        var params = getParameters(req);
+        var params = getParameters(req),
+        	filter;
         
         console.log('/api/likes');
         console.log(params);
         
-        db.getLikes(
-            { time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
+        if (params.user) {
+        	filter = { user: params.user, time: { '$lte': params.timeUntil, '$gte': params.timeSince } };
+        }
+        else {
+        	filter = { time: { '$lte': params.timeUntil, '$gte': params.timeSince } };
+        }
+        
+        db.getLikesExt(
+            filter, 
             { time: -1 }, 
             params.count, 
             function(likes) { res.json(likes); }

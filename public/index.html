@@ -27,9 +27,10 @@
 	          		<a class="brand" href="#">Trackservice</a>
 	          		<ul class="nav">
 						<li class="menu-recent active"><a href="#/recent">Recent</a></li>
-						<li class="menu-all"><a href="#/all">All</a></li>
+						<li class="menu-user"><a href="#/user">User</a></li>
 						<li class="menu-top"><a href="#/top">Top</a></li>
 						<li class="menu-popular"><a href="#/popular">Popular</a></li>
+						<li class="menu-all"><a href="#/all">All</a></li>
 	          		</ul>
 	          		<form action="" class="pull-right">
 	            		<input class="input-small" type="text" placeholder="Username">
@@ -87,6 +88,11 @@
 		<td class="count">
 			<div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
 		</td> 	
+	</script>
+	
+	<script type="text/template" id="like_template">	
+		<td class="song">{{ artist }} - {{ title }}</td> 
+		<td class="time">{{ time }}</td> 	
 	</script>
 	
 	<script type="text/template" id="sidebar_template">	

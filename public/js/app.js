@@ -12,6 +12,40 @@ $(function() {
 	    return Date.today().add({days: -daysAgo});
 	}
 	
+	function getTimeStr(time) {
+		var now = new Date(),
+			day = time.clone().clearTime(),
+			today = now.clone().clearTime(),
+			isToday = day.equals(Date.today()),
+			isYesterday = day.equals(Date.today().add(-1).day()),
+			timeDiff = now.getTime() - time.getTime(),
+			timeDiffInMinutes = timeDiff / 1000 / 60,
+			timeStr;
+			
+		if (timeDiffInMinutes < 15) {
+		    timeStr = 'vor ' + Math.round(timeDiffInMinutes) + ' min';
+		}
+		else if (isToday) {
+		    timeStr = time.toString('HH:mm');
+		}
+		else if(isYesterday) {
+		    timeStr = 'gestern ' + time.toString('HH:mm');
+		}
+		else {
+		    timeStr = time.toString('d. MMM. HH:mm');
+		}
+		
+		return timeStr;
+	}
+	
+	function isRecentTime(time) {
+		var now = new Date(),
+			timeDiff = now.getTime() - time.getTime(),
+			timeDiffInMinutes = timeDiff / 1000 / 60;
+			
+		return timeDiffInMinutes < 15;			
+	}
+	
 	function likeSong(songId, user) {
 	    $.post('api/likes/' + songId, { user: user }, function(data) {
 	       console.log('song like ok'); 
@@ -35,10 +69,22 @@ $(function() {
 		       artist: json.artist,
 		       title: json.title,
 		       count: json.count,
-		       percentage: maxCount > 0 ? json.count / maxCount * 95 : 0,
+		       percentage: maxCount > 0 ? json.count / maxCount * 95 : 0
 		    });
 		    
 		    return song;
+	    },
+	    createFromLike: function(json) {
+	    	var song = new Song();
+	    	
+	    	song.set({
+	    		songId: json._id,
+	    		artist: json.artist,
+	    		title: json.title,
+	    		time: getTimeStr(new Date(json.time)),
+	    	});
+	    	
+	    	return song;
 	    }
 	});
 	
@@ -54,7 +100,6 @@ $(function() {
                 since: getDateAgo(daysAgo).toString()
             },
             function(items) {
-            	console.log(items);
                 collection.reset(_.map(items, function(item) {
                     return Song.create(item, items[0].count);
                 }));
@@ -68,7 +113,6 @@ $(function() {
                 since: getDateAgo(daysAgo).toString()
             }, 
             function(items) {
-            	console.log(items);
                 collection.reset(_(items).select(function(item) { return item.count > 0; })
                     .map(function(item) {
                         return Song.create(item, items[0].count);
@@ -76,6 +120,19 @@ $(function() {
                 ));
                 
             });
+        },
+        fetchLikedFromServer: function(user, count) {
+	        var collection = this;
+	        console.log('fetching liked songs');
+	        $.getJSON('api/likes', { 
+	            user: user,
+	            count: count,
+	        }, 
+	        function(items) {
+	            collection.reset(_.map(items, function(item) {
+	                return Song.createFromLike(item);
+	            }));
+	        });
         }
     });
     
@@ -89,37 +146,16 @@ $(function() {
     {
         create: function(json) {      
             var play = new Play(),
-                now = new Date(),
-                time = new Date(json.time),
-    	        day = time.clone().clearTime(),
-    	        today = now.clone().clearTime(),
-    	        isToday = day.equals(Date.today()),
-    	        isYesterday = day.equals(Date.today().add(-1).day()),
-    	        timeDiff = now.getTime() - time.getTime(),
-    	        timeDiffInMinutes = timeDiff / 1000 / 60,
-    	        timeStr;
-
-    	    if (timeDiffInMinutes < 15) {
-    	        timeStr = 'vor ' + Math.round(timeDiffInMinutes) + ' min';
-    	    }
-    	    else if (isToday) {
-    	        timeStr = time.toString('HH:mm');
-    	    }
-    	    else if(isYesterday) {
-    	        timeStr = 'gestern ' + time.toString('HH:mm');
-    	    }
-            else {
-                timeStr = time.toString('d. MMM. HH:mm');
-            }
+            	time = new Date(json.time);
 
             play.set({ 
                 songId: json.song_id,
-                time: timeStr,
+                time: getTimeStr(time),
                 originalTime: json.time,
                 artist: json.artist,
                 title: json.title,
                 source: json.source,
-                isNew: timeDiffInMinutes < 15,
+                isNew: isRecentTime(time)
             });
             
             return play;
@@ -183,14 +219,12 @@ $(function() {
             this.model.bind('reset', this.render, this);
         },
         render: function() {
-            var viewType = this.viewType,
-                table = this.el;
+            var table = this.el;
                 
             $(table).empty();
             
             this.model.each(function(song) {
                var view = new SongView({model: song });
-               view.viewType = viewType;
                $(table).append(view.render().el);
             });
 
@@ -251,6 +285,50 @@ $(function() {
             
         }
     });
+    
+    /// LikeView
+        
+    var LikeView = Backbone.View.extend({
+        tagName:  "tr",
+        className: "",
+        template: Handlebars.compile($('#like_template').html()),
+        events: {
+        }, 
+        initialize: function() {
+            this.model.bind('change', this.render, this);
+        },
+        render: function() {
+            var json = this.model.toJSON();
+            $(this.el).html(this.template(json));
+            return this;
+        },
+    });
+    
+    /// LikeListView
+    
+    var LikeListView = Backbone.View.extend({
+        tagName: "table",
+        className: "zebra-striped",
+        initialize: function() {
+            this.model.bind('change', this.render, this);        
+            this.model.bind('add', this.render, this);
+            this.model.bind('remove', this.render, this);
+            this.model.bind('reset', this.render, this);
+        },
+        render: function() {
+            var table = this.el;
+                
+            $(table).empty();
+            
+            this.model.each(function(like) {
+               var view = new LikeView({model: like });
+               $(table).append(view.render().el);
+            });
+
+            return this;
+        },
+    });
+    
     
     /// SidebarItemView
     
@@ -360,6 +438,14 @@ $(function() {
 	        $('#song-list').html(PopularSongsView.el);
 	        
 	        this.clearFooter();
+        },
+        showUser: function(user) {
+        	this.setActiveMenuItem('.menu-user');
+        	this.setTitle('My Tracks <small>' + user + '</small');
+        	
+        	UserLikes.fetchLikedFromServer(user, 15);
+        	$('#song-list').html(UserLikesView.el);
+        	this.clearFooter();
         }
     });
     
@@ -371,6 +457,8 @@ $(function() {
 	        "/recent": "showRecent",
 	        "/top": "showTopSongs",
 	        "/popular": "showPopularSongs",
+	        "/user": "showCurrentUser",
+	        "/user/:user": "showUser",
 	        "": "showRecent",
 	    },
 	    
@@ -386,20 +474,24 @@ $(function() {
 	    showPopularSongs: function() { 
 	        App.showPopularSongs();
 	    },
+	    showUser: function(user) {
+	    	App.showUser(user);
+	    },
+	    showCurrentUser: function() {
+	    	App.showUser(user);
+	    }
 	});
-	
-	
 	
 	/// Init stuff
     
     window.SidebarTopSongs = new SongList();
     window.SidebarTopSongsView = new SidebarListView({ 
-        model: SidebarTopSongs, 
+        model: SidebarTopSongs
     });
     
     window.SidebarPopularSongs = new SongList();
     window.SidebarPopularSongsView = new SidebarListView({ 
-        model: SidebarPopularSongs,  
+        model: SidebarPopularSongs 
     });
 
     window.Plays = new PlayList();    
@@ -409,12 +501,17 @@ $(function() {
     
     window.TopSongs = new SongList();    
     window.TopSongsView = new SongListView({ 
-        model: TopSongs, 
+        model: TopSongs 
     });
 
     window.PopularSongs = new SongList(); 
     window.PopularSongsView = new SongListView({ 
-        model: PopularSongs, 
+        model: PopularSongs
+    });
+    
+    window.UserLikes = new SongList();
+    window.UserLikesView = new LikeListView({
+    	model: UserLikes
     });
 
 	window.App = new AppView();
