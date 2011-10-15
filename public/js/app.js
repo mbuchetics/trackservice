@@ -5,7 +5,8 @@
 
 $(function() {
 	var host = window.location.hostname,
-	    user = 'TestUser5';
+	    user = 'TestUser5',
+	    sidebarDaysAgo = 7;
 
 	function getDateAgo(daysAgo) {
 	    return Date.today().add({days: -daysAgo});
@@ -14,7 +15,7 @@ $(function() {
 	function likeSong(songId, user) {
 	    $.post('api/likes/' + songId, { user: user }, function(data) {
 	       console.log('song like ok'); 
-	       SidebarPopularSongs.fetchPopularFromServer(10);
+	       SidebarPopularSongs.fetchPopularFromServer(sidebarDaysAgo, 10);
 	    });
 	}
 	
@@ -24,22 +25,20 @@ $(function() {
 	    like: function() {
 	        likeSong(this.get('songId'), user);
 	    }
-    },
-    { // class properties
-        create: function(json, maxPlayCount, maxLikeCount) {
-            var song = new Song();
-            
-	        song.set({
-	           songId: json._id,
-	           artist: json.artist,
-	           title: json.title,
-	           play_count: json.play_count,
-	           like_count: json.like_count,
-	           play_percentage: maxPlayCount > 0 ? json.play_count / maxPlayCount * 95 : 0,
-	           like_percentage: maxLikeCount > 0 ? json.like_count / maxLikeCount * 95 : 0,
-	        });
-	        
-	        return song;
+	},
+	{ // class properties
+	    create: function(json, maxCount) {
+		    var song = new Song();
+		    
+		    song.set({
+		       songId: json._id,
+		       artist: json.artist,
+		       title: json.title,
+		       count: json.count,
+		       percentage: maxCount > 0 ? json.count / maxCount * 95 : 0,
+		    });
+		    
+		    return song;
 	    }
 	});
 	
@@ -47,31 +46,35 @@ $(function() {
     
     var SongList = Backbone.Collection.extend({
         model: Song,
-        fetchTopFromServer: function(count) {
+        fetchTopFromServer: function(daysAgo, count) {
             var collection = this;
-            $.getJSON('api/songs/top_plays', { 
+            console.log('fetching top songs: ' + daysAgo);
+            $.getJSON('api/songs/top_plays', {
                 count: count,
-                since: getDateAgo(7).toString()
-            }, 
+                since: getDateAgo(daysAgo).toString()
+            },
             function(items) {
+            	console.log(items);
                 collection.reset(_.map(items, function(item) {
-                    return Song.create(item, items[0].play_count, items[0].like_count);
+                    return Song.create(item, items[0].count);
                 }));
             });
         },
-        fetchPopularFromServer: function(count) {
+        fetchPopularFromServer: function(daysAgo, count) {
             var collection = this;
             console.log('fetching popular songs');
             $.getJSON('api/songs/top_likes', { 
                 count: count,
-                since: getDateAgo(7).toString()
+                since: getDateAgo(daysAgo).toString()
             }, 
             function(items) {
-                collection.reset(_(items).select(function(item) { return item.like_count > 0; })
+            	console.log(items);
+                collection.reset(_(items).select(function(item) { return item.count > 0; })
                     .map(function(item) {
-                        return Song.create(item, items[0].like_count, items[0].like_count);
+                        return Song.create(item, items[0].count);
                     }
                 ));
+                
             });
         }
     });
@@ -159,16 +162,6 @@ $(function() {
         },
         render: function() {
             var json = this.model.toJSON();
-            
-            if (this.viewType == 'like_count') {
-                json.count = json.like_count;
-                json.percentage = json.like_percentage;
-            }
-            else {
-                json.count = json.play_count;
-                json.percentage = json.play_percentage;
-            }
-            
             $(this.el).html(this.template(json));
             return this;
         },
@@ -270,16 +263,6 @@ $(function() {
         },
         render: function() {
             var json = this.model.toJSON();
-            
-            if (this.viewType == 'like_count') {
-                json.count = json.like_count;
-                json.percentage = json.like_percentage;
-            }
-            else {
-                json.count = json.play_count;
-                json.percentage = json.play_percentage;
-            }
-            
             $(this.el).html(this.template(json));
             return this;
         }
@@ -301,7 +284,7 @@ $(function() {
                 table = this.el;
                 
             $(table).empty();
-            
+           
             this.model.each(function(item) {
                var view = new SidebarItemView({model: item });
                view.viewType = viewType;
@@ -364,7 +347,7 @@ $(function() {
             this.setActiveMenuItem('.menu-top');
 	        this.setTitle('Top Tracks <small>Top 15 of last week</small>');
 	        
-	        TopSongs.fetchTopFromServer(15);
+	        TopSongs.fetchTopFromServer(7, 15);
 	        $('#song-list').html(TopSongsView.el);
 	        
 	        this.clearFooter();
@@ -373,7 +356,7 @@ $(function() {
             this.setActiveMenuItem('.menu-popular');
 	        this.setTitle('Popular Tracks <small>Top 15 of last week</small>');
         
-            PopularSongs.fetchPopularFromServer(15);
+            PopularSongs.fetchPopularFromServer(7, 15);
 	        $('#song-list').html(PopularSongsView.el);
 	        
 	        this.clearFooter();
@@ -405,20 +388,20 @@ $(function() {
 	    },
 	});
 	
+	
+	
 	/// Init stuff
     
     window.SidebarTopSongs = new SongList();
     window.SidebarTopSongsView = new SidebarListView({ 
         model: SidebarTopSongs, 
     });
-    window.SidebarTopSongsView.viewType = "play_count";
     
     window.SidebarPopularSongs = new SongList();
     window.SidebarPopularSongsView = new SidebarListView({ 
         model: SidebarPopularSongs,  
     });
-    window.SidebarPopularSongsView.viewType = "like_count";
-    
+
     window.Plays = new PlayList();    
     window.PlaysView = new PlayListView({ 
         model: Plays 
@@ -428,19 +411,18 @@ $(function() {
     window.TopSongsView = new SongListView({ 
         model: TopSongs, 
     });
-    window.TopSongsView.viewType = 'play_count';
-    
+
     window.PopularSongs = new SongList(); 
     window.PopularSongsView = new SongListView({ 
         model: PopularSongs, 
     });
-    window.PopularSongsView.viewType = 'like_count';
-	
+
 	window.App = new AppView();
 	window.Router = new AppRouter();
 	
-	SidebarTopSongs.fetchTopFromServer(10);
-	SidebarPopularSongs.fetchPopularFromServer(10);
+	SidebarTopSongs.fetchTopFromServer(sidebarDaysAgo, 10);
+	SidebarPopularSongs.fetchPopularFromServer(sidebarDaysAgo, 10);
+	
 	/*
 	setInterval(function() {
 	    TopSongs.fetchTopFromServer(15);
