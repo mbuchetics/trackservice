@@ -141,6 +141,14 @@ $(function() {
     var Play = Backbone.Model.extend({
 	    like: function() {
             likeSong(this.get('songId'), user);
+	    },
+	    updateTime: function() {
+	    	var time = this.get('originalTime');
+	    	
+	    	this.set({ 
+	    		time:  getTimeStr(time),
+	    		isNew: isRecentTime(time)
+	    	});
 	    }
     }, // class properties
     {
@@ -151,7 +159,7 @@ $(function() {
             play.set({ 
                 songId: json.song_id,
                 time: getTimeStr(time),
-                originalTime: json.time,
+                originalTime: time,
                 artist: json.artist,
                 title: json.title,
                 source: json.source,
@@ -167,19 +175,36 @@ $(function() {
     var PlayList = Backbone.Collection.extend({
        model: Play,
        fetchFromServer: function(count) {
-           var collection = this;
-           $.getJSON('api/plays', { count: count }, 
+       		var collection = this;
+           	$.getJSON('api/plays', { count: count }, 
                function(items) {
-	               collection.reset(_.map(items, Play.create));
-       	   });
+	               	collection.reset(_.map(items, Play.create));
+       	   	});
        },
        fetchMoreFromServer: function(count) {
-           var collection = this;
-           var lastPlay = collection.last();
-           $.getJSON('api/plays', { until: lastPlay.get('originalTime'), count: count + 1 }, 
-                function(items) {
-   	               collection.add(_(items).rest(1).map(Play.create));
-           });
+           	var collection = this,
+           		time = collection.last().get('originalTime').add({ seconds: -1});
+           		
+           	$.getJSON('api/plays', { until: time.toString(), count: count }, 
+           	     function(items) {
+   	       	        collection.add(_.map(items, Play.create));
+          	 });
+       },
+       updateFromServer: function() {
+       		var collection = this,
+       			time = collection.first().get('originalTime').add({ seconds: 1});
+       			
+       		$.getJSON('api/plays', { since: time.toString(), count: -1 }, 
+       		     function(items) {
+       		     	_.each(items, function(item) {
+       		     		collection.add(Play.create(item), { at: 0 });
+       		     	});
+       		});
+       },
+       updateTimes: function() {
+       		this.each(function(play) {
+       			play.updateTime();
+       		});
        }
     });
     
@@ -274,15 +299,21 @@ $(function() {
             
             return this;
         },
-        addOne: function(play) {
+        addOne: function(play, playList) {
+        	var index = playList.indexOf(play);
             var table = this.el;
             
             var view = new PlayView({model: play});
             var row = view.render().el;
             
             $(row).fadeIn();
-            $(table).append(row);
             
+            if (index == 0) {
+            	$(table).prepend(row);
+            } 
+            else {
+            	$(table).append(row);
+            }
         }
     });
     
@@ -520,6 +551,11 @@ $(function() {
 	SidebarTopSongs.fetchTopFromServer(sidebarDaysAgo, 10);
 	SidebarPopularSongs.fetchPopularFromServer(sidebarDaysAgo, 10);
 	
+	setInterval(function() {
+		Plays.updateFromServer();
+		Plays.updateTimes();
+	}, 10000);
+	
 	/*
 	setInterval(function() {
 	    TopSongs.fetchTopFromServer(15);
@@ -528,6 +564,10 @@ $(function() {
     	SidebarPopularSongs.fetchPopularFromServer(10);
 	}, 1000);
 	*/
+	
+	/// JQuery handlers
+	
+	/// fm4 popup
 	
 	$('#fm4-stream').click(function() {
 		var href = $('#fm4-stream a').attr('href');
