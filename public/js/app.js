@@ -190,14 +190,16 @@ $(function() {
    	       	        collection.add(_.map(items, Play.create));
           	 });
        },
-       updateFromServer: function() {
+       updateFromServer: function(count) {
        		var collection = this,
        			time = collection.first().get('originalTime').add({ seconds: 1});
        			
-       		$.getJSON('api/plays', { since: time.toString(), count: -1 }, 
+       		$.getJSON('api/plays', { since: time.toString(), count: count }, 
        		     function(items) {
+       		     	items.reverse();
        		     	_.each(items, function(item) {
        		     		collection.add(Play.create(item), { at: 0 });
+       		     		collection.remove(collection.last());
        		     	});
        		});
        },
@@ -285,7 +287,8 @@ $(function() {
         tagName: "table",
         className: "zebra-striped",
         initialize: function() {
-            this.model.bind('add', this.addOne, this);
+            this.model.bind('add', this.add, this);
+            this.model.bind('remove', this.remove, this);
             this.model.bind('reset', this.render, this);
         },
         render: function() {
@@ -299,21 +302,26 @@ $(function() {
             
             return this;
         },
-        addOne: function(play, playList) {
-        	var index = playList.indexOf(play);
-            var table = this.el;
-            
-            var view = new PlayView({model: play});
-            var row = view.render().el;
-            
-            $(row).fadeIn();
-            
+        add: function(play, playList) {
+        	var index = playList.indexOf(play),
+        		table = this.el,
+        		view = new PlayView({model: play}),
+            	row = view.render().el;
+                         
             if (index == 0) {
+            	$(row).fadeIn('slow');
             	$(table).prepend(row);
             } 
             else {
+            	$(row).fadeIn('fast');
             	$(table).append(row);
             }
+        },
+        remove: function(play, playList) {
+        	var index = playList.indexOf(play),
+        		table = this.el;
+        	
+        	$(table).find('tr').eq(index).remove();
         }
     });
     
@@ -554,7 +562,7 @@ $(function() {
 	setInterval(function() {
 		Plays.updateFromServer();
 		Plays.updateTimes();
-	}, 10000);
+	}, 1000);
 	
 	/*
 	setInterval(function() {
