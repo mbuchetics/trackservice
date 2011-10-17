@@ -561,8 +561,11 @@ $(function() {
 	
 	setInterval(function() {
 		Plays.updateFromServer();
+	}, 10000);
+	
+	setInterval(function() {
 		Plays.updateTimes();
-	}, 1000);
+	}, 60000);
 	
 	/*
 	setInterval(function() {
