@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=1280" />
+	
 	<title>trackservice</title>	
 	
-	<link rel="stylesheet" href="css/bootstrap.css" />
+	<link href='http://fonts.googleapis.com/css?family=Merriweather:900,400,700' rel='stylesheet' type='text/css'>
+	
+	<link rel="stylesheet" href="css/fonts/fonts.css" />
+	<link rel="stylesheet" href="css/reset.css" />
 	<link rel="stylesheet" href="css/style.css" />
 	
 	<script src="js/externals/json2.js" type="text/javascript" charset="utf-8"></script>
@@ -16,11 +21,11 @@
 	<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-	<div id="app">
+	<div id="container">
 		
 		<!-- Topbar
 		================================================== -->
-	
+		<!--
 		<div class="topbar">
 			<div class="fill">
 	        	<div class="container">
@@ -39,38 +44,45 @@
 	        	</div>
 	      	</div>
 	    </div>
+		-->
+		
+		<div id="page-header">
+			<div id="page-title">
+				<h1>Page Title</h1>
+				<div class="break"></div>
+				<h3>Subtext</h3>
+			</div>
+		</div>
+		
+		<div class="clear"></div>
+		
+		<div id="main">
+			<div id="song-list"></div>
+			<div id="song-list-footer"></div>
+		</div>
+		
+		<div id="right">
+			<h4>Top 10 Last Week</h4>
+			<div class="sidebar" id="top-sidebar"></div>
+			
+			<h4>Popular Last Week</h4>
+			<div class="sidebar" id="popular-sidebar"></div>
+			
+			<h4>FM4 Live Stream</h4>
+			<div class="sidebar">
+				<span id="fm4-stream"><a href="http://fm4.orf.at/v2static/html/streaming/index.html">popup</a></span> | 
+				<a href="http://mp3stream1.apasf.apa.at:8000/listen.pls">mp3</a> | 
+				<a href="mms://apasf.apa.at/fm4_live_worldwide">wma</a>
+			</div>
+		</div>
+		
+		<div class="clear"></div>
 	
-		<div class="container">
-
-	    	<div class="content">
-	        	<div class="page-header">
-	          		<h1 id="page-title">Page Title <small>Subtext</small></h1>
-	        	</div>
-	        	<div class="row">
-	          		<div class="span10">
-						<div id="song-list"></div>
-						<div id="song-list-footer"></div>
-	          		</div>
-	          		<div class="span6">
-	            		<h4>Top 10 Last Week</h4>
-						<div class="sidebar" id="top-sidebar"></div>
-						<h4>Popular Last Week</h4>
-						<div class="sidebar" id="popular-sidebar"></div>
-						<h4>FM4 Live Stream</h4>
-						<div class="sidebar">
-							<span id="fm4-stream"><a href="http://fm4.orf.at/v2static/html/streaming/index.html">popup</a></span> | 
-							<a href="http://mp3stream1.apasf.apa.at:8000/listen.pls">mp3</a> | 
-							<a href="mms://apasf.apa.at/fm4_live_worldwide">wma</a>
-						</div>
-	          		</div>
-	        	</div>
-	      	</div>
-
-	      	<footer>
-	        	<p>You can <a href="https://github.com/mbuchetics/trackservice">fork this project on GitHub.</a></p>
-	      	</footer>
-
-	    </div>
+		<div id="page-footer">
+			<footer>
+				<p>You can <a href="https://github.com/mbuchetics/trackservice">fork this project on GitHub.</a></p>
+			</footer>
+		</div>
 
 	</div>
 

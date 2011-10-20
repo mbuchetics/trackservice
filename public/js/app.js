@@ -415,7 +415,7 @@ $(function() {
     /// AppView
     
     var AppView = Backbone.View.extend({
-        el: $("#app"),
+        el: $("#container"),
         initialize: function() {
             $('#top-sidebar').html(SidebarTopSongsView.el);
             $('#popular-sidebar').html(SidebarPopularSongsView.el);
@@ -424,8 +424,9 @@ $(function() {
     	    this.$('.topbar').find('.active').removeClass('active');
     	    this.$('.topbar').find(selector).addClass('active');
     	},
-    	setTitle: function(title) {
-    	    this.$('#page-title').html(title);
+    	setTitle: function(title, subTitle) {
+    	    this.$('#page-title h1').html(title);
+			this.$('#page-title h3').html(subTitle);
     	},
     	setFooter: function(text, clickAction) {
     	    var footer = this.$('#song-list-footer').html(text);
@@ -442,7 +443,7 @@ $(function() {
        	},
         showAllPlays: function() {
             this.setActiveMenuItem('.menu-all');
-            this.setTitle('All Tracks <small>from the beginning of time</small>');
+            this.setTitle('All Tracks', 'from the beginning of time');
             
             Plays.fetchFromServer(-1);
             $('#song-list').html(PlaysView.el);
@@ -451,7 +452,7 @@ $(function() {
         },
         showRecentPlays: function() {
             this.setActiveMenuItem('.menu-recent');
-	        this.setTitle('Recent Tracks <small>Last 15 plays</small>');
+	        this.setTitle('Recent Tracks', 'Last 15 plays');
 	        
 	        Plays.fetchFromServer(15);
             $('#song-list').html(PlaysView.el);
@@ -462,7 +463,7 @@ $(function() {
         },
         showTopSongs: function() {
             this.setActiveMenuItem('.menu-top');
-	        this.setTitle('Top Tracks <small>Top 15 of last week</small>');
+	        this.setTitle('Top Tracks', 'Top 15 of last week');
 	        
 	        TopSongs.fetchTopFromServer(7, 15);
 	        $('#song-list').html(TopSongsView.el);
@@ -471,7 +472,7 @@ $(function() {
         },
         showPopularSongs: function() {
             this.setActiveMenuItem('.menu-popular');
-	        this.setTitle('Popular Tracks <small>Top 15 of last week</small>');
+	        this.setTitle('Popular Tracks', 'Top 15 of last week');
         
             PopularSongs.fetchPopularFromServer(7, 15);
 	        $('#song-list').html(PopularSongsView.el);
@@ -480,7 +481,7 @@ $(function() {
         },
         showUser: function(user) {
         	this.setActiveMenuItem('.menu-user');
-        	this.setTitle('My Tracks <small>' + user + '</small');
+        	this.setTitle('My Tracks', user);
         	
         	UserLikes.fetchLikedFromServer(user, 15);
         	$('#song-list').html(UserLikesView.el);

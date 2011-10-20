@@ -1,137 +1,78 @@
-html, body {
-    background-color: #eee;
+html {
 }
-  
+
 body {
-    padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+	background: #222;
 }
 
-footer p {
-    text-align: center; /* center align it with the container */
+h1, h2, h3, h4 {
+	background: #fff;
+	padding: 6px;
+	display: inline-block;
+	font-weight: bold;
+	letter-spacing: .1em;
+	text-transform: uppercase;
 }
 
-/* The white background content wrapper */
-.content {
-    background-color: #fff;
-    padding: 20px;
-    margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
-    -webkit-border-radius: 0 0 6px 6px;
-    -moz-border-radius: 0 0 6px 6px;
-    border-radius: 0 0 6px 6px;
-    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+#container {
+	font-family: 'Helvetica Neue', Helvetica, Arial, serif;
+	width: 1218px;
+	margin: 15px auto;
 }
 
-/* Page header tweaks */
-.page-header {
-    background-color: #f5f5f5;
-    padding: 20px 20px 10px;
-    margin: -20px -20px 20px;
+#page-header {
+	width: 750px;
 }
 
-/* Give a quick and non-cross-browser friendly divider */
-.content .span6 {
-    margin-left: 0;
-    padding-left: 10px;
-    border-left: 1px solid #eee;
+#page-title  {
+	display: inline-block;
 }
 
-.topbar .btn {
-    border: 0;
+#page-title h1 {
+	font-family: 'ChunkFiveRegular', 'Helvetica Neue', Helvetica, Arial, serif;
+	font-size: 300%;
+	//font-weight: bold;
 }
 
-#song-list-footer
-{
-    text-align: center;
-    font-size: 90%;
-    color: #555;
-    margin: 0px 20px;
-    padding: 5px;
-    border-top: 1px solid #eee;
+#page-title h3 {
+	display: inline-block;
+	float: right;
+	font-size: 100%;
 }
 
-#song-list
-{
-    padding: 10px;
+#main {
+	width: 750px;
+	float: left;
 }
 
-#song-list .plus
-{ 
-    width: 20px;
-    text-align: center;
+#right {
+	margin-left: 30px;
+	width: 438px;
+	float: left;
 }
 
-#song-list .button-plus
-{
-    text-align: center;
-    font-size: 9.75px;
-    //font-weight: bold;
-    background-color: #0064CD;
-    padding: 5px 8px 6px;
-    color: white;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+#page-footer {
+	width: 750px;
+	margin: 0px auto;
+	text-align: center;
+	font-size: 70%;
+	font-weight: bold;
 }
 
-#song-list .button-plus:hover
-{
-    text-decoration: none;
-    background-color: #004A99;
+#page-footer footer {
+	display: inline-block;
+	background: #fff;
+	padding: 6px;
 }
 
-#song-list .song
-{
+.clear { 
+	clear: both; 
+	font: 1px/1px sans-serif; 
+	height: 1px; 
+	overflow: hidden; 
 }
 
-#song-list .time
-{
-    width: 140px;
-    text-align: right;
-}
-
-#song-list .count
-{
-    width: 140px;
-    text-align: right;
-}
-
-.sidebar 
-{
-	padding: 5px;
-}
-
-.sidebar .count
-{
-    width: 60px;
-    text-align: right;
-}
-
-.sidebar table
-{
-    border: 0px;
-}
-
-.sidebar table td
-{
-    padding: 1px 5px;
-    border-top: 0px;
-}
-
-.sidebar table tr
-{
-    font-size: 90%;
-    color: #555;
-}
-
-.chartbar
-{
-    background-color: #FDDFDE;
-    border: 1px solid #FBC7C6;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    color: #666;
-    padding: 0px 3px;
+.break { 
+	clear: both; 
+	overflow: hidden; 
 }
