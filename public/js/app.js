@@ -450,7 +450,7 @@ $(function() {
             this.setActiveMenuItem('.menu-recent');
 	        this.setTitle('FM4 Playlist', 'Recent songs');
 	        
-	        Plays.fetchFromServer(15);
+	        Plays.fetchFromServer(30);
             $('#song-list').html(PlaysView.el);
             
             this.setFooter('<a href="">more</a>', function() { 

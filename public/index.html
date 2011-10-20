@@ -110,10 +110,14 @@
 	</script>
 	
 	<script type="text/template" id="sidebar_template">	
-		<td class="song">{{ artist }} - {{ title }}</td> 
 		<td class="count">
-			<div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
-		</td> 	
+			<div class="chartbar" style="width:{{percentage}}%">
+				{{ count }}
+			</div>
+		</td> 
+		<td class="content">
+			<span class="song">{{ artist }} - {{ title }}</span>
+		</td>	
 	</script>
 	
 	<!-- /TEMPLATES -->
