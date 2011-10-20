@@ -32,6 +32,7 @@ a {
 
 #page-header {
 	width: 750px;
+	margin-bottom: 20px;
 }
 
 #page-title  {
@@ -147,22 +148,24 @@ a {
 	padding-right: 3px;
 }
 
-#song-list .time {
-	background-color: #fff;
-	font-weight: bold;
-	font-size: 70%;
-	padding-left: 3px;
-	padding-right: 3px;
-}
-
 #song-list .song.new {
 	font-size: 200%;
-	font-weight: bold;
+}
+
+#song-list .time {
+	background-color: #fd0;
+	//font-weight: bold;
+	font-size: 100%;
+	padding-left: 3px;
+	padding-right: 3px;
 }
 
 #song-list .time.new {
 	background-color: #fd0;
 	color: #222;
+	font-size: 130%;
+	//font-weight: bold;
+	display: table;
 }
 
 #page-footer {
