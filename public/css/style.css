@@ -1,12 +1,16 @@
+/* @override 
+	http://localhost:3000/css/style.css */
+
 html {
 }
 
 body {
+	font-family: 'Helvetica Neue', Helvetica, Arial, serif;
 	background: #222;
+	color: #333;
 }
 
 h1, h2, h3, h4 {
-	//background: #fff;
 	background: #333;
 	color: #fd0;
 	padding: 6px;
@@ -16,10 +20,81 @@ h1, h2, h3, h4 {
 	text-transform: uppercase;
 }
 
+a {
+	color: #ffbc00;
+}
+
+#song-list tr {
+}
+
+#song-list td {
+	vertical-align: baseline;
+	//border-bottom: 1px solid #000000;
+	padding-left: 6px;
+	padding-bottom: 7px;
+}
+
+#song-list .plus {
+	vertical-align: middle;
+	//background-color: #83de57;
+	text-align: center;
+	padding-left:  0px;
+}
+
+#song-list .content {
+	//background-color: #f3c1ef;	
+}
+
+#song-list .button-plus {
+	background-color: #fd0;
+	font-weight: bold;
+	padding: 1px 5px 0px;
+	text-decoration: none;
+	color: #333;
+}
+
+#song-list .button-plus.new {
+	font-size: 200%;
+}
+
+#song-list .button-plus:hover {
+	background-color: #555;
+	color: #ddd;
+}
+
+#song-list .song {
+	background-color: #fff;
+	font-weight: bold;
+	height: 30px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+#song-list .time {
+	background-color: #fff;
+	font-weight: bold;
+	font-size: 70%;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+#song-list .song.new {
+	font-size: 200%;
+}
+
+#song-list .time.new {
+	background-color: #fd0;
+	color: #222;
+}
+
+#song-list {
+	margin: 5px;
+}
+
 #container {
-	font-family: 'Helvetica Neue', Helvetica, Arial, serif;
 	width: 1218px;
-	margin: 15px auto;
+	margin: 0px auto;
+	padding:  15px;
 }
 
 #page-header {

@@ -238,7 +238,6 @@ $(function() {
     
     var SongListView = Backbone.View.extend({
         tagName: "table",
-        className: "zebra-striped",
         initialize: function() {
             this.model.bind('change', this.render, this);        
             this.model.bind('add', this.render, this);
@@ -285,7 +284,6 @@ $(function() {
     
     var PlayListView = Backbone.View.extend({
         tagName: "table",
-        className: "zebra-striped",
         initialize: function() {
             this.model.bind('add', this.add, this);
             this.model.bind('remove', this.remove, this);
@@ -347,7 +345,6 @@ $(function() {
     
     var LikeListView = Backbone.View.extend({
         tagName: "table",
-        className: "zebra-striped",
         initialize: function() {
             this.model.bind('change', this.render, this);        
             this.model.bind('add', this.render, this);
@@ -389,7 +386,6 @@ $(function() {
     
     var SidebarListView = Backbone.View.extend({
         tagName: "table",
-        className: "zebra-striped",
         initialize: function() {
             this.model.bind('change', this.render, this);        
             this.model.bind('add', this.render, this);
