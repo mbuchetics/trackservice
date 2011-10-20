@@ -6,7 +6,9 @@ body {
 }
 
 h1, h2, h3, h4 {
-	background: #fff;
+	//background: #fff;
+	background: #333;
+	color: #fd0;
 	padding: 6px;
 	display: inline-block;
 	font-weight: bold;
@@ -31,7 +33,6 @@ h1, h2, h3, h4 {
 #page-title h1 {
 	font-family: 'ChunkFiveRegular', 'Helvetica Neue', Helvetica, Arial, serif;
 	font-size: 300%;
-	//font-weight: bold;
 }
 
 #page-title h3 {
@@ -61,8 +62,10 @@ h1, h2, h3, h4 {
 
 #page-footer footer {
 	display: inline-block;
-	background: #fff;
-	padding: 6px;
+	background: #333;
+	color: #ddd;
+	margin-top: 40px;
+	padding: 6px 30px;
 }
 
 .clear { 
