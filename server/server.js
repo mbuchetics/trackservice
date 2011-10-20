@@ -33,6 +33,7 @@ function getTime(timeStr) {
     // fm4 trackservice times are GMT+0200
     time.setHours(time.getHours() - 2);
     
+    console.log(now);
     console.log(time);
 
     // previous day
