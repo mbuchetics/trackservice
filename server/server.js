@@ -34,9 +34,9 @@ function getTime(timeStr) {
     time.setHours(time.getHours() - 2);
 
     // previous day
-    if (now - time < 0) {
-        time.setDate(time.getDate() - 1);
-    }
+    //if (now - time < 0) {
+    //    time.setDate(time.getDate() - 1);
+    //}
 
     return time;
 }
