@@ -30,6 +30,8 @@ function getTime(timeStr) {
         minute = timeStr.substring(3,5), 
         time = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0));
         
+    console.log(time);
+        
     // fm4 trackservice times are GMT+0200
     time.setHours(time.getHours() - 2);
     
