@@ -23,13 +23,13 @@ $(function() {
 			timeStr;
 			
 		if (timeDiffInMinutes < 15) {
-		    timeStr = 'vor ' + Math.round(timeDiffInMinutes) + ' min';
+		    timeStr = Math.round(timeDiffInMinutes) + ' min ago';
 		}
 		else if (isToday) {
 		    timeStr = time.toString('HH:mm');
 		}
 		else if(isYesterday) {
-		    timeStr = 'gestern ' + time.toString('HH:mm');
+		    timeStr = 'yesterday ' + time.toString('HH:mm');
 		}
 		else {
 		    timeStr = time.toString('d. MMM. HH:mm');
