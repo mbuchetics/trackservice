@@ -21,8 +21,11 @@ $(function() {
 			timeDiff = now.getTime() - time.getTime(),
 			timeDiffInMinutes = timeDiff / 1000 / 60,
 			timeStr;
-			
-		if (timeDiffInMinutes < 15) {
+		
+		if (timeDiffInMinutes < 2) {
+		    timeStr = 'now';
+		}	
+		else if (timeDiffInMinutes < 15) {
 		    timeStr = Math.round(timeDiffInMinutes) + ' min ago';
 		}
 		else if (isToday) {
