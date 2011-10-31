@@ -28,16 +28,25 @@ function getTime(timeStr) {
     var now = new Date(),
         hour = timeStr.substring(0,2),
         minute = timeStr.substring(3,5), 
-        time = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0));
+        time = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, 0)),
+        diffHour = 1;
+        
+    if (isDaylightSaving(time)) {
+        diffHour = 2;
+    }
              
     // fm4 trackservice times are GMT+0200
-    time.setHours(time.getHours() - 2);
+    time.setHours(time.getHours() - diffHour);
     
-    if (hour < 2) {
+    if (hour < diffHour) {
     	time.setDate(time.getDate() + 1);
     }
 
     return time;
+}
+
+function isDaylightSaving(time) {
+    return false;
 }
 
 function getTracklist() {     

@@ -89,10 +89,18 @@
 	<!-- TEMPLATES -->
 	
 	<script type="text/template" id="play_template">	
-		<td class="plus"><a class="button-plus {{#if isNew}}new{{/if}}" href="">+</a></td>
+		<td class="plus"><a class="button-plus" href="">+</a></td>
 		<td class="content">
-			<span class="song {{#if isNew}}new{{/if}}">{{ artist }} - {{ title }}</span>
-			<div class="time {{#if isNew}}new{{/if}}">{{ time }}</div>
+			<span class="song">{{ artist }} - {{ title }}</span>
+			<span class="time">{{ time }}</span>
+		</td> 
+	</script>
+	
+	<script type="text/template" id="play_template_recent">	
+		<td class="plus"><a class="button-plus recent" href="">+</a></td>
+		<td class="content">
+			<div class="song recent">{{ artist }} - {{ title }}</div>
+			<div class="time recent">{{ time }}</div>
 		</td> 
 	</script>
 	

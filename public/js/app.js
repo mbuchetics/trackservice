@@ -150,7 +150,7 @@ $(function() {
 	    	
 	    	this.set({ 
 	    		time:  getTimeStr(time),
-	    		isNew: isRecentTime(time)
+	    		isRecent: isRecentTime(time)
 	    	});
 	    }
     }, // class properties
@@ -166,7 +166,7 @@ $(function() {
                 artist: json.artist,
                 title: json.title,
                 source: json.source,
-                isNew: isRecentTime(time)
+                isRecent: isRecentTime(time)
             });
             
             return play;
@@ -267,14 +267,21 @@ $(function() {
         tagName:  "tr",
         className: "",
         template: Handlebars.compile($('#play_template').html()),
+        templateRecent: Handlebars.compile($('#play_template_recent').html()),
         events: {
             "click .button-plus": "like"
         }, 
         initialize: function() {
             this.model.bind('change', this.render, this);
         },
-        render: function() {
-            $(this.el).html(this.template(this.model.toJSON()));
+        render: function() {            
+            if (this.model.get('isRecent')) {
+                $(this.el).html(this.templateRecent(this.model.toJSON()));
+            }
+            else {
+                $(this.el).html(this.template(this.model.toJSON()));
+            }
+            
             return this;
         },
         like: function(e) {

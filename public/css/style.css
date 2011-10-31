@@ -131,7 +131,7 @@ a {
 	font-family: Arial;
 }
 
-#song-list .button-plus.new {
+#song-list .button-plus.recent {
 	font-size: 200%;
 	font-weight: bold;
 }
@@ -143,13 +143,13 @@ a {
 
 #song-list .song {
 	background-color: #fff;
-	height: 30px;
 	padding-left: 3px;
 	padding-right: 3px;
 }
 
-#song-list .song.new {
+#song-list .song.recent {
 	font-size: 200%;
+	border: 5px #fff solid;
 }
 
 #song-list .time {
@@ -157,10 +157,9 @@ a {
 	font-size: 100%;
 	padding-left: 3px;
 	padding-right: 3px;
-	display: inline;
 }
 
-#song-list .time.new {
+#song-list .time.recent {
 	background-color: #fd0;
 	color: #222;
 	font-size: 130%;
