@@ -10,6 +10,8 @@ var config = require('./config'),
     _ = require('underscore'),
     colors = require('colors'),
     datetime = require('datetime'),
+    dateutils = require('date-utils'),
+    dstTimes = null,
     jQuerySrc = fs.readFileSync('public/js/externals/jquery-1.6.3.min.js').toString();
     
 var useJQuery = function(body, callback) {
@@ -35,7 +37,7 @@ function getTime(timeStr) {
         diffHour = 2;
     }
              
-    // fm4 trackservice times are GMT+0200
+    // fm4 trackservice times are CET (or CEST)
     time.setHours(time.getHours() - diffHour);
     
     if (hour < diffHour) {
@@ -46,6 +48,47 @@ function getTime(timeStr) {
 }
 
 function isDaylightSaving(time) {
+    if (dstTimes == null) {
+        dstTimes = new Array(
+            // 2011
+            new Date(Date.UTC(2011, 2, 27, 2, 0, 0)),
+            new Date(Date.UTC(2011, 9, 30, 3, 0, 0)),
+            // 2012
+            new Date(Date.UTC(2012, 2, 25, 2, 0, 0)),
+            new Date(Date.UTC(2012, 9, 28, 3, 0, 0)),
+            // 2013
+            new Date(Date.UTC(2013, 2, 31, 2, 0, 0)),
+            new Date(Date.UTC(2013, 9, 27, 3, 0, 0)),
+            // 2014
+            new Date(Date.UTC(2014, 2, 30, 2, 0, 0)),
+            new Date(Date.UTC(2014, 9, 26, 3, 0, 0)),
+            // 2015
+            new Date(Date.UTC(2015, 2, 29, 2, 0, 0)),
+            new Date(Date.UTC(2015, 9, 25, 3, 0, 0)),
+            // 2016
+            new Date(Date.UTC(2015, 2, 27, 2, 0, 0)),
+            new Date(Date.UTC(2015, 9, 30, 3, 0, 0)),
+            // 2017
+            new Date(Date.UTC(2015, 2, 26, 2, 0, 0)),
+            new Date(Date.UTC(2015, 9, 29, 3, 0, 0)),
+            // 2018
+            new Date(Date.UTC(2015, 2, 25, 2, 0, 0)),
+            new Date(Date.UTC(2015, 9, 28, 3, 0, 0)),
+            // 2019
+            new Date(Date.UTC(2015, 2, 31, 2, 0, 0)),
+            new Date(Date.UTC(2015, 9, 27, 3, 0, 0))
+        );
+    }
+    
+    for (var i=0; i < dstTimes.length; i+=2) {
+        var from = dstTimes[i],
+            to = dstTimes[i+1];
+       
+        if (time.between(from, to)) {
+            return true;
+        }
+    }    
+    
     return false;
 }
 
