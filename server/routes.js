@@ -166,6 +166,27 @@ module.exports = function(app) {
 	
 	/// spotify
 	
+	app.get('api/blub', function(req, res) {
+		//var query = req.param('query');
+		
+		console.log('/api/blub');
+        console.log(query);
+		
+		res.json({ ok: true });
+
+		/*
+		request({
+		    uri: 'http://http://ws.spotify.com/search/1/track.json?q=' + query,
+		    json: true,
+		    }, 
+		    function(error, res2, result) {
+			    if (!error && res2.statusCode == 200) {
+					res.json(result);
+			    }
+			});
+		*/
+	});
+	
 	app.get('api/spotify', function(req, res) {
 		//var query = req.param('query');
 		
