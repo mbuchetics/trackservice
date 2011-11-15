@@ -155,7 +155,7 @@ module.exports = function(app) {
         res.json({ ok: true });
     });
     
-    app.get('/api/test1', function(req, res) {
+    app.get('/api/test2', function(req, res) {
     	var params = getParameters(req);
     	
     	db.getTopLikedSongs(
