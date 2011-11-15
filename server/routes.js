@@ -167,11 +167,14 @@ module.exports = function(app) {
 	/// spotify
 	
 	app.get('api/spotify', function(req, res) {
-		var query = req.param('query');
+		//var query = req.param('query');
 		
 		console.log('/api/spotify');
         console.log(query);
+		
+		res.json({ ok: true });
 
+		/*
 		request({
 		    uri: 'http://http://ws.spotify.com/search/1/track.json?q=' + query,
 		    json: true,
@@ -181,6 +184,7 @@ module.exports = function(app) {
 					res.json(result);
 			    }
 			});
+		*/
 	});
     
     app.get('*', function(req, res) {    
