@@ -168,6 +168,9 @@ module.exports = function(app) {
 	
 	app.get('api/spotify', function(req, res) {
 		var query = req.param('query');
+		
+		console.log('/api/spotify');
+        console.log(query);
 
 		request({
 		    uri: 'http://http://ws.spotify.com/search/1/track.json?q=' + query,
