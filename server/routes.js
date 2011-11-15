@@ -1,4 +1,5 @@
-var db = require('./database.js');
+var db = require('./database.js'),
+	request = require('request');
 
 function getParameters(req) {
     var paramCount = req.param('count'),
@@ -162,6 +163,22 @@ module.exports = function(app) {
     		params.count,
     		function(songs) { res.json(songs); });
     });
+	
+	/// spotify
+	
+	app.get('api/spotify', function(req, res) {
+		var query = req.param('query');
+
+		request({
+		    uri: 'http://http://ws.spotify.com/search/1/track.json?q=' + query,
+		    json: true,
+		    }, 
+		    function(error, res2, result) {
+			    if (!error && res2.statusCode == 200) {
+					res.json(result);
+			    }
+			});
+	});
     
     app.get('*', function(req, res) {    
         res.writeHead(404);
