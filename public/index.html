@@ -21,6 +21,30 @@
 	<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
+	<div id="fb-root"></div>
+	<script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '252955554753527', // App ID
+	      channelURL : '//trackservice.localhost.com:3000/channel.html', // Channel File
+	      status     : true, // check login status
+	      cookie     : true, // enable cookies to allow the server to access the session
+	      oauth      : true, // enable OAuth 2.0
+	      xfbml      : true  // parse XFBML
+	    });
+	
+		facebookInitialized();
+	  };
+
+	  // Load the SDK Asynchronously
+	  (function(d){
+	     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+	     js = d.createElement('script'); js.id = id; js.async = true;
+	     js.src = "//connect.facebook.net/en_US/all.js";
+	     d.getElementsByTagName('head')[0].appendChild(js);
+	   }(document));
+	</script>
+	
 	<div id="container">
 		
 		<!-- Topbar
@@ -62,6 +86,12 @@
 		</div>
 		
 		<div id="right">
+			<h4 id="username">Anonymous</h4>
+			<div class="sidebar" id="user-sidebar">
+				<a href="#" id="login">login with facebook</a>
+				<a href="#" id="logout">logout</a>
+			</div>
+			
 			<h4>Top 10 Last Week</h4>
 			<div class="sidebar" id="top-sidebar"></div>
 			
@@ -88,20 +118,22 @@
 
 	<!-- TEMPLATES -->
 	
-	<script type="text/template" id="play_template">	
+	<script type="text/template" id="play_template">
 		<td class="plus"><a class="button-plus" href="">+</a></td>
 		<td class="content">
-			<span class="song">{{ artist }} - {{ title }}</span>
 			<span class="time">{{ time }}</span>
+			<span class="song">{{ artist }} - {{ title }}</span>			
+			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}"><img src="images/button-play-01.png" width="12px" height="12px"></a></span>{{/if}}
 		</td> 
 	</script>
 	
 	<script type="text/template" id="play_template_recent">	
-		<td class="plus"><a class="button-plus recent" href="">+</a></td>
+		<td class="plus"><a class="button-plus recent" href="">+</a></td>		
 		<td class="content">
 			<div class="song recent">{{ artist }} - {{ title }}</div>
 			<div class="time recent">{{ time }}</div>
-		</td> 
+			{{#if spotify}}<span class="spotify recent"><a href="{{ spotify }}">play on spotify <img src="images/button-play-01.png" width="18px" height="18px"></a></span>{{/if}}
+		</td>
 	</script>
 	
 	<script type="text/template" id="song_template">	

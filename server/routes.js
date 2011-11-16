@@ -15,6 +15,21 @@ function getParameters(req) {
     };
 }
 
+function searchSpotify(uri, res) {
+    console.log(uri);
+
+	request({
+	    uri: uri,
+	    json: true,
+	    }, 
+	    function(error, res2, result) {
+		    if (!error && res2.statusCode == 200) {
+				res.json(result);
+		    }
+	    }
+    );
+}
+
 module.exports = function(app) {
 
 	/// artists
@@ -165,48 +180,24 @@ module.exports = function(app) {
     });
 	
 	/// spotify
-	
-	app.get('api/blub', function(req, res) {
-		//var query = req.param('query');
-		
-		console.log('/api/blub');
-        console.log(query);
-		
-		res.json({ ok: true });
 
-		/*
-		request({
-		    uri: 'http://http://ws.spotify.com/search/1/track.json?q=' + query,
-		    json: true,
-		    }, 
-		    function(error, res2, result) {
-			    if (!error && res2.statusCode == 200) {
-					res.json(result);
-			    }
-			});
-		*/
-	});
-	
-	app.get('api/spotify', function(req, res) {
-		//var query = req.param('query');
-		
-		console.log('/api/spotify');
-        console.log(query);
-		
-		res.json({ ok: true });
+    app.get('/api/spotify/track', function(req, res) {
+    	var query = req.param('query');
+		console.log('/api/spotify/track');
+        searchSpotify('http://ws.spotify.com/search/1/track.json?q=' + escape(query), res);
+    });
 
-		/*
-		request({
-		    uri: 'http://http://ws.spotify.com/search/1/track.json?q=' + query,
-		    json: true,
-		    }, 
-		    function(error, res2, result) {
-			    if (!error && res2.statusCode == 200) {
-					res.json(result);
-			    }
-			});
-		*/
-	});
+    app.get('/api/spotify/artist', function(req, res) {
+    	var query = req.param('query');
+		console.log('/api/spotify/track');
+        searchSpotify('http://ws.spotify.com/search/1/artist.json?q=' + escape(query), res);
+    });
+
+    app.get('/api/spotify/album', function(req, res) {
+    	var query = req.param('query');		
+		console.log('/api/spotify/track');
+        searchSpotify('http://ws.spotify.com/search/1/album.json?q=' + escape(query), res);
+    });
     
     app.get('*', function(req, res) {    
         res.writeHead(404);

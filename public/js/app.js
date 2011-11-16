@@ -56,12 +56,91 @@ $(function() {
 	    });
 	}
 	
+	function getSpotifyLink(artist, title, callback) {
+		var queryString = artist + '+' + title;
+		console.log('fetching spotify link: ' + queryString);
+		$.getJSON('api/spotify/track', { query: queryString }, 
+			function(result) {
+				if (result.tracks.length > 0) {
+					var link = result.tracks[0].href;
+					console.log('spotify link for ' + queryString + ': ' + link);
+					callback(link);
+				} 
+				else {
+					console.log('no spotify link for ' + queryString);
+				}				
+			}
+		);
+	}
+	
+	/// User
+	
+	var User = Backbone.Model.extend({
+        setUserData: function() {
+            var user = this;
+            FB.api('/me', function(response) {
+                console.log('user logged in');
+                console.log(response);
+                user.set({
+                   'username': response.name,
+                   'userid': response.id,
+                   'isLoggedIn': true
+                });
+                
+                $('#username').text('Hallo, ' + response.first_name + '!');
+            });
+	    },
+	    check: function() {
+	        var user = this;
+	        FB.getLoginStatus(function(response) {
+	            if (response.authResponse) {
+	                user.setUserData();
+	            }
+	            else {
+	                console.log('unknown user');
+	                user.set({
+    	               'username': null,
+    	               'userid': null,
+    	               'isLoggedIn': false
+    	            });
+	            }
+	        });
+	    },
+	    login: function() {
+	        var user = this;
+	        FB.login(function(response) {
+               if (response.authResponse) {
+                   user.setUserData();
+               }
+               else {
+                   console.log('user cancelled login');
+               }
+            });
+	    },
+	    logout: function() {
+	        var user = this;
+	        FB.logout(function(response) {
+	            user.set({
+	               'username': null,
+	               'userid': null,
+	               'isLoggedIn': false
+	            });
+	        });
+	    } 
+	});
+	
 	/// Song
 	
 	var Song = Backbone.Model.extend({
 	    like: function() {
 	        likeSong(this.get('songId'), user);
-	    }
+	    },
+	    setSpotifyLink: function() {
+			var song = this;
+			getSpotifyLink(this.get('artist'), this.get('title'), function(link) {
+				song.set({ spotify: link });
+			});
+		}
 	},
 	{ // class properties
 	    create: function(json, maxCount) {
@@ -74,6 +153,8 @@ $(function() {
 		       count: json.count,
 		       percentage: maxCount > 0 ? json.count / maxCount * 95 : 0
 		    });
+		    
+		    song.setSpotifyLink();
 		    
 		    return song;
 	    },
@@ -152,7 +233,13 @@ $(function() {
 	    		time:  getTimeStr(time),
 	    		isRecent: isRecentTime(time)
 	    	});
-	    }
+	    },
+	    setSpotifyLink: function() {
+			var play = this;
+			getSpotifyLink(this.get('artist'), this.get('title'), function(link) {
+				play.set({ spotify: link });
+			});
+		}
     }, // class properties
     {
         create: function(json) {      
@@ -168,6 +255,8 @@ $(function() {
                 source: json.source,
                 isRecent: isRecentTime(time)
             });
+            
+            play.setSpotifyLink();
             
             return play;
         }
@@ -528,7 +617,23 @@ $(function() {
 	    }
 	});
 	
+	/// Facebook
+	
+	window.facebookInitialized = function facebookInitialized() {
+	    window.User.check();
+	}
+	
+	$('#login').click(function() {
+	   window.User.login();
+	});
+	
+	$('#logout').click(function() {
+	   window.User.logout();
+	});
+	
 	/// Init stuff
+	
+	window.User = new User();
     
     window.SidebarTopSongs = new SongList();
     window.SidebarTopSongsView = new SidebarListView({ 
