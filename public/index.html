@@ -47,29 +47,6 @@
 	
 	<div id="container">
 		
-		<!-- Topbar
-		================================================== -->
-		<!--
-		<div class="topbar">
-			<div class="fill">
-	        	<div class="container">
-	          		<a class="brand" href="#">Trackservice</a>
-	          		<ul class="nav">
-						<li class="menu-recent active"><a href="#/recent">Recent</a></li>
-						<li class="menu-user"><a href="#/user">User</a></li>
-						<li class="menu-top"><a href="#/top">Top</a></li>
-						<li class="menu-popular"><a href="#/popular">Popular</a></li>
-						<li class="menu-all"><a href="#/all">All</a></li>
-	          		</ul>
-	          		<form action="" class="pull-right">
-	            		<input class="input-small" type="text" placeholder="Username">
-	            		<button class="btn" type="submit">Sign in</button>
-	          		</form>
-	        	</div>
-	      	</div>
-	    </div>
-		-->
-		
 		<div id="page-header">
 			<div id="page-title">
 				<h1>Page Title</h1>
@@ -87,16 +64,20 @@
 		
 		<div id="right">
 			<h4 id="username">Anonymous</h4>
-			<div class="sidebar" id="user-sidebar">
-				<a href="#" id="login">login with facebook</a>
-				<a href="#" id="logout">logout</a>
+			<div class="sidebar" id="user-sidebar"></div>
+			<div class="sidebar" id="user-controls">
+				<div><a href="#" id="login">login with facebook</a></div>
+				<div><a href="#" id="logout">logout</a></div>
 			</div>
+			<div class="clear"></div>	
 			
-			<h4>Top 10 Last Week</h4>
+			<h4>Most Played</h4>
 			<div class="sidebar" id="top-sidebar"></div>
+			<div class="clear"></div>	
 			
-			<h4>Popular Last Week</h4>
+			<h4>Popular</h4>
 			<div class="sidebar" id="popular-sidebar"></div>
+			<div class="clear"></div>	
 			
 			<h4>FM4 Live Stream</h4>
 			<div class="sidebar">
@@ -104,6 +85,7 @@
 				<a href="http://mp3stream1.apasf.apa.at:8000/listen.pls">mp3</a> | 
 				<a href="mms://apasf.apa.at/fm4_live_worldwide">wma</a>
 			</div>
+			<div class="clear"></div>
 		</div>
 		
 		<div class="clear"></div>
@@ -122,7 +104,7 @@
 		<td class="plus"><a class="button-plus" href="">+</a></td>
 		<td class="content">
 			<span class="time">{{ time }}</span>
-			<span class="song">{{ artist }} - {{ title }}</span>			
+			<span class="song">{{ artist }} - {{ title }}</span>
 			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}"><img src="images/button-play-01.png" width="12px" height="12px"></a></span>{{/if}}
 		</td> 
 	</script>
@@ -131,15 +113,19 @@
 		<td class="plus"><a class="button-plus recent" href="">+</a></td>		
 		<td class="content">
 			<div class="song recent">{{ artist }} - {{ title }}</div>
-			<div class="time recent">{{ time }}</div>
-			{{#if spotify}}<span class="spotify recent"><a href="{{ spotify }}">play on spotify <img src="images/button-play-01.png" width="18px" height="18px"></a></span>{{/if}}
+			<div>
+				<span class="time recent">{{ time }}</span>
+				{{#if spotify}}
+				<span class="spotify recent"><a href="{{ spotify }}">play on spotify <img src="images/button-play-01.png" width="18px" height="18px"></a></span>
+				{{/if}}
+			</div>
 		</td>
 	</script>
 	
 	<script type="text/template" id="song_template">	
 		<td class="plus"><a class="button-plus" href="">+</a></td>
 		<td class="song">{{ artist }} - {{ title }}</td> 
-		<td class="count">
+		<td class="chartbar_col">
 			<div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
 		</td> 	
 	</script>
@@ -149,15 +135,26 @@
 		<td class="time">{{ time }}</td> 	
 	</script>
 	
-	<script type="text/template" id="sidebar_template">	
-		<td class="count">
+	<script type="text/template" id="sidebar_like_template">
+		<td class="time_col"><span class="time">{{ time }}</span></td> 	
+		<td class="song_col">
+			<span class="song">{{ artist }} - {{ title }}</span>
+			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
+		</td>
+		<div class="clear"></div>	
+	</script>
+	
+	<script type="text/template" id="sidebar_song_template">	
+		<td class="chartbar_col">
 			<div class="chartbar" style="width:{{percentage}}%">
 				{{ count }}
 			</div>
 		</td> 
-		<td class="content">
+		<td class="song_col">
 			<span class="song">{{ artist }} - {{ title }}</span>
+			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
 		</td>	
+		<div class="clear"></div>
 	</script>
 	
 	<!-- /TEMPLATES -->

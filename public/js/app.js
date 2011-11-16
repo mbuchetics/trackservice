@@ -5,7 +5,6 @@
 
 $(function() {
 	var host = window.location.hostname,
-	    user = 'TestUser5',
 	    sidebarDaysAgo = 7;
 
 	function getDateAgo(daysAgo) {
@@ -23,7 +22,7 @@ $(function() {
 			timeStr;
 		
 		if (timeDiffInMinutes < 2) {
-		    timeStr = 'now';
+		    timeStr = 'just now';
 		}	
 		else if (timeDiffInMinutes < 15) {
 		    timeStr = Math.round(timeDiffInMinutes) + ' min ago';
@@ -49,28 +48,12 @@ $(function() {
 		return timeDiffInMinutes < 15;			
 	}
 	
-	function likeSong(songId, user) {
-	    $.post('api/likes/' + songId, { user: user }, function(data) {
+	function likeSong(songId, userId) {
+	    $.post('api/likes/' + songId, { user: userId }, function(data) {
 	       console.log('song like ok'); 
 	       SidebarPopularSongs.fetchPopularFromServer(sidebarDaysAgo, 10);
+	       UserLikes.fetchLikedFromServer(userId, 15);
 	    });
-	}
-	
-	function getSpotifyLink(artist, title, callback) {
-		var queryString = artist + '+' + title;
-		console.log('fetching spotify link: ' + queryString);
-		$.getJSON('api/spotify/track', { query: queryString }, 
-			function(result) {
-				if (result.tracks.length > 0) {
-					var link = result.tracks[0].href;
-					console.log('spotify link for ' + queryString + ': ' + link);
-					callback(link);
-				} 
-				else {
-					console.log('no spotify link for ' + queryString);
-				}				
-			}
-		);
 	}
 	
 	/// User
@@ -83,9 +66,14 @@ $(function() {
                 console.log(response);
                 user.set({
                    'username': response.name,
-                   'userid': response.id,
+                   'id': response.id,
                    'isLoggedIn': true
                 });
+                
+                UserLikes.fetchLikedFromServer(response.id, 15);
+                
+                $('#login').hide();
+                $('#logout').show();
                 
                 $('#username').text('Hallo, ' + response.first_name + '!');
             });
@@ -100,9 +88,12 @@ $(function() {
 	                console.log('unknown user');
 	                user.set({
     	               'username': null,
-    	               'userid': null,
+    	               'id': null,
     	               'isLoggedIn': false
     	            });
+    	            
+    	            $('#login').show();
+                    $('#logout').hide();
 	            }
 	        });
 	    },
@@ -122,9 +113,11 @@ $(function() {
 	        FB.logout(function(response) {
 	            user.set({
 	               'username': null,
-	               'userid': null,
+	               'id': null,
 	               'isLoggedIn': false
 	            });
+	            $('#login').show();
+                $('#logout').hide();
 	        });
 	    } 
 	});
@@ -133,14 +126,8 @@ $(function() {
 	
 	var Song = Backbone.Model.extend({
 	    like: function() {
-	        likeSong(this.get('songId'), user);
-	    },
-	    setSpotifyLink: function() {
-			var song = this;
-			getSpotifyLink(this.get('artist'), this.get('title'), function(link) {
-				song.set({ spotify: link });
-			});
-		}
+	        likeSong(this.get('songId'), CurrentUser.get('id'));
+	    }
 	},
 	{ // class properties
 	    create: function(json, maxCount) {
@@ -154,8 +141,10 @@ $(function() {
 		       percentage: maxCount > 0 ? json.count / maxCount * 95 : 0
 		    });
 		    
-		    song.setSpotifyLink();
-		    
+            if (json.spotify) {
+                song.set({ spotify: json.spotify });
+            }
+            
 		    return song;
 	    },
 	    createFromLike: function(json) {
@@ -167,6 +156,10 @@ $(function() {
 	    		title: json.title,
 	    		time: getTimeStr(new Date(json.time)),
 	    	});
+	    	
+	    	if (json.spotify) {
+	    	    song.set({ spotify: json.spotify });
+	    	}
 	    	
 	    	return song;
 	    }
@@ -205,11 +198,11 @@ $(function() {
                 
             });
         },
-        fetchLikedFromServer: function(user, count) {
+        fetchLikedFromServer: function(userId, count) {
 	        var collection = this;
 	        console.log('fetching liked songs');
 	        $.getJSON('api/likes', { 
-	            user: user,
+	            user: userId,
 	            count: count,
 	        }, 
 	        function(items) {
@@ -224,7 +217,7 @@ $(function() {
     
     var Play = Backbone.Model.extend({
 	    like: function() {
-            likeSong(this.get('songId'), user);
+            likeSong(this.get('songId'), CurrentUser.get('id'));
 	    },
 	    updateTime: function() {
 	    	var time = this.get('originalTime');
@@ -233,13 +226,7 @@ $(function() {
 	    		time:  getTimeStr(time),
 	    		isRecent: isRecentTime(time)
 	    	});
-	    },
-	    setSpotifyLink: function() {
-			var play = this;
-			getSpotifyLink(this.get('artist'), this.get('title'), function(link) {
-				play.set({ spotify: link });
-			});
-		}
+	    }
     }, // class properties
     {
         create: function(json) {      
@@ -253,10 +240,12 @@ $(function() {
                 artist: json.artist,
                 title: json.title,
                 source: json.source,
-                isRecent: isRecentTime(time)
+                isRecent: isRecentTime(time),
             });
             
-            play.setSpotifyLink();
+            if (json.spotify) {
+	    	    play.set({ spotify: json.spotify });
+	    	}
             
             return play;
         }
@@ -470,13 +459,21 @@ $(function() {
     var SidebarItemView = Backbone.View.extend({
         tagName:  "tr",
         className: "",
-        template: Handlebars.compile($('#sidebar_template').html()),
+        templateSong: Handlebars.compile($('#sidebar_song_template').html()),
+        templateLike: Handlebars.compile($('#sidebar_like_template').html()),
         initialize: function() {
             this.model.bind('change', this.render, this);
         },
         render: function() {
             var json = this.model.toJSON();
-            $(this.el).html(this.template(json));
+            
+            if (this.model.has('count')) {
+                $(this.el).html(this.templateSong(json));
+            }
+            else {
+                $(this.el).html(this.templateLike(json));
+            }
+            
             return this;
         }
     });
@@ -499,7 +496,6 @@ $(function() {
            
             this.model.each(function(item) {
                var view = new SidebarItemView({model: item });
-               view.viewType = viewType;
                $(table).append(view.render().el);
             });
             
@@ -512,13 +508,10 @@ $(function() {
     var AppView = Backbone.View.extend({
         el: $("#container"),
         initialize: function() {
+            $('#user-sidebar').html(SidebarUserView.el);
             $('#top-sidebar').html(SidebarTopSongsView.el);
             $('#popular-sidebar').html(SidebarPopularSongsView.el);
         },
-        setActiveMenuItem: function(selector) {
-    	    this.$('.topbar').find('.active').removeClass('active');
-    	    this.$('.topbar').find(selector).addClass('active');
-    	},
     	setTitle: function(title, subTitle) {
     	    this.$('#page-title h1').html(title);
 			this.$('#page-title h3').html(subTitle);
@@ -535,18 +528,8 @@ $(function() {
     	},
     	clearFooter: function() {
     		this.$('#song-list-footer').empty();
-       	},
-        showAllPlays: function() {
-            this.setActiveMenuItem('.menu-all');
-            this.setTitle('All Tracks', 'from the beginning of time');
-            
-            Plays.fetchFromServer(-1);
-            $('#song-list').html(PlaysView.el);
-            
-            this.clearFooter();
-        },
+       	}, 
         showRecentPlays: function() {
-            this.setActiveMenuItem('.menu-recent');
 	        this.setTitle('FM4 Playlist', 'Recent songs');
 	        
 	        Plays.fetchFromServer(30);
@@ -556,29 +539,10 @@ $(function() {
                 Plays.fetchMoreFromServer(10);
             });
         },
-        showTopSongs: function() {
-            this.setActiveMenuItem('.menu-top');
-	        this.setTitle('Top Tracks', 'Top 15 of last week');
-	        
-	        TopSongs.fetchTopFromServer(7, 15);
-	        $('#song-list').html(TopSongsView.el);
-	        
-	        this.clearFooter();
-        },
-        showPopularSongs: function() {
-            this.setActiveMenuItem('.menu-popular');
-	        this.setTitle('Popular Tracks', 'Top 15 of last week');
-        
-            PopularSongs.fetchPopularFromServer(7, 15);
-	        $('#song-list').html(PopularSongsView.el);
-	        
-	        this.clearFooter();
-        },
-        showUser: function(user) {
-        	this.setActiveMenuItem('.menu-user');
-        	this.setTitle('My Tracks', user);
+        showUser: function(userId) {
+        	this.setTitle('My Tracks', userId);
         	
-        	UserLikes.fetchLikedFromServer(user, 15);
+        	UserLikes.fetchLikedFromServer(userId, 15);
         	$('#song-list').html(UserLikesView.el);
         	this.clearFooter();
         }
@@ -588,52 +552,44 @@ $(function() {
     
     var AppRouter = Backbone.Router.extend({
 	    routes: {
-	        "/all": "showAll",
-	        "/recent": "showRecent",
-	        "/top": "showTopSongs",
-	        "/popular": "showPopularSongs",
 	        "/user": "showCurrentUser",
-	        "/user/:user": "showUser",
+	        "/user/:userId": "showUser",
 	        "": "showRecent",
 	    },
 	    
-	    showAll: function() { 
-	        App.showAllPlays(); 
-	    },
 	    showRecent: function() { 
 	        App.showRecentPlays(); 
 	    },
-	    showTopSongs: function() { 
-	        App.showTopSongs(); 
-	    },
-	    showPopularSongs: function() { 
-	        App.showPopularSongs();
-	    },
-	    showUser: function(user) {
-	    	App.showUser(user);
+	    showUser: function(userId) {
+	    	App.showUser(userId);
 	    },
 	    showCurrentUser: function() {
-	    	App.showUser(user);
+	    	App.showUser(CurrentUser.id);
 	    }
 	});
 	
 	/// Facebook
 	
 	window.facebookInitialized = function facebookInitialized() {
-	    window.User.check();
+	    CurrentUser.check();
 	}
 	
 	$('#login').click(function() {
-	   window.User.login();
+	   CurrentUser.login();
 	});
 	
 	$('#logout').click(function() {
-	   window.User.logout();
+	   CurrentUser.logout();
 	});
 	
 	/// Init stuff
 	
-	window.User = new User();
+	window.CurrentUser = new User();
+	window.UserLikes = new SongList();
+	
+    window.SidebarUserView = new SidebarListView({ 
+        model: UserLikes
+    });
     
     window.SidebarTopSongs = new SongList();
     window.SidebarTopSongsView = new SidebarListView({ 
@@ -649,21 +605,6 @@ $(function() {
     window.PlaysView = new PlayListView({ 
         model: Plays 
     });
-    
-    window.TopSongs = new SongList();    
-    window.TopSongsView = new SongListView({ 
-        model: TopSongs 
-    });
-
-    window.PopularSongs = new SongList(); 
-    window.PopularSongsView = new SongListView({ 
-        model: PopularSongs
-    });
-    
-    window.UserLikes = new SongList();
-    window.UserLikesView = new LikeListView({
-    	model: UserLikes
-    });
 
 	window.App = new AppView();
 	window.Router = new AppRouter();
@@ -678,15 +619,6 @@ $(function() {
 	setInterval(function() {
 		Plays.updateTimes();
 	}, 60000);
-	
-	/*
-	setInterval(function() {
-	    TopSongs.fetchTopFromServer(15);
-	    PopularSongs.fetchPopularFromServer(15);
-	    SidebarTopSongs.fetchTopFromServer(10);
-    	SidebarPopularSongs.fetchPopularFromServer(10);
-	}, 1000);
-	*/
 	
 	/// JQuery handlers
 	

@@ -1,5 +1,7 @@
 /* @override 
 	http://localhost:3000/css/style.css */
+	
+.clear {clear: both;}
 
 html {
 }
@@ -66,33 +68,66 @@ a {
 	padding: 8px;
 }
 
+#user-controls {
+    margin-left: 80px;
+    margin-bottom: 20px;
+}
+
+.spotify {
+	background-color: #fd0;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+.spotify:hover {
+	background-color: #ddd;
+}
+
 .sidebar {
 	font-size: 80%;
-	//font-weight: bold;
 	margin-left: 10px;
 	margin-bottom: 20px;
 	margin-top: 10px;
 }
 
 .sidebar td {
-	//line-height: 16px;
 	padding-bottom: 6px;
 }
 
-.sidebar td.count {
-	width: 60px;
+.sidebar .chartbar_col {
+	width: 80px;
 	text-align: right;
+	color: #ddd;
+}
+
+.sidebar .time_col {
+    width: 80px;
+	text-align: right;
+}
+
+.sidebar .time {
+	background-color: #444;
+	color: #ddd;
+	text-align: right;
+	float: right;
+	padding: 2px 3px;
 }
 
 .sidebar .song {
 	background-color: #fff;
-	margin-left:  5px;
+    margin-left:  5px;
+	float: left;
+	padding: 2px 3px;
+}
+
+.sidebar .spotify {
+    margin-left: 5px;
 	float: left;
 	padding: 2px 3px;
 }
 
 .sidebar .chartbar {
-	background-color: #fd0;
+	background-color: #444;
 	text-align: right;
 	float: right;
 	padding-right: 2px;
@@ -137,9 +172,6 @@ a {
 	background-color: #ddd;
 }
 
-#song-list .content {	
-}
-
 #song-list .song {
 	background-color: #fff;
 	padding-left: 3px;
@@ -151,18 +183,13 @@ a {
 	border: 5px #fff solid;
 }
 
-#song-list .spotify {
-	background-color: #fd0;
-	padding-left: 3px;
-	padding-right: 3px;
-}
-
 #song-list .spotify.recent {
 	padding-left: 3px;
 	padding-right: 3px;
-	font-size: 110%;
+	font-size: 120%;
 	text-align: right;
 	vertical-align: center;
+	padding-top:5px;
 	padding-bottom: 5px;
 	float: right;
 	height: 21px;
@@ -175,10 +202,6 @@ a {
 
 #song-list .spotify.recent img {
 	margin-bottom: -3px;
-}
-
-#song-list .spotify:hover {
-	background-color: #ddd;
 }
 
 #song-list a {
@@ -196,12 +219,15 @@ a {
 #song-list .time.recent {
 	background-color: #444;
 	color: #ddd;
-	font-size: 130%;
-	display: inline-block;
 	padding-left: 3px;
 	padding-right: 3px;
+	font-size: 130%;
 	text-align: right;
+	vertical-align: center;
+	padding-top:5px;
 	padding-bottom: 5px;
+	float: left;
+	height: 21px;
 }
 
 #page-footer {

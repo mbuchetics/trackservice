@@ -1,5 +1,4 @@
-var db = require('./database.js'),
-	request = require('request');
+var db = require('./database.js');
 
 function getParameters(req) {
     var paramCount = req.param('count'),
@@ -13,21 +12,6 @@ function getParameters(req) {
         timeSince:  paramSince ? new Date(paramSince) : new Date(0),
         user: paramUser
     };
-}
-
-function searchSpotify(uri, res) {
-    console.log(uri);
-
-	request({
-	    uri: uri,
-	    json: true,
-	    }, 
-	    function(error, res2, result) {
-		    if (!error && res2.statusCode == 200) {
-				res.json(result);
-		    }
-	    }
-    );
 }
 
 module.exports = function(app) {
@@ -170,33 +154,13 @@ module.exports = function(app) {
         res.json({ ok: true });
     });
     
-    app.get('/api/test2', function(req, res) {
+    app.get('/api/test', function(req, res) {
     	var params = getParameters(req);
     	
     	db.getTopLikedSongs(
     		{ time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
     		params.count,
     		function(songs) { res.json(songs); });
-    });
-	
-	/// spotify
-
-    app.get('/api/spotify/track', function(req, res) {
-    	var query = req.param('query');
-		console.log('/api/spotify/track');
-        searchSpotify('http://ws.spotify.com/search/1/track.json?q=' + escape(query), res);
-    });
-
-    app.get('/api/spotify/artist', function(req, res) {
-    	var query = req.param('query');
-		console.log('/api/spotify/track');
-        searchSpotify('http://ws.spotify.com/search/1/artist.json?q=' + escape(query), res);
-    });
-
-    app.get('/api/spotify/album', function(req, res) {
-    	var query = req.param('query');		
-		console.log('/api/spotify/track');
-        searchSpotify('http://ws.spotify.com/search/1/album.json?q=' + escape(query), res);
     });
     
     app.get('*', function(req, res) {    
