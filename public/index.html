@@ -23,15 +23,26 @@
 <body>
 	<div id="fb-root"></div>
 	<script>
-	  window.fbAsyncInit = function() {
-	    FB.init({
-	      appId      : '252955554753527', // App ID
-	      channelURL : '//trackservice.localhost.com:3000/channel.html', // Channel File
-	      status     : true, // check login status
-	      cookie     : true, // enable cookies to allow the server to access the session
-	      oauth      : true, // enable OAuth 2.0
-	      xfbml      : true  // parse XFBML
-	    });
+	/*
+		window.fbAsyncInit = function() {
+		    FB.init({
+		      appId      : '252955554753527', // App ID
+		      channelURL : '//trackservice.localhost.com:3000/channel.html', // Channel File
+		      status     : true, // check login status
+		      cookie     : true, // enable cookies to allow the server to access the session
+		      oauth      : true, // enable OAuth 2.0
+		      xfbml      : true  // parse XFBML
+		    });
+	*/
+		window.fbAsyncInit = function() {
+	    	FB.init({
+		      appId      : '274629705912895', // App ID
+		      channelURL : '//trackservice.heroku.com/channel.html', // Channel File
+		      status     : true, // check login status
+		      cookie     : true, // enable cookies to allow the server to access the session
+		      oauth      : true, // enable OAuth 2.0
+		      xfbml      : true  // parse XFBML
+		    });
 	
 		facebookInitialized();
 	  };
