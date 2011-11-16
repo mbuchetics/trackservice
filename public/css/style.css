@@ -136,7 +136,7 @@ a {
 }
 
 #song-list {
-	margin: 5px;
+	margin-right: 15px;
 }
 
 #song-list tr {
@@ -146,26 +146,34 @@ a {
 	vertical-align: baseline;
 	padding-left: 6px;
 	padding-bottom: 12px;
+	white-space: nowrap;
 }
 
 #song-list .plus {
-	vertical-align: middle;
+	//vertical-align: middle;
 	text-align: center;
 	padding-left:  0px;
+	width: 40px;
 }
 
 #song-list .button-plus {
 	background-color: #fd0;
 	font-weight: bold;
-	padding: 0px 5px 0px;
+	width: 17px;
+	margin-left: 15px;
+}
+
+#song-list .button-plus a {
 	text-decoration: none;
 	color: #333;
 	font-family: Arial;
 }
 
 #song-list .button-plus.recent {
-	font-size: 200%;
+	font-size: 150%;
 	font-weight: bold;
+	margin-left: 5px;
+	border: 5px #fd0 solid;
 }
 
 #song-list .button-plus:hover {
