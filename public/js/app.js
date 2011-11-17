@@ -11,7 +11,7 @@ $(function() {
 	    return Date.today().add({days: -daysAgo});
 	}
 	
-	function getTimeStr(time) {
+	function getTimeStr(time, short) {
 		var now = new Date(),
 			day = time.clone().clearTime(),
 			today = now.clone().clearTime(),
@@ -30,12 +30,22 @@ $(function() {
 		else if (isToday) {
 		    timeStr = time.toString('HH:mm');
 		}
-		else if(isYesterday) {
-		    timeStr = 'yesterday ' + time.toString('HH:mm');
+		else if (short) {
+			if(isYesterday) {
+		    	timeStr = 'yesterday';
+			}
+			else {
+		    	timeStr = time.toString('d. MM.');
+			}
 		}
 		else {
-		    timeStr = time.toString('d. MMM. HH:mm');
-		}
+			if(isYesterday) {
+		    	timeStr = 'yesterday ' + time.toString('HH:mm');
+			}
+			else {
+		    	timeStr = time.toString('d. MMM. HH:mm');
+			}
+		}		
 		
 		return timeStr;
 	}
@@ -154,7 +164,7 @@ $(function() {
 	    		songId: json._id,
 	    		artist: json.artist,
 	    		title: json.title,
-	    		time: getTimeStr(new Date(json.time)),
+	    		time: getTimeStr(new Date(json.time), true),
 	    	});
 	    	
 	    	if (json.spotify) {

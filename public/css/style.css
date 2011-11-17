@@ -178,6 +178,7 @@ a {
 
 #song-list .button-plus:hover {
 	background-color: #ddd;
+	border-color: #ddd;
 }
 
 #song-list .song {
