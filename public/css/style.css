@@ -139,14 +139,13 @@ a {
 	margin-right: 15px;
 }
 
-#song-list tr {
+#song-list tr {	
 }
 
 #song-list td {
 	vertical-align: baseline;
 	padding-left: 6px;
 	padding-bottom: 12px;
-	white-space: nowrap;
 }
 
 #song-list .plus {
@@ -181,15 +180,27 @@ a {
 	border-color: #ddd;
 }
 
+#song-list .content {
+    //max-width: 695px;
+}
+
 #song-list .song {
 	background-color: #fff;
 	padding-left: 3px;
 	padding-right: 3px;
+	
+	white-space: nowrap;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
 }
 
 #song-list .song.recent {
 	font-size: 150%;
 	border: 5px #fff solid;
+	display: block;
+	max-width: 100%;
 }
 
 #song-list .spotify.recent {

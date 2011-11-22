@@ -112,6 +112,8 @@
 		</div>
 		
 		<div class="clear"></div>
+		
+		<iframe name="helper" style="display:none;"></iframe>
 	
 		<div id="page-footer">
 			<footer>
@@ -128,7 +130,7 @@
 		<td class="content">
 			<span class="time">{{ time }}</span>
 			<span class="song">{{ artist }} - {{ title }}</span>
-			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}"><img src="images/button-play-01.png" width="12px" height="12px"></a></span>{{/if}}
+			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}" target="helper"><img src="images/button-play-01.png" width="12px" height="12px"></a></span>{{/if}}
 		</td> 
 	</script>
 	
@@ -139,7 +141,7 @@
 			<div>
 				<span class="time recent">{{ time }}</span>
 				{{#if spotify}}
-				<span class="spotify recent"><a href="{{ spotify }}">play on spotify <img src="images/button-play-01.png" width="18px" height="18px"></a></span>
+				<span class="spotify recent"><a href="{{ spotify }}" target="helper">play on spotify <img src="images/button-play-01.png" width="18px" height="18px"></a></span>
 				{{/if}}
 			</div>
 		</td>
@@ -162,7 +164,7 @@
 		<td class="time_col"><span class="time">{{ time }}</span></td> 	
 		<td class="song_col">
 			<span class="song">{{ artist }} - {{ title }}</span>
-			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
+			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}" target="helper"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
 		</td>
 		<div class="clear"></div>	
 	</script>
@@ -175,7 +177,7 @@
 		</td> 
 		<td class="song_col">
 			<span class="song">{{ artist }} - {{ title }}</span>
-			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
+			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}" target="helper"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
 		</td>	
 		<div class="clear"></div>
 	</script>
