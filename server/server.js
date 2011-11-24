@@ -12,7 +12,7 @@ var config = require('./config'),
     datetime = require('datetime'),
     dateutils = require('date-utils'),
     dstTimes = null,
-    jQuerySrc = fs.readFileSync('public/js/externals/jquery-1.6.3.min.js').toString();
+    jQuerySrc = fs.readFileSync('public/js/libs/externals/jquery-1.7.1.min.js').toString();
     
 var useJQuery = function(body, callback) {
     jsdom.env ({

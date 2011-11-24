@@ -10,16 +10,9 @@
 	<link rel="stylesheet" href="css/fonts/fonts.css" />
 	<link rel="stylesheet" href="css/reset.css" />
 	<link rel="stylesheet" href="css/style.css" />
-	
-	<script src="js/externals/json2.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/externals/jquery-1.6.3.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/externals/jquery.timeago.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/externals/underscore-min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/externals/handlebars.1.0.0.beta.3.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/externals/backbone-min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/externals/date.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
-	
+
+	<script data-main="js/boot.js" src="js/require.js"></script>
+
 	<script type="text/javascript">
 	 	var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', 'UA-159380-5']);
@@ -34,39 +27,31 @@
 </head>
 <body>
 	<div id="fb-root"></div>
+<!--
 	<script>
-	/*
-		window.fbAsyncInit = function() {
-		    FB.init({
-		      appId      : '252955554753527', // App ID
-		      channelURL : '//trackservice.localhost.com:3000/channel.html', // Channel File
-		      status     : true, // check login status
-		      cookie     : true, // enable cookies to allow the server to access the session
-		      oauth      : true, // enable OAuth 2.0
-		      xfbml      : true  // parse XFBML
-		    });
-	*/
-		window.fbAsyncInit = function() {
-	    	FB.init({
-		      appId      : '274629705912895', // App ID
-		      channelURL : '//trackservice.heroku.com/channel.html', // Channel File
-		      status     : true, // check login status
-		      cookie     : true, // enable cookies to allow the server to access the session
-		      oauth      : true, // enable OAuth 2.0
-		      xfbml      : true  // parse XFBML
-		    });
-	
-		facebookInitialized();
-	  };
+    window.fbAsyncInit = function() {
+        FB.init({
+            //appId      : '252955554753527', // App ID
+	        //channelURL : '//trackservice.localhost.com:3000/channel.html', // Channel File
+            appId      : '274629705912895', // App ID
+            channelURL : '//trackservice.heroku.com/channel.html', // Channel File
+            status     : true, // check login status
+            cookie     : true, // enable cookies to allow the server to access the session
+            oauth      : true, // enable OAuth 2.0
+            xfbml      : true  // parse XFBML
+        });
 
-	  // Load the SDK Asynchronously
-	  (function(d){
-	     var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-	     js = d.createElement('script'); js.id = id; js.async = true;
-	     js.src = "//connect.facebook.net/en_US/all.js";
-	     d.getElementsByTagName('head')[0].appendChild(js);
-	   }(document));
-	</script>
+        facebookInitialized();
+    };
+
+    // Load the SDK Asynchronously
+    (function(d){
+        var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+        js = d.createElement('script'); js.id = id; js.async = true;
+        js.src = "//connect.facebook.net/en_US/all.js";
+        d.getElementsByTagName('head')[0].appendChild(js);
+    }(document));
+	</script>-->
 	
 	<div id="container">
 		
