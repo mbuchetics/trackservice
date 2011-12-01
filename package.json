@@ -1,25 +1,25 @@
 {
   "author": "Matthias Buchetics <mbuchetics@gmail.com>",
-  "name": "fm4trackservice",
-  "version": "0.0.0",
+  "name": "trackservice",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mbuchetics/fm4trackservice.git"
+    "url": "git://github.com/mbuchetics/trackservice.git"
   },
   "engines": {
     "node": "v0.4.7"
   },
   "dependencies": {
-    "request": "2.1.1",
-    "express": "2.4.6",
-    "jsdom": "0.2.4",
-    "underscore": "1.1.7",
-    "colors": "0.5.0",
-    "mongodb": "0.9.6-14",
-    "async": "0.1.9",
-    "jade": "0.15.4",
-    "datetime": "0.0.3",
-    "date-utils": "1.2.5"
+    "request": "2.1.x",
+    "express": "2.4.x",
+    "jsdom": "0.2.x",
+    "underscore": "1.1.x",
+    "colors": "0.5.x",
+    "mongodb": "0.9.x",
+    "async": "0.1.x",
+    "jade": "0.15.x",
+    "datetime": "0.0.x",
+    "date-utils": "1.2.x"
   },
   "devDependencies": {}
 }
