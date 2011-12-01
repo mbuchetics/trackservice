@@ -586,13 +586,18 @@ define(["order!libs.jquery",
 	    });
 
         function facebookInit(d) {
+            var appId = '274629705912895',
+                channelURL = '//trackservice.localhost.com:3000/channel.html';
+
+            if (host.indexOf("localhost") != -1) {
+                appId = '252955554753527';
+                channelURL = '//trackservice.localhost.com:3000/channel.html';
+            }
 
             fbAsyncInit = function() {
                 FB.init({
-                    appId      : '252955554753527', // App ID
-	                channelURL : '//trackservice.localhost.com:3000/channel.html', // Channel File
-                    //appId      : '274629705912895', // App ID
-                    //channelURL : '//trackservice.heroku.com/channel.html', // Channel File
+                    appId      : appId,
+	                channelURL : channelURL,
                     status     : true, // check login status
                     cookie     : true, // enable cookies to allow the server to access the session
                     oauth      : true, // enable OAuth 2.0
