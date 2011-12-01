@@ -1,10 +1,10 @@
 {
   "author": "Matthias Buchetics <mbuchetics@gmail.com>",
-  "name": "fm4trackservice",
+  "name": "trackservice",
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mbuchetics/fm4trackservice.git"
+    "url": "git://github.com/mbuchetics/trackservice.git"
   },
   "engines": {
     "node": "v0.4.7"
