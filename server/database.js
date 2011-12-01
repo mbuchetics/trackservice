@@ -122,11 +122,11 @@ function getTopSongs(collectionName, filterCriteria, count, callback) {
 					title: song.title,
 					count: counts[index]
 				};
-				
+
 				if (song.spotify) {
-				    doc.spotify = spotify;
+				    doc.spotify = song.spotify;
 				}
-				
+
 				songsWithCounts.push(doc);
 			});
 			

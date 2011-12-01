@@ -161,7 +161,7 @@ define(["order!libs.jquery",
                 if (json.spotify) {
                     song.set({ spotify: json.spotify });
                 }
-                
+
 		        return song;
 	        },
 	        createFromLike: function(json) {
@@ -177,7 +177,7 @@ define(["order!libs.jquery",
 	        	if (json.spotify) {
 	        	    song.set({ spotify: json.spotify });
 	        	}
-	        	
+
 	        	return song;
 	        }
 	    });
@@ -632,8 +632,8 @@ define(["order!libs.jquery",
 	            /// Init stuff
 	
 	            window.CurrentUser = new User();
-	            window.UserLikes = new SongList();
-	
+
+	            window.UserLikes = new SongList();	
                 window.SidebarUserView = new SidebarListView({ 
                     model: UserLikes
                 });
