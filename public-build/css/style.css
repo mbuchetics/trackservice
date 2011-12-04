@@ -1,0 +1,234 @@
+
+	
+.clear {clear: both;}
+html {
+}
+body {
+	font-family: 'Helvetica Neue', Helvetica, Arial, serif;
+	background: #222;
+	color: #333;
+}
+h1, h2, h3, h4 {
+	background: #333;
+	color: #fd0;
+	padding: 6px;
+	display: inline-block;
+	font-weight: bold;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
+a {
+	color: #ffbc00;
+}
+#container {
+	width: 1218px;
+	margin: 0px auto;
+	padding:  15px;
+}
+#page-header {
+	width: 750px;
+	margin-bottom: 20px;
+}
+#page-title  {
+	display: inline-block;
+}
+#page-title h1 {
+	font-family: 'ChunkFiveRegular', 'Helvetica Neue', Helvetica, Arial, serif;
+	font-size: 300%;
+}
+#page-title h3 {
+	display: inline-block;
+	float: right;
+	font-size: 100%;
+}
+#main {
+	width: 750px;
+	float: left;
+}
+#right {
+	margin-left: 30px;
+	width: 438px;
+	float: left;
+}
+#right h4 {
+	font-family: 'Helvetica Neue', Helvetica, Arial, serif;
+	padding: 8px;
+}
+#user-controls {
+    margin-left: 80px;
+    margin-bottom: 20px;
+}
+.spotify {
+	background-color: #fd0;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+.spotify:hover {
+	background-color: #ddd;
+}
+.sidebar {
+	font-size: 80%;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
+.sidebar td {
+	padding-bottom: 6px;
+}
+.sidebar .chartbar_col {
+	width: 80px;
+	text-align: right;
+	color: #ddd;
+}
+.sidebar .time_col {
+    width: 80px;
+	text-align: right;
+}
+.sidebar .time {
+	background-color: #444;
+	color: #ddd;
+	text-align: right;
+	float: right;
+	padding: 2px 3px;
+}
+.sidebar .song {
+	background-color: #fff;
+    margin-left:  5px;
+	float: left;
+	padding: 2px 3px;
+}
+.sidebar .spotify {
+    margin-left: 5px;
+	float: left;
+	padding: 2px 3px;
+}
+.sidebar .chartbar {
+	background-color: #444;
+	text-align: right;
+	float: right;
+	padding-right: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+#song-list {
+	margin-right: 15px;
+}
+#song-list tr {	
+}
+#song-list td {
+	vertical-align: baseline;
+	padding-left: 6px;
+	padding-bottom: 12px;
+}
+#song-list .plus {
+	//vertical-align: middle;
+	text-align: center;
+	padding-left:  0px;
+	width: 40px;
+}
+#song-list .button-plus {
+	background-color: #fd0;
+	font-weight: bold;
+	width: 17px;
+	margin-left: 15px;
+}
+#song-list .button-plus a {
+	text-decoration: none;
+	color: #333;
+	font-family: Arial;
+}
+#song-list .button-plus.recent {
+	font-size: 150%;
+	font-weight: bold;
+	margin-left: 5px;
+	border: 5px #fd0 solid;
+}
+#song-list .button-plus:hover {
+	background-color: #ddd;
+	border-color: #ddd;
+}
+#song-list .content {
+    //max-width: 695px;
+}
+#song-list .song {
+	background-color: #fff;
+	padding-left: 3px;
+	padding-right: 3px;
+	
+	white-space: nowrap;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
+#song-list .song.recent {
+	font-size: 150%;
+	border: 5px #fff solid;
+	display: block;
+	max-width: 100%;
+}
+#song-list .spotify.recent {
+	padding-left: 3px;
+	padding-right: 3px;
+	font-size: 120%;
+	text-align: right;
+	vertical-align: center;
+	padding-top:5px;
+	padding-bottom: 5px;
+	float: right;
+	height: 21px;
+}
+#song-list .spotify.recent a {
+	color: #333;
+	text-decoration: none;
+}
+#song-list .spotify.recent img {
+	margin-bottom: -3px;
+}
+#song-list a {
+	text-decoration: none;
+}
+#song-list .time {
+	background-color: #444;
+	color: #ddd;
+	font-size: 100%;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+#song-list .time.recent {
+	background-color: #444;
+	color: #ddd;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-size: 130%;
+	text-align: right;
+	vertical-align: center;
+	padding-top:5px;
+	padding-bottom: 5px;
+	float: left;
+	height: 21px;
+}
+#page-footer {
+	width: 750px;
+	margin: 0px auto;
+	text-align: center;
+	font-size: 70%;
+	font-weight: bold;
+}
+#page-footer footer {
+	display: inline-block;
+	background: #333;
+	color: #ddd;
+	margin-top: 40px;
+	padding: 6px 30px;
+}
+.clear { 
+	clear: both; 
+	font: 1px/1px sans-serif; 
+	height: 1px; 
+	overflow: hidden; 
+}
+.break { 
+	clear: both; 
+	overflow: hidden; 
+}
