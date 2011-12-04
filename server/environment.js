@@ -1,6 +1,6 @@
 module.exports = function(app, express) {
     
-    var oneDay = 8640000000; // milliseconds
+    var oneDay = 86400000; // milliseconds
     
     app.use(express.bodyParser());
     app.use(express.methodOverride());
