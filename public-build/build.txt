@@ -1,5 +1,5 @@
 
-js/app.js
+js/app/main.js
 ----------------
 js/order.js
 js/libs/externals/jquery-1.7.1.min.js
@@ -22,4 +22,15 @@ js/libs/externals/json2.js
 js/libs/require_json2.js
 js/libs/externals/date.js
 js/libs/require_date.js
-js/app.js
+js/app/constants.js
+js/app/utils.js
+js/app/models/user.js
+js/app/models/song.js
+js/app/models/play.js
+js/app/models.js
+js/app/views/like.js
+js/app/views/play.js
+js/app/views/song.js
+js/app/views/sidebar.js
+js/app/views.js
+js/app/main.js

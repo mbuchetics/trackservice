@@ -1,1 +1,1 @@
-define(["js/libs/externals/json2.js"],function(){return console.log("json2"),JSON})
+define(["js/libs/externals/json2.js"],function(){return window.console&&console.log("json2"),JSON})

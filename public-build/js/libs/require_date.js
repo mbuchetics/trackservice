@@ -1,1 +1,1 @@
-define(["js/libs/externals/date.js"],function(){console.log("date")})
+define(["js/libs/externals/date.js"],function(){window.console&&console.log("date")})

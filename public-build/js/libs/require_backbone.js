@@ -1,1 +1,1 @@
-define(["order!libs.underscore","order!libs.jquery","order!js/libs/externals/backbone-min.js"],function(){return console.log("backbone"),Backbone})
+define(["order!libs.underscore","order!libs.jquery","order!js/libs/externals/backbone-min.js"],function(){return window.console&&console.log("backbone"),Backbone})

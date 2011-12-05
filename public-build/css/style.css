@@ -45,6 +45,14 @@ a {
 	width: 750px;
 	float: left;
 }
+#main .placeholder {
+    display: inline-block;
+    background-color: #fff;
+    padding: 6px;
+    font-weight: bold;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+}
 #right {
 	margin-left: 30px;
 	width: 438px;
@@ -57,14 +65,6 @@ a {
 #user-controls {
     margin-left: 80px;
     margin-bottom: 20px;
-}
-.spotify {
-	background-color: #fd0;
-	padding-left: 3px;
-	padding-right: 3px;
-}
-.spotify:hover {
-	background-color: #ddd;
 }
 .sidebar {
 	font-size: 80%;
@@ -98,9 +98,16 @@ a {
 	padding: 2px 3px;
 }
 .sidebar .spotify {
+    background-color: #fd0;
     margin-left: 5px;
 	float: left;
-	padding: 2px 3px;
+	padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 1px;
+    padding-bottom: 3px;
+}
+.sidebar .spotify:hover {
+	background-color: #ddd;
 }
 .sidebar .chartbar {
 	background-color: #444;
@@ -131,6 +138,7 @@ a {
 	font-weight: bold;
 	width: 17px;
 	margin-left: 15px;
+    border: 2px #fd0 solid;
 }
 #song-list .button-plus a {
 	text-decoration: none;
@@ -160,12 +168,23 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;
+    border: 2px #fff solid;
 }
 #song-list .song.recent {
 	font-size: 150%;
 	border: 5px #fff solid;
 	display: block;
 	max-width: 100%;
+}
+#song-list .spotify {
+	background-color: #fd0;
+	padding-left: 3px;
+	padding-right: 3px;
+    border: 1px #fd0 solid;
+}
+#song-list .spotify:hover {
+	background-color: #ddd;
+    border: 1px #ddd solid;
 }
 #song-list .spotify.recent {
 	padding-left: 3px;
@@ -194,6 +213,8 @@ a {
 	font-size: 100%;
 	padding-left: 3px;
 	padding-right: 3px;
+    border: 2px #444 solid;
+    display: inline-block;
 }
 #song-list .time.recent {
 	background-color: #444;

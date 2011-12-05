@@ -170,4 +170,7 @@ function run() {
     setInterval(printMemory, 60000);
 }
 
+console.log('node version: ' + process.version);
+console.log('node env: ' + config.node_env);
+console.log('server: ' + config.server);
 db.init(config, run);
