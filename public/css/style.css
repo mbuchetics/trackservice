@@ -199,7 +199,7 @@ a {
 	
 	white-space: nowrap;
     max-width: 400px;
-    overflow: hidden;
+    //overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;
 
