@@ -188,21 +188,12 @@ a {
 	border-color: #ddd;
 }
 
-#song-list .content {
-    //max-width: 695px;
-}
-
 #song-list .song {
 	background-color: #fff;
 	padding-left: 3px;
-	padding-right: 3px;
-	
-	white-space: nowrap;
-    max-width: 400px;
-    //overflow: hidden;
-    text-overflow: ellipsis;
+	padding-right: 3px;	
+    //max-width: 400px;
     display: inline-block;
-
     border: 2px #fff solid;
 }
 
@@ -215,9 +206,11 @@ a {
 
 #song-list .spotify {
 	background-color: #fd0;
-	padding-left: 3px;
-	padding-right: 3px;
-    border: 1px #fd0 solid;
+	padding-left: 2px;
+	padding-right: 2px;
+    border: 2px #fd0 solid;
+    width: 12px;
+    display: inline-block;
 }
 
 #song-list .spotify:hover {

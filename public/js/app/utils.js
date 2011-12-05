@@ -65,7 +65,6 @@ function($, _, json2, date, constants) { return {
 
     likeSong: function(songId, userId) {
         $.post('api/likes/' + songId, { user: userId }, function(data) {
-           log('song like ok'); 
            SidebarPopularSongs.fetchPopularFromServer(constants.sidebarDaysAgo, 10);
            UserLikes.fetchLikedFromServer(userId, 15);
         });
