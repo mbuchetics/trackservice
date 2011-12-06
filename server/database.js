@@ -44,7 +44,7 @@ function getCollection(name, callback, errorCallback) {
 function dropCollection(collectionName) {
 	getCollection(collectionName, function(collection) { 
 		collection.drop(); 
-	}, errorCallback);
+	});
 }
 
 function getItems(collectionName, filterCriteria, sortCriteria, count, callback, errorCallback) {
