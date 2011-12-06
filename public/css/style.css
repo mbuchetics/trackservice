@@ -215,7 +215,7 @@ a {
 
 #song-list .spotify:hover {
 	background-color: #ddd;
-    border: 1px #ddd solid;
+    border: 2px #ddd solid;
 }
 
 #song-list .spotify.recent {
@@ -227,6 +227,7 @@ a {
 	padding-top:5px;
 	padding-bottom: 5px;
 	float: right;
+    width: auto;
 	height: 21px;
 }
 
