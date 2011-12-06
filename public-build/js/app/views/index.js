@@ -1,1 +1,0 @@
-define(["app/views/like","app/views/play","app/views/song","app/views/sidebar"],function(a,b,c,d,e){return{Like:a.LikeView,Likes:a.LikesView,Play:b.PlayView,Plays:b.PlaysView,Song:c.SongView,Songs:c.SongsView,SidebarItem:d.ItemView,SidebarItems:d.ItemsView}})
