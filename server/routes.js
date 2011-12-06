@@ -1,4 +1,5 @@
-var db = require('./database.js');
+var db = require('./database.js'),
+    header = { "Access-Control-Allow-Origin": "*" };
 
 function getParameters(req) {
     var paramCount = req.param('count'),
@@ -27,7 +28,7 @@ module.exports = function(app) {
 		db.getTopPlayedArtists(
 			{ time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
 			params.count,
-			function(artists) { res.json(artists); }
+			function(artists) { res.json(artists, header); }
 		);
 	});
     
@@ -43,7 +44,7 @@ module.exports = function(app) {
             { last_time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
             { last_time: -1 }, 
             params.count, 
-            function(songs) { res.json(songs); }
+            function(songs) { res.json(songs, header); }
         );
     });
     
@@ -56,7 +57,7 @@ module.exports = function(app) {
         db.getTopPlayedSongs(
         	{ time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
         	params.count,
-        	function(songs) { res.json(songs); }
+        	function(songs) { res.json(songs, header); }
         );
     });
     
@@ -69,7 +70,7 @@ module.exports = function(app) {
         db.getTopLikedSongs(
         	{ time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
         	params.count,
-        	function(songs) { res.json(songs); }
+        	function(songs) { res.json(songs, header); }
         );
     });
     
@@ -79,7 +80,7 @@ module.exports = function(app) {
         console.log('/api/songs/' + songId);
   
         db.getSong({ _id: db.toObjectID(songId) }, function(song) {
-            res.json(song);
+            res.json(song, header);
         });
     });
     
@@ -95,7 +96,7 @@ module.exports = function(app) {
             { time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
             { time: -1 }, 
             params.count, 
-            function(plays) { res.json(plays); }
+            function(plays) { res.json(plays, header); }
         );
     });
     
@@ -105,7 +106,7 @@ module.exports = function(app) {
         console.log('/api/plays/' + songId);
   
         db.getPlays({ song_id: db.toObjectID(songId) }, { time: -1 }, 0, function(plays) {
-            res.json(plays);
+            res.json(plays, header);
         });
     });
     
@@ -129,7 +130,7 @@ module.exports = function(app) {
             filter, 
             { time: -1 }, 
             params.count, 
-            function(likes) { res.json(likes); }
+            function(likes) { res.json(likes, header); }
         );
     });
     
@@ -139,7 +140,7 @@ module.exports = function(app) {
         console.log('/api/likes/' + songId);
   
         db.getLikes({ song_id: db.toObjectID(songId) }, { time: -1 }, 0, function(likes) {
-            res.json(likes);
+            res.json(likes, header);
         });
     });
     
@@ -160,11 +161,11 @@ module.exports = function(app) {
     	db.getTopLikedSongs(
     		{ time: { '$lte': params.timeUntil, '$gte': params.timeSince } }, 
     		params.count,
-    		function(songs) { res.json(songs); });
+    		function(songs) { res.json(songs, header); });
     });
     
     app.get('*', function(req, res) {    
-        res.writeHead(404);
+        res.writeHead(404, header);
         res.end();
     });
 };
