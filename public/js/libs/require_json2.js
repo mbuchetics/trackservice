@@ -1,6 +1,7 @@
 define(["js/libs/externals/json2.js"], 
     function() {
-        console.log('json2');
+        if (window.console) 
+            console.log('json2');
         return JSON;
     }
 );

@@ -3,7 +3,8 @@ define(["order!libs.underscore",
         "order!js/libs/externals/backbone-min.js"
     ], 
     function() {
-        console.log('backbone');
+        if (window.console) 
+            console.log('backbone');
         return Backbone;
     }
 );

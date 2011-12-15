@@ -5,25 +5,38 @@ var mongodb = require('mongodb'),
     spotify = require('./spotify'),
     db;
     
-function init(config, callback) {
+function init(config, callback, errorCallback) {
     console.log('trying to connect to db');
     console.log(config);
 
-    mongodb.connect(config.db_url, function(err, database) {
+    mongodb.connect(config.db_url, {
+        server: {
+            auto_reconnect: true
+        }
+    }, function(err, database) {
         if (!err) {
             db = database;
             callback();
         }
         else {
             console.log('error connecting to db'.red);
+            if (errorCallback) {
+                errorCallback();   
+            }
         }
     });
 }
 
-function getCollection(name, callback) {
+function getCollection(name, callback, errorCallback) {
     db.collection(name, function(err, collection) {
         if (!err) {
-           callback(collection);
+            callback(collection);
+        }
+        else {
+            console.log("getCollection failed");
+            if (errorCallback) {
+                errorCallback();   
+            }
         }
     });
 }
@@ -34,146 +47,176 @@ function dropCollection(collectionName) {
 	});
 }
 
-function getItems(collectionName, filterCriteria, sortCriteria, count, callback) {
+function getItems(collectionName, filterCriteria, sortCriteria, count, callback, errorCallback) {
     if (count < 0) {
         count = 0;
     }
     
     getCollection(collectionName, function(collection) {
         collection.find(filterCriteria).sort(sortCriteria).limit(count).toArray(function(err, results) {
-           if (!err) {
-               callback(results);
-           } 
-        });
+            if (!err) {
+                callback(results);
+            }
+            else {
+                console.log("getItems failed");
+                if (errorCallback) {
+                    errorCallback();   
+                }
+            }
+        }, errorCallback);
     });
 }
 
-function getItem(collectionName, criteria, callback) {
+function getItem(collectionName, criteria, callback, errorCallback) {
     getCollection(collectionName, function(collection) {
         collection.findOne(criteria, function(err, result) {
             if (!err) {
                 callback(result);
             }
-        }); 
-    });
+            else {
+                console.log("getItem failed");
+                if (errorCallback) {
+                    errorCallback();
+                }
+            }
+        });
+    }, errorCallback);
 }
 
-function aggregateByCount(collectionName, filterCriteria, count, map, callback) {
-	getCollection(collectionName, function(collection) {
-		var tempCollectionName = _.uniqueId('temp_');
-		console.log(tempCollectionName);
-	    collection.mapReduce(
-	    	map,
-	    	function(key, array) {
-	    		var result = { count: 0, times: [] };
-	    		
-	    		array.forEach(function(value) {
-	    		    result.count += value.count;
-	    		    result.times = result.times.concat(value.times);
-	    		});
-	    		
-	    		return result;
-	    	},
-	    	{ 
-	    		out: tempCollectionName,
-	    		query: filterCriteria,
-	    	},
-	    	function(err, collection) {
-	    		if (!err) {
-	    			collection.find().sort({ 'value.count': -1 }).limit(count).toArray(function(err, results) {
-	    				if (!err) {	    					
-	    					callback(results);
-	    					dropCollection(tempCollectionName);
-	    				}
-	    			});
-	    		}
-	    	}
-	    );
-	});
+function aggregateByCount(collectionName, filterCriteria, count, map, callback, errorCallback) {
+    getCollection(collectionName, function(collection) {
+        var tempCollectionName = _.uniqueId('temp_');
+        console.log(tempCollectionName);
+        collection.mapReduce(
+        map, function(key, array) {
+            var result = {
+                count: 0,
+                times: []
+            };
+            array.forEach(function(value) {
+                result.count += value.count;
+                result.times = result.times.concat(value.times);
+            });
+            return result;
+        }, {
+            out: tempCollectionName,
+            query: filterCriteria
+        }, function(err, collection) {
+            if (!err) {
+                collection.find().sort({
+                    'value.count': -1
+                }).limit(count).toArray(function(err, results) {
+                    if (!err) {
+                        callback(results);
+                        dropCollection(tempCollectionName);
+                    }
+                });
+            }
+            else {
+                console.log("aggregateByCount failed");
+                if (errorCallback) {
+                    errorCallback();
+                }
+            }
+        });
+    }, errorCallback);
 }
 
-function getTopPlayedArtists(filterCriteria, count, callback) {
-	aggregateByCount('plays', filterCriteria, count, function() {
-		emit(this.artist, {count: 1, times: [ this.time ]});
-	}, function(results) {
-		var mappedResults = _.map(results, function(item) { 
-			return {  
-				artist: item._id, 
-				count: item.value.count
-			};
-		});
-		callback(mappedResults);
-	});
+function getTopPlayedArtists(filterCriteria, count, callback, errorCallback) {
+    aggregateByCount('plays', filterCriteria, count, function() {
+        emit(this.artist, {
+            count: 1,
+            times: [this.time]
+        });
+    }, function(results) {
+        var mappedResults = _.map(results, function(item) {
+            return {
+                artist: item._id,
+                count: item.value.count
+            };
+        });
+        callback(mappedResults);
+    }, errorCallback);
+}
+function getTopSongs(collectionName, filterCriteria, count, callback, errorCallback) {
+    aggregateByCount(collectionName, filterCriteria, count, function() {
+        emit(this.song_id, {
+            count: 1,
+            times: [this.time]
+        });
+    }, function(results) {
+        var songIds = _.map(results, function(item) {
+            return item._id
+        }),
+            counts = _.map(results, function(item) {
+                return item.value.count
+            }),
+            songsWithCounts = [];
+        getSongs({
+            _id: {
+                $in: songIds
+            }
+        }, {}, count, function(songs) {
+            _.each(songs, function(song, index) {
+                var doc = {
+                    _id: song._id,
+                    artist: song.artist,
+                    title: song.title,
+                    count: counts[index]
+                };
+                if (song.spotify) {
+                    doc.spotify = song.spotify;
+                }
+                songsWithCounts.push(doc);
+            });
+            callback(songsWithCounts);
+        });
+    }, errorCallback);
 }
 
-function getTopSongs(collectionName, filterCriteria, count, callback) {
-	aggregateByCount(collectionName, filterCriteria, count, function() {
-		emit( this.song_id, {count: 1, times: [ this.time ]});
-	}, function(results) {
-		var songIds = _.map(results, function(item) { return item._id }),
-			counts = _.map(results, function(item) { return item.value.count }),
-			songsWithCounts = [];
-			
-		getSongs({ _id: { $in: songIds } }, {}, count, function(songs) {
-			_.each(songs, function(song, index) {
-				var doc = { 
-					_id: song._id,
-					artist: song.artist,
-					title: song.title,
-					count: counts[index]
-				};
-				
-				if (song.spotify) {
-				    doc.spotify = spotify;
-				}
-				
-				songsWithCounts.push(doc);
-			});
-			
-			callback(songsWithCounts);
-		});
-	});
+function getTopPlayedSongs(filterCriteria, count, callback, errorCallback) {
+	getTopSongs('plays', filterCriteria, count, callback, errorCallback);
 }
 
-function getTopPlayedSongs(filterCriteria, count, callback) {
-	getTopSongs('plays', filterCriteria, count, callback);
+function getTopLikedSongs(filterCriteria, count, callback, errorCallback) {
+	getTopSongs('likes', filterCriteria, count, callback, errorCallback);
 }
 
-function getTopLikedSongs(filterCriteria, count, callback) {
-	getTopSongs('likes', filterCriteria, count, callback);
-}
-
-function getLikesExt(filterCriteria, sortCriteria, count, callback) {
-	getLikes(filterCriteria, sortCriteria, count, function(likes) {
-		var songIds = _.map(likes, function(item) { return item.song_id }),
-			likesExt = new Array(likes.length),
-			dict = {};
-		
-		_.each(likes, function(like, index) {
-		   dict[like.song_id] = { index: index, like: like };
-		});
-		
-		getSongs({ _id: { $in: songIds } }, {}, count, function(songs) {
-			_.each(songs, function(song, index) {
-				var like = dict[song._id].like, 
-				    doc = { 
-    					_id: song._id,
-    					artist: song.artist,
-    					title: song.title,
-    					user: like.user,
-    					time: like.time
-    				};
-    				
-    			if (song.spotify) {
-    				doc.spotify = song.spotify;
-    			}
-    			
-				likesExt[dict[song._id].index] = doc;
-			});
-
-			callback(likesExt);
-		});
-	});
+function getLikesExt(filterCriteria, sortCriteria, count, callback, errorCallback) {
+    getLikes(filterCriteria, sortCriteria, count, function(likes) {
+        var songIds = _.map(likes, function(item) {
+            return item.song_id
+        }),
+            likesExt = new Array(likes.length),
+            dict = {};
+        _.each(likes, function(like, index) {
+            dict[like.song_id] = {
+                index: index,
+                like: like
+            };
+        });
+        getSongs({
+            _id: {
+                $in: songIds
+            }
+        }, {}, count, function(songs) {
+            _.each(songs, function(song, index) {
+                var like = dict[song._id].like,
+                    doc = {
+                        _id: song._id,
+                        artist: song.artist,
+                        title: song.title,
+                        user: like.user,
+                        time: like.time
+                    };
+                if (song.spotify) {
+                    doc.spotify = song.spotify;
+                }
+                likesExt[dict[song._id].index] = doc;
+            });
+            callback(likesExt);
+        });
+    }, errorCallback);
 }
 
 // convenience
@@ -182,52 +225,52 @@ function toObjectID(idString) {
     return new db.bson_serializer.ObjectID(idString);
 }
 
-function getSongsCollection(callback) {
-    getCollection('songs', callback);
+function getSongsCollection(callback, errorCallback) {
+    getCollection('songs', callback, errorCallback);
 }
 
-function getPlaysCollection(callback) {
-    getCollection('plays', callback);
+function getPlaysCollection(callback, errorCallback) {
+    getCollection('plays', callback, errorCallback);
 }
 
-function getLikesCollection(callback) {
-    getCollection('likes', callback);
+function getLikesCollection(callback, errorCallback) {
+    getCollection('likes', callback, errorCallback);
 }
 
-function getUsersCollection(callback) {
-    getCollection('users', callback);
+function getUsersCollection(callback, errorCallback) {
+    getCollection('users', callback, errorCallback);
 }
 
-function getSongs(filterCriteria, sortCriteria, count, callback) {
-    getItems('songs', filterCriteria, sortCriteria, count, callback);
+function getSongs(filterCriteria, sortCriteria, count, callback, errorCallback) {
+    getItems('songs', filterCriteria, sortCriteria, count, callback, errorCallback);
 }
 
-function getPlays(filterCriteria, sortCriteria, count, callback) {
-    getItems('plays', filterCriteria, sortCriteria, count, callback);
+function getPlays(filterCriteria, sortCriteria, count, callback, errorCallback) {
+    getItems('plays', filterCriteria, sortCriteria, count, callback, errorCallback);
 }
 
-function getLikes(filterCriteria, sortCriteria, count, callback) {
-    getItems('likes', filterCriteria, sortCriteria, count, callback);
+function getLikes(filterCriteria, sortCriteria, count, callback, errorCallback) {
+    getItems('likes', filterCriteria, sortCriteria, count, callback, errorCallback);
 }
 
-function getUsers(filterCriteria, sortCriteria, count, callback) {
-    getItems('users', filterCriteria, sortCriteria, count, callback);
+function getUsers(filterCriteria, sortCriteria, count, callback, errorCallback) {
+    getItems('users', filterCriteria, sortCriteria, count, callback, errorCallback);
 }
 
-function getSong(criteria, callback) {
-    getItem('songs', criteria, callback);
+function getSong(criteria, callback, errorCallback) {
+    getItem('songs', criteria, callback, errorCallback);
 }
 
-function getPlay(criteria, callback) {
-    getItem('plays', criteria, callback);
+function getPlay(criteria, callback, errorCallback) {
+    getItem('plays', criteria, callback, errorCallback);
 }
 
-function getLike(criteria, callback) {
-    getItem('likes', criteria, callback);
+function getLike(criteria, callback, errorCallback) {
+    getItem('likes', criteria, callback, errorCallback);
 }
 
-function getUser(criteria, callback) {
-    getItem('users', criteria, callback);
+function getUser(criteria, callback, errorCallback) {
+    getItem('users', criteria, callback, errorCallback);
 }
 
 // high level
@@ -238,7 +281,7 @@ function insertPlay(songId, song, spotifyLink) {
         time: song.time,
         artist: song.artist,
         title: song.title,
-        source: song.source,
+        source: song.source
     };
     
     if (spotifyLink) {
@@ -279,7 +322,7 @@ function insertPlayAndUpdateSong(songId, song, spotifyLink) {
     });
 }
 
-function addPlay(song, waitForInsert) {
+function addPlay(song) {
     getSong({ artist: song.artist, title: song.title }, function(foundSong) {
         // song not in database
         if (!foundSong) {
@@ -292,7 +335,7 @@ function addPlay(song, waitForInsert) {
             };
             
             spotify.getLink(song.artist, song.title, function(link) {
-               if (link != null) {
+               if (link !== null) {
                    songDoc.spotify = link;
                }
                

@@ -1,0 +1,3 @@
+define({
+    sidebarDaysAgo: 7,
+});

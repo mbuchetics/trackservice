@@ -8,11 +8,16 @@
         "libs.underscore":  "libs/require_underscore",
         "libs.handlebars":  "libs/require_handlebars",
         "libs.backbone":    "libs/require_backbone",
-        "libs.date":        "libs/require_date"
+        "libs.date":        "libs/require_date",
+        "main":             "app/main",
+        "models":           "app/models",
+        "views":             "app/views",
+        "utils":            "app/utils",
+        "constants":        "app/constants"
     },
     modules: [
         {
-            name: "app"
+            name: "main"
         }
     ]
 })

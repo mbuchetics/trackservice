@@ -1,5 +1,6 @@
 define(["js/libs/externals/date.js"], 
     function() {
-        console.log('date');
+        if (window.console) 
+            console.log('date');
     }
 );

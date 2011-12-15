@@ -24,7 +24,7 @@ var useJQuery = function(body, callback) {
             window.close();
         }
     });
-}
+};
     
 function getTime(timeStr) {
     var now = new Date(),
@@ -41,14 +41,14 @@ function getTime(timeStr) {
     time.setHours(time.getHours() - diffHour);
     
     if (hour < diffHour) {
-    	time.setDate(time.getDate() + 1);
+        time.setDate(time.getDate() + 1);
     }
 
     return time;
 }
 
 function isDaylightSaving(time) {
-    if (dstTimes == null) {
+    if (dstTimes === null) {
         dstTimes = new Array(
             // 2011
             new Date(Date.UTC(2011, 2, 27, 2, 0, 0)),
@@ -120,7 +120,7 @@ function parseTracklist(html) {
                 'time': time, 
                 'artist': artist, 
                 'title': title,
-                'source': 'fm4',
+                'source': 'fm4'
             };
             
             var isDuplicate = _.any(foundSongs, function(element) {
@@ -170,4 +170,7 @@ function run() {
     setInterval(printMemory, 60000);
 }
 
+console.log('node version: ' + process.version);
+console.log('node env: ' + config.node_env);
+console.log('server: ' + config.server);
 db.init(config, run);

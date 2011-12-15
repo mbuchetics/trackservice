@@ -1,0 +1,1 @@
+define(["order!js/libs/externals/underscore-min.js"],function(){return window.console&&console.log("underscore"),_})

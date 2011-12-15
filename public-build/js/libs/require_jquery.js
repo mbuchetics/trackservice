@@ -1,0 +1,1 @@
+define(["order!js/libs/externals/jquery-1.7.1.min.js","order!js/libs/externals/jquery.timeago.js"],function(){return window.console&&console.log("jquery"),window.$})
