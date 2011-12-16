@@ -1,13 +1,14 @@
 {
   "author": "Matthias Buchetics <mbuchetics@gmail.com>",
   "name": "trackservice",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/mbuchetics/trackservice.git"
   },
   "engines": {
-    "node": "v0.4.7"
+    "node": "v0.6.x",
+    "npm": ">=1.0.0"
   },
   "dependencies": {
     "request": "2.x",
