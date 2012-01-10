@@ -7,7 +7,7 @@
     "url": "git://github.com/mbuchetics/trackservice.git"
   },
   "engines": {
-    "node": "v0.6.7",
+    "node": "v0.6.x",
     "npm": ">=1.0.0"
   },
   "dependencies": {
