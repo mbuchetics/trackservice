@@ -17,7 +17,7 @@ function($, _, Backbone, Handlebars, json2, utils) {
         },
         render: function() {
             var json = this.model.toJSON();
-            
+			 
             if (this.model.has('count')) {
                 $(this.el).html(this.templateSong(json));
             }

@@ -21,28 +21,28 @@ function($, _, Backbone, Handlebars, Models, Views, utils, constants) {
             $('#popular-sidebar').html(SidebarPopularSongsView.el);
         },
 
-    	setTitle: function(title, subTitle) {
-    	    this.$('#page-title h1').html(title);
-		    this.$('#page-title h3').html(subTitle);
-    	},
+        setTitle: function(title, subTitle) {
+            this.$('#page-title h1').html(title);
+            this.$('#page-title h3').html(subTitle);
+        },
 
-    	setFooter: function(text, clickAction) {
-    	    var footer = this.$('#song-list-footer').html(text);
-    	    
-    	    if (clickAction) {
-    	        footer.click(function(e) {
-    	            e.preventDefault();
-    	            clickAction();
-    	        });
-    	    }
-    	},
+        setFooter: function(text, clickAction) {
+            var footer = this.$('#song-list-footer').html(text);
+            
+            if (clickAction) {
+                footer.click(function(e) {
+                    e.preventDefault();
+                    clickAction();
+                });
+            }
+        },
 
-    	clearFooter: function() {
-    		this.$('#song-list-footer').empty();
-       	}, 
+        clearFooter: function() {
+            this.$('#song-list-footer').empty();
+        }, 
 
         showRecentPlays: function() {
-            this.setTitle('FM4&Spotify', 'Recent tracks');	            
+            this.setTitle('FM4&Spotify', 'Recent tracks');              
 
             Plays.fetchFromServer(30);
             $('#song-list').html(PlaysView.el);
@@ -53,11 +53,11 @@ function($, _, Backbone, Handlebars, Models, Views, utils, constants) {
         },
 
         showUser: function(userId) {
-        	this.setTitle('My Tracks', userId);
-        	
-        	UserLikes.fetchLikedFromServer(userId, 15);
-        	$('#song-list').html(UserLikesView.el);
-        	this.clearFooter();
+            this.setTitle('My Tracks', userId);
+            
+            UserLikes.fetchLikedFromServer(userId, 15);
+            $('#song-list').html(UserLikesView.el);
+            this.clearFooter();
         }
     });
     
@@ -76,11 +76,11 @@ function($, _, Backbone, Handlebars, Models, Views, utils, constants) {
         },
 
         showUser: function(userId) {
-        	App.showUser(userId);
+            App.showUser(userId);
         },
 
         showCurrentUser: function() {
-        	App.showUser(CurrentUser.id);
+            App.showUser(CurrentUser.id);
         }
     });
 
@@ -91,7 +91,7 @@ function($, _, Backbone, Handlebars, Models, Views, utils, constants) {
 
             window.CurrentUser = new Models.User();
 
-            window.UserLikes = new Models.Songs();	
+            window.UserLikes = new Models.Songs();  
             window.SidebarUserView = new Views.SidebarItems({ 
                 model: UserLikes
             });
@@ -118,11 +118,11 @@ function($, _, Backbone, Handlebars, Models, Views, utils, constants) {
             SidebarPopularSongs.fetchPopularFromServer(constants.sidebarDaysAgo, 10);
 
             setInterval(function() {
-	            Plays.updateFromServer();
+                Plays.updateFromServer();
             }, 10000);
 
             setInterval(function() {
-	            Plays.updateTimes();
+                Plays.updateTimes();
             }, 60000);
 
             /// Facebook
@@ -140,9 +140,9 @@ function($, _, Backbone, Handlebars, Models, Views, utils, constants) {
             /// fm4 popup
 
             $('#fm4-stream').click(function() {
-	            var href = $('#fm4-stream a').attr('href');
-	            window.open(href, 'player', 'width=320,height=260');
-	            return false;
+                var href = $('#fm4-stream a').attr('href');
+                window.open(href, 'player', 'width=320,height=260');
+                return false;
             });
 
             Backbone.history.start();

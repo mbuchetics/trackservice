@@ -15,38 +15,38 @@ function($, _, Backbone, utils) {
         // class properties
 
         create: function(json, maxCount) {
-	        var song = new Song();
-	        
-	        song.set({
-	           songId: json._id,
-	           artist: json.artist,
-	           title: json.title,
-	           count: json.count,
-	           percentage: maxCount > 0 ? json.count / maxCount * 95 : 0
-	        });
-	        
+            var song = new Song();
+            
+            song.set({
+               songId: json._id,
+               artist: json.artist,
+               title: json.title,
+               count: json.count,
+               percentage: maxCount > 0 ? json.count / maxCount * 95 : 0
+            });
+            
             if (json.spotify) {
                 song.set({ spotify: json.spotify });
             }
 
-	        return song;
+            return song;
         },
 
         createFromLike: function(json) {
-        	var song = new Song();
-        	
-        	song.set({
-        		songId: json._id,
-        		artist: json.artist,
-        		title: json.title,
-        		time: utils.getTimeStr(new Date(json.time), true),
-        	});
-        	
-        	if (json.spotify) {
-        	    song.set({ spotify: json.spotify });
-        	}
+            var song = new Song();
+            
+            song.set({
+                songId: json._id,
+                artist: json.artist,
+                title: json.title,
+                time: utils.getTimeStr(new Date(json.time), true),
+            });
+            
+            if (json.spotify) {
+                song.set({ spotify: json.spotify });
+            }
 
-        	return song;
+            return song;
         }
     });
 

@@ -17,22 +17,22 @@ function getParameters(req) {
 
 module.exports = function(app) {
 
-	/// artists
-	app.get('/api/artists/top_plays', function(req, res) {
-	    var params = getParameters(req);
-	    console.log('/api/artists/top_plays');
-	    console.log(params);
-	    db.getTopPlayedArtists({
-	        time: {
-	            '$lte': params.timeUntil,
-	            '$gte': params.timeSince
-	        }
-	    }, params.count, function(artists) {
-	        res.json(artists, header);
-	    }, function() {
-	        res.json('error', 500);
-	    });
-	});
+    /// artists
+    app.get('/api/artists/top_plays', function(req, res) {
+        var params = getParameters(req);
+        console.log('/api/artists/top_plays');
+        console.log(params);
+        db.getTopPlayedArtists({
+            time: {
+                '$lte': params.timeUntil,
+                '$gte': params.timeSince
+            }
+        }, params.count, function(artists) {
+            res.json(artists, header);
+        }, function() {
+            res.json('error', 500);
+        });
+    });
     
     /// songs
     

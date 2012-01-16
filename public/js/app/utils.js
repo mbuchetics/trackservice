@@ -28,7 +28,7 @@ function($, _, json2, date, constants) { return {
 
         if (timeDiffInMinutes < 2) {
             timeStr = 'just now';
-        }	
+        }   
         else if (timeDiffInMinutes < 15) {
             timeStr = Math.round(timeDiffInMinutes) + ' min ago';
         }
@@ -37,20 +37,20 @@ function($, _, json2, date, constants) { return {
         }
         else if (short) {
             if(isYesterday) {
-            	timeStr = 'yesterday';
+                timeStr = 'yesterday';
             }
             else {
-            	timeStr = time.toString('d. MM.');
+                timeStr = time.toString('d. MM.');
             }
         }
         else {
             if(isYesterday) {
-            	timeStr = 'yesterday ' + time.toString('HH:mm');
+                timeStr = 'yesterday ' + time.toString('HH:mm');
             }
             else {
-            	timeStr = time.toString('d. MMM. HH:mm');
+                timeStr = time.toString('d. MMM. HH:mm');
             }
-        }		
+        }       
 
         return timeStr;
     },
@@ -60,7 +60,7 @@ function($, _, json2, date, constants) { return {
             timeDiff = now.getTime() - time.getTime(),
             timeDiffInMinutes = timeDiff / 1000 / 60;
 
-        return timeDiffInMinutes < 15;			
+        return timeDiffInMinutes < 15;          
     },
 
     likeSong: function(songId, userId) {

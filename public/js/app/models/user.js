@@ -36,12 +36,12 @@ function($, _, Backbone, utils) {
                 else {
                     utils.log('unknown user');
                     user.set({
-    	               'username': null,
-    	               'id': null,
-    	               'isLoggedIn': false
-    	            });
-    	            
-    	            $('#login').show();
+                       'username': null,
+                       'id': null,
+                       'isLoggedIn': false
+                    });
+                    
+                    $('#login').show();
                     $('#logout').hide();
                 }
             });

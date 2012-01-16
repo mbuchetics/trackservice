@@ -52,25 +52,25 @@ function($, _, Backbone, Handlebars, json2, utils) {
             return this;
         },
         add: function(play, playList) {
-        	var index = playList.indexOf(play),
-        		table = this.el,
-        		view = new PlayView({model: play}),
-            	row = view.render().el;
+            var index = playList.indexOf(play),
+                table = this.el,
+                view = new PlayView({model: play}),
+                row = view.render().el;
                          
             if (index == 0) {
-            	$(row).fadeIn('slow');
-            	$(table).prepend(row);
+                $(row).fadeIn('slow');
+                $(table).prepend(row);
             } 
             else {
-            	$(row).fadeIn('fast');
-            	$(table).append(row);
+                $(row).fadeIn('fast');
+                $(table).append(row);
             }
         },
         remove: function(play, playList) {
-        	var index = playList.indexOf(play),
-        		table = this.el;
-        	
-        	$(table).find('tr').eq(index).remove();
+            var index = playList.indexOf(play),
+                table = this.el;
+            
+            $(table).find('tr').eq(index).remove();
         }
     });
 

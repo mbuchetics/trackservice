@@ -1,144 +1,144 @@
 <!DOCTYPE html>
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=1280" />
-	
-	<title>fm4&spotify</title>	
-	
-	<link rel="stylesheet" href="css/fonts/fonts.css" />
-	<link rel="stylesheet" href="css/reset.css" />
-	<link rel="stylesheet" href="css/style.css" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=1280" />
+    
+    <title>fm4&spotify</title>  
+    
+    <link rel="stylesheet" href="css/fonts/fonts.css" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/style.css" />
 
-	<script data-main="js/boot.js" src="js/require.js"></script>
+    <script data-main="js/boot.js" src="js/require.js"></script>
 
-	<script type="text/javascript">
-	 	var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-159380-5']);
-		_gaq.push(['_trackPageview']);
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-159380-5']);
+        _gaq.push(['_trackPageview']);
 
-		(function() {
-		  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
 </head>
 <body>
-	<div id="fb-root"></div>
+    <div id="fb-root"></div>
 
-	<div id="container">
-		
-		<div id="page-header">
-			<div id="page-title">
-				<h1>FM4&Spotify</h1>
-				<div class="break"></div>
-				<h3>Recent tracks</h3>
-			</div>
-		</div>
-		
-		<div class="clear"></div>
-		
-		<div id="main">
-			<div id="song-list"><div class="placeholder">loading ...</div></div>
-			<div id="song-list-footer"></div>
-		</div>
-		
-		<div id="right">
-			<h4 id="username">Anonymous</h4>
-			<div class="sidebar" id="user-sidebar"></div>
-			<div class="sidebar" id="user-controls">
-				<div><a href="#" id="login">login with facebook</a></div>
-				<div><a href="#" id="logout">logout</a></div>
-			</div>
-			<div class="clear"></div>	
-			
-			<h4>Most Played</h4>
-			<div class="sidebar" id="top-sidebar"></div>
-			<div class="clear"></div>	
-			
-			<h4>Popular</h4>
-			<div class="sidebar" id="popular-sidebar"></div>
-			<div class="clear"></div>	
-			
-			<h4>FM4 Live Stream</h4>
-			<div class="sidebar">
-				<span id="fm4-stream"><a href="http://fm4.orf.at/v2static/html/streaming/index.html">popup</a></span> | 
-				<a href="http://mp3stream1.apasf.apa.at:8000/listen.pls">mp3</a> | 
-				<a href="mms://apasf.apa.at/fm4_live_worldwide">wma</a>
-			</div>
-			<div class="clear"></div>
-		</div>
-		
-		<div class="clear"></div>
-		
-		<iframe name="helper" style="display:none;"></iframe>
-	
-		<div id="page-footer">
-			<footer>
-				<p>You can <a href="https://github.com/mbuchetics/trackservice">fork this project on GitHub.</a></p>
-			</footer>
-		</div>
+    <div id="container">
+        
+        <div id="page-header">
+            <div id="page-title">
+                <h1>FM4&Spotify</h1>
+                <div class="break"></div>
+                <h3>Recent tracks</h3>
+            </div>
+        </div>
+        
+        <div class="clear"></div>
+        
+        <div id="main">
+            <div id="song-list"><div class="placeholder">loading ...</div></div>
+            <div id="song-list-footer"></div>
+        </div>
+        
+        <div id="right">
+            <h4 id="username">Anonymous</h4>
+            <div class="sidebar" id="user-sidebar"></div>
+            <div class="sidebar" id="user-controls">
+                <div><a href="#" id="login">login with facebook</a></div>
+                <div><a href="#" id="logout">logout</a></div>
+            </div>
+            <div class="clear"></div>   
+            
+            <h4>Most Played</h4>
+            <div class="sidebar" id="top-sidebar"></div>
+            <div class="clear"></div>   
+            
+            <h4>Popular</h4>
+            <div class="sidebar" id="popular-sidebar"></div>
+            <div class="clear"></div>   
+            
+            <h4>FM4 Live Stream</h4>
+            <div class="sidebar">
+                <span id="fm4-stream"><a href="http://fm4.orf.at/v2static/html/streaming/index.html">popup</a></span> | 
+                <a href="http://mp3stream1.apasf.apa.at:8000/listen.pls">mp3</a> | 
+                <a href="mms://apasf.apa.at/fm4_live_worldwide">wma</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+        
+        <div class="clear"></div>
+        
+        <iframe name="helper" style="display:none;"></iframe>
+    
+        <div id="page-footer">
+            <footer>
+                <p>You can <a href="https://github.com/mbuchetics/trackservice">fork this project on GitHub.</a></p>
+            </footer>
+        </div>
 
-	</div>
+    </div>
 
-	<!-- TEMPLATES -->
-	
-	<script type="text/template" id="play_template">
-		<td class="plus"><div class="button-plus"><a href="">+</a></div></td>
-		<td class="content">
-			<span class="time">{{ time }}</span>
-			<span class="song">{{ artist }} - {{ title }}</span>
-			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}" target="helper"><img src="images/button-play-01.png" width="12px" height="12px"></a></span>{{/if}}
-		</td> 
-	</script>
-	
-	<script type="text/template" id="play_template_recent">	
-		<td class="plus"><div class="button-plus recent"><a href="">+</a></div></td>		
-		<td class="content">
-			<div class="song recent">{{ artist }} - {{ title }}</div>
-			<div>
-				<span class="time recent">{{ time }}</span>
-				{{#if spotify}}
-				<span class="spotify recent"><a href="{{ spotify }}" target="helper">play on spotify <img src="images/button-play-01.png" width="18px" height="18px"></a></span>
-				{{/if}}
-			</div>
-		</td>
-	</script>
-	
-	<script type="text/template" id="song_template">	
-		<td class="plus"><a class="button-plus" href="">+</a></td>
-		<td class="song">{{ artist }} - {{ title }}</td> 
-		<td class="chartbar_col">
-			<div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
-		</td> 	
-	</script>
-	
-	<script type="text/template" id="like_template">	
-		<td class="song">{{ artist }} - {{ title }}</td> 
-		<td class="time">{{ time }}</td> 	
-	</script>
-	
-	<script type="text/template" id="sidebar_like_template">
-		<td class="time_col"><span class="time">{{ time }}</span></td> 	
-		<td class="song_col">
-			<span class="song">{{ artist }} - {{ title }}</span>
-			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}" target="helper"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
-		</td>
-		<div class="clear"></div>	
-	</script>
-	
-	<script type="text/template" id="sidebar_song_template">	
-		<td class="chartbar_col">
-			<div class="chartbar" style="width:{{percentage}}%">
-				{{ count }}
-			</div>
-		</td> 
-		<td class="song_col">
-			<span class="song">{{ artist }} - {{ title }}</span>
-			{{#if spotify}}<span class="spotify"><a href="{{ spotify }}" target="helper"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
-		</td>	
-		<div class="clear"></div>
-	</script>
-	
-	<!-- /TEMPLATES -->
+    <!-- TEMPLATES -->
+    
+    <script type="text/template" id="play_template">
+        <td class="plus"><div class="button-plus"><a href="">+</a></div></td>
+        <td class="content">
+            <span class="time">{{ time }}</span>
+            <span class="song">{{ artist }} - {{ title }}</span>
+            {{#if spotify}}<span class="spotify"><a href="{{ spotify }}" target="helper"><img src="images/button-play-01.png" width="12px" height="12px"></a></span>{{/if}}
+        </td> 
+    </script>
+    
+    <script type="text/template" id="play_template_recent"> 
+        <td class="plus"><div class="button-plus recent"><a href="">+</a></div></td>        
+        <td class="content">
+            <div class="song recent">{{ artist }} - {{ title }}</div>
+            <div>
+                <span class="time recent">{{ time }}</span>
+                {{#if spotify}}
+                <span class="spotify recent"><a href="{{ spotify }}" target="helper">play on spotify <img src="images/button-play-01.png" width="18px" height="18px"></a></span>
+                {{/if}}
+            </div>
+        </td>
+    </script>
+    
+    <script type="text/template" id="song_template">    
+        <td class="plus"><a class="button-plus" href="">+</a></td>
+        <td class="song">{{ artist }} - {{ title }}</td> 
+        <td class="chartbar_col">
+            <div class="chartbar" style="width:{{percentage}}%"><span>{{ count }}</span></div>
+        </td>   
+    </script>
+    
+    <script type="text/template" id="like_template">    
+        <td class="song">{{ artist }} - {{ title }}</td> 
+        <td class="time">{{ time }}</td>    
+    </script>
+    
+    <script type="text/template" id="sidebar_like_template">
+        <td class="time_col"><span class="time">{{ time }}</span></td>  
+        <td class="song_col">
+            <span class="song">{{ artist }} - {{ title }}</span>
+            {{#if spotify}}<span class="spotify"><a href="{{ spotify }}" target="helper"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
+        </td>
+        <div class="clear"></div>   
+    </script>
+    
+    <script type="text/template" id="sidebar_song_template">    
+        <td class="chartbar_col">
+            <div class="chartbar" style="width:{{percentage}}%">
+                {{ count }}
+            </div>
+        </td> 
+        <td class="song_col">
+            <span class="song">{{ artist }} - {{ title }}</span>
+            {{#if spotify}}<span class="spotify"><a href="{{ spotify }}" target="helper"><img src="images/button-play-01.png" width="8px" height="8px"></a></span>{{/if}}
+        </td>   
+        <div class="clear"></div>
+    </script>
+    
+    <!-- /TEMPLATES -->
 </body>

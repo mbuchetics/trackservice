@@ -42,9 +42,9 @@ function getCollection(name, callback, errorCallback) {
 }
 
 function dropCollection(collectionName) {
-	getCollection(collectionName, function(collection) { 
-		collection.drop(); 
-	});
+    getCollection(collectionName, function(collection) { 
+        collection.drop(); 
+    });
 }
 
 function getItems(collectionName, filterCriteria, sortCriteria, count, callback, errorCallback) {
@@ -175,11 +175,11 @@ function getTopSongs(collectionName, filterCriteria, count, callback, errorCallb
 }
 
 function getTopPlayedSongs(filterCriteria, count, callback, errorCallback) {
-	getTopSongs('plays', filterCriteria, count, callback, errorCallback);
+    getTopSongs('plays', filterCriteria, count, callback, errorCallback);
 }
 
 function getTopLikedSongs(filterCriteria, count, callback, errorCallback) {
-	getTopSongs('likes', filterCriteria, count, callback, errorCallback);
+    getTopSongs('likes', filterCriteria, count, callback, errorCallback);
 }
 
 function getLikesExt(filterCriteria, sortCriteria, count, callback, errorCallback) {

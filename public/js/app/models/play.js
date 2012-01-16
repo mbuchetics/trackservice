@@ -12,12 +12,12 @@ function($, _, Backbone, utils) {
         },
 
         updateTime: function() {
-        	var time = this.get('originalTime');
-        	
-        	this.set({ 
-        		time:  utils.getTimeStr(time),
-        		isRecent: utils.isRecentTime(time)
-        	});
+            var time = this.get('originalTime');
+            
+            this.set({ 
+                time:  utils.getTimeStr(time),
+                isRecent: utils.isRecentTime(time)
+            });
         }
 
         },  {
@@ -25,7 +25,7 @@ function($, _, Backbone, utils) {
 
         create: function(json) {      
             var play = new Play(),
-            	time = new Date(json.time);
+                time = new Date(json.time);
 
             play.set({ 
                 songId: json.song_id,
@@ -38,8 +38,8 @@ function($, _, Backbone, utils) {
             });
             
             if (json.spotify) {
-        	    play.set({ spotify: json.spotify });
-        	}
+                play.set({ spotify: json.spotify });
+            }
             
             return play;
         }
@@ -50,41 +50,41 @@ function($, _, Backbone, utils) {
        model: Play,
 
        fetchFromServer: function(count) {
-       		var collection = this;
-           	$.getJSON('api/plays', { count: count }, 
+            var collection = this;
+            $.getJSON('api/plays', { count: count }, 
                function(items) {
-                   	collection.reset(_.map(items, Play.create));
-       	   	});
+                    collection.reset(_.map(items, Play.create));
+            });
        },
 
        fetchMoreFromServer: function(count) {
-           	var collection = this,
-           		time = collection.last().get('originalTime').add({ seconds: -1});
-           		
-           	$.getJSON('api/plays', { until: time.toString(), count: count }, 
-           	     function(items) {
-   	       	        collection.add(_.map(items, Play.create));
-          	 });
+            var collection = this,
+                time = collection.last().get('originalTime').add({ seconds: -1});
+                
+            $.getJSON('api/plays', { until: time.toString(), count: count }, 
+                 function(items) {
+                    collection.add(_.map(items, Play.create));
+             });
        },
 
        updateFromServer: function(count) {
-       		var collection = this,
-       			time = collection.first().get('originalTime').add({ seconds: 1});
-       			
-       		$.getJSON('api/plays', { since: time.toString(), count: count }, 
-       		     function(items) {
-       		     	items.reverse();
-       		     	_.each(items, function(item) {
-       		     		collection.add(Play.create(item), { at: 0 });
-       		     		collection.remove(collection.last());
-       		     	});
-       		});
+            var collection = this,
+                time = collection.first().get('originalTime').add({ seconds: 1});
+                
+            $.getJSON('api/plays', { since: time.toString(), count: count }, 
+                 function(items) {
+                    items.reverse();
+                    _.each(items, function(item) {
+                        collection.add(Play.create(item), { at: 0 });
+                        collection.remove(collection.last());
+                    });
+            });
        },
 
        updateTimes: function() {
-       		this.each(function(play) {
-       			play.updateTime();
-       		});
+            this.each(function(play) {
+                play.updateTime();
+            });
        }
     });
 
