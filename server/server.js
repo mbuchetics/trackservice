@@ -143,8 +143,13 @@ function parseTracklist(html) {
 }
 
 function printMemory() {
-    var mem = process.memoryUsage();
-    console.log('mem: ' + mem.rss / 1024 / 1024);
+    try {
+        var mem = process.memoryUsage();
+        console.log('mem: ' + mem.rss / 1024 / 1024);
+    }
+    catch(e) {
+        console.log('could not get memory usage');
+    }
 }
 
 function run() {  
