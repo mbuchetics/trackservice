@@ -152,30 +152,39 @@ function printMemory() {
     }
 }
 
-function run() {  
-    console.log('connected to db'.green);
-    console.log('start tracking songs'.green);
+function run(callback) {
+    console.log('node version: ' + process.version);
+    console.log('node env: ' + config.node_env);
+    console.log('server: ' + config.server);
     
-    console.log('[new session ' + new Date().toGMTString() + ']');
+    db.init(config, function() {
+        console.log('connected to db'.green);
+        console.log('start tracking songs'.green);
     
-    var app = express.createServer();
+        console.log('[new session ' + new Date().toGMTString() + ']');
     
-    require('./environment.js')(app, express);
-    require('./routes.js')(app);
+        var app = express.createServer();
     
-    console.log('listening on port ' + config.port);
+        require('./environment.js')(app, express);
+        require('./routes.js')(app);
+    
+        console.log('listening on port ' + config.port);
 
-    app.listen(config.port);
+        app.listen(config.port);
 
-    getTracklist();
-    printMemory();
+        getTracklist();
+        printMemory();
     
-    //setInterval(getTracklist, 120000);
-    setInterval(getTracklist, 60000);
-    setInterval(printMemory, 60000);
+        //setInterval(getTracklist, 120000);
+        setInterval(getTracklist, 60000);
+        setInterval(printMemory, 60000);
+
+        if (callback) {
+            callback();
+        }
+    });
 }
 
-console.log('node version: ' + process.version);
-console.log('node env: ' + config.node_env);
-console.log('server: ' + config.server);
-db.init(config, run);
+// exports
+
+module.exports.run = run;

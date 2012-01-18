@@ -12,7 +12,7 @@
     "npm": ">=1.0.0"
   },
   "scripts": {
-    "start": "server/server.js"
+    "start": "server/main.js"
   },
   "dependencies": {
     "request": "2.x",
@@ -31,5 +31,7 @@
     "qs": "*",
     "formidable": "*"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "vows": "0.6.x"
+  }
 }
