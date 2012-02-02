@@ -13,16 +13,16 @@ function($, _, Backbone, Handlebars, json2, utils) {
         templateSong: Handlebars.compile($('#sidebar_song_template').html()),
         templateLike: Handlebars.compile($('#sidebar_like_template').html()),
         initialize: function() {
-            this.model.bind('change', this.render, this);
+            this.model.on('change', this.render, this);
         },
         render: function() {
             var json = this.model.toJSON();
 			 
             if (this.model.has('count')) {
-                $(this.el).html(this.templateSong(json));
+                this.$el.html(this.templateSong(json));
             }
             else {
-                $(this.el).html(this.templateLike(json));
+                this.$el.html(this.templateLike(json));
             }
             
             return this;
@@ -32,20 +32,20 @@ function($, _, Backbone, Handlebars, json2, utils) {
     var ItemsView = Backbone.View.extend({
         tagName: "table",
         initialize: function() {
-            this.model.bind('change', this.render, this);        
-            this.model.bind('add', this.render, this);
-            this.model.bind('remove', this.render, this);
-            this.model.bind('reset', this.render, this);
+            this.model.on('change', this.render, this);        
+            this.model.on('add', this.render, this);
+            this.model.on('remove', this.render, this);
+            this.model.on('reset', this.render, this);
         },
         render: function() {
             var viewType = this.viewType,
-                table = this.el;
+                table = this.$el;
                 
-            $(table).empty();
+            table.empty();
            
             this.model.each(function(item) {
                var view = new ItemView({model: item });
-               $(table).append(view.render().el);
+               table.append(view.render().el);
             });
             
             return this;

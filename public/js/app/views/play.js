@@ -15,14 +15,14 @@ function($, _, Backbone, Handlebars, json2, utils) {
             "click .button-plus": "like"
         }, 
         initialize: function() {
-            this.model.bind('change', this.render, this);
+            this.model.on('change', this.render, this);
         },
         render: function() {            
             if (this.model.get('isRecent')) {
-                $(this.el).html(this.templateRecent(this.model.toJSON()));
+                this.$el.html(this.templateRecent(this.model.toJSON()));
             }
             else {
-                $(this.el).html(this.template(this.model.toJSON()));
+                this.$el.html(this.template(this.model.toJSON()));
             }
             
             return this;
@@ -36,41 +36,41 @@ function($, _, Backbone, Handlebars, json2, utils) {
     var PlaysView = Backbone.View.extend({
         tagName: "table",
         initialize: function() {
-            this.model.bind('add', this.add, this);
-            this.model.bind('remove', this.remove, this);
-            this.model.bind('reset', this.render, this);
+            this.model.on('add', this.add, this);
+            this.model.on('remove', this.remove, this);
+            this.model.on('reset', this.render, this);
         },
         render: function() {
-            var table = this.el;
-            $(table).empty();
+            var table = this.$el;
+            table.empty();
             
             this.model.each(function(play) {
                var view = new PlayView({model: play});
-               $(table).append(view.render().el);
+               table.append(view.render().el);
             });
             
             return this;
         },
         add: function(play, playList) {
             var index = playList.indexOf(play),
-                table = this.el,
+                table = this.$el,
                 view = new PlayView({model: play}),
-                row = view.render().el;
+                row = $(view.render().el);
                          
             if (index == 0) {
-                $(row).fadeIn('slow');
-                $(table).prepend(row);
+                row.fadeIn('slow');
+                table.prepend(row);
             } 
             else {
-                $(row).fadeIn('fast');
-                $(table).append(row);
+                row.fadeIn('fast');
+                table.append(row);
             }
         },
         remove: function(play, playList) {
             var index = playList.indexOf(play),
-                table = this.el;
+                table = this.$el;
             
-            $(table).find('tr').eq(index).remove();
+            table.find('tr').eq(index).remove();
         }
     });
 

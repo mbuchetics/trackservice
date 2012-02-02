@@ -16,11 +16,11 @@ function($, _, Backbone, Handlebars, json2, utils) {
             // mouseover
         }, 
         initialize: function() {
-            this.model.bind('change', this.render, this);
+            this.model.on('change', this.render, this);
         },
         render: function() {
             var json = this.model.toJSON();
-            $(this.el).html(this.template(json));
+            this.$el.html(this.template(json));
             return this;
         },
         like: function(e) {
@@ -32,19 +32,19 @@ function($, _, Backbone, Handlebars, json2, utils) {
     var SongsView = Backbone.View.extend({
         tagName: "table",
         initialize: function() {
-            this.model.bind('change', this.render, this);        
-            this.model.bind('add', this.render, this);
-            this.model.bind('remove', this.render, this);
-            this.model.bind('reset', this.render, this);
+            this.model.on('change', this.render, this);        
+            this.model.on('add', this.render, this);
+            this.model.on('remove', this.render, this);
+            this.model.on('reset', this.render, this);
         },
         render: function() {
-            var table = this.el;
+            var table = this.$el;
                 
-            $(table).empty();
+            table.empty();
             
             this.model.each(function(song) {
                var view = new SongView({model: song });
-               $(table).append(view.render().el);
+               table.append(view.render().el);
             });
 
             return this;
