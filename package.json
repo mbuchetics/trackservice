@@ -2,7 +2,7 @@
   "author": "Matthias Buchetics <mbuchetics@gmail.com>",
   "name": "trackservice",
   "subdomain": "trackservice",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "repository": {
     "type": "git",
     "url": "git://github.com/mbuchetics/trackservice.git"
